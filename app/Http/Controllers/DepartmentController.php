@@ -39,6 +39,8 @@ class DepartmentController extends Controller
     }
     public function store(Request $request)
     {
+         //user form request, it is cleaner and separates validation logic from controller methods, making the code more maintainable
+        // below link for more information https://chatgpt.com/share/673c25d7-bb34-8002-9890-eaa661d347af
         $request->validate([
             'title_en' => 'required|string|max:55',
             'title_fa' => 'required|string|max:55',
@@ -62,6 +64,8 @@ class DepartmentController extends Controller
     
     public function update(Request $request, Department $department)
     {
+       //user form request, itis cleaner and separates validation logic from controller methods, making the code more maintainable.
+        
         $request->validate([
             'title_en' => 'required|string|max:55',
             'title_fa' => 'required|string|max:55',
