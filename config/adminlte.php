@@ -327,8 +327,8 @@ return [
         //     'label' => 4,
         //     'label_color' => 'success',
         // ],
-     
-        
+
+
         ['header' => 'account_settings'],
         // [
         //     'text' => 'profile',
@@ -348,52 +348,37 @@ return [
                     'text' => 'Department',
                     'url' => 'departments',
                 ],
+            ]
+        ],
+        
+        [
+            'text'    => 'Vendor Management',
+            'icon'    => 'fas fa-store',
+            'submenu' => [
                 [
-                    'text' => 'Department',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text' => 'Vendor List',
+                    'url'  => 'vendors',
+                    'icon' => 'fas fa-list',
                 ],
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
+                    'text' => 'Inventory Items',
+                    'url'  => 'inventory_items',
+                    'icon' => 'fas fa-boxes',
+                ],
+                [
+                    'text' => 'Purchase Orders',
+                    'url'  => 'purchase_orders',
+                    'icon' => 'fas fa-shopping-cart',
                 ],
             ],
         ],
-        // ['header' => 'labels'],
-        // [
-        //     'text' => 'important',
-        //     'icon_color' => 'red',
-        //     'url' => '#',
-        // ],
-        // [
-        //     'text' => 'warning',
-        //     'icon_color' => 'yellow',
-        //     'url' => '#',
-        // ],
-        // [
-        //     'text' => 'information',
-        //     'icon_color' => 'cyan',
-        //     'url' => '#',
-        // ],
+        
+        [
+        'text' => 'Stock Adjustments', // The label of the menu item
+        'url'  => 'stock_adjustments', // URL to the stock adjustments index page
+        'icon' => 'fas fa-cogs', 
+        ]
+       
     ],
 
     /*

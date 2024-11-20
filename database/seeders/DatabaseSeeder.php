@@ -4,6 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\InventoryItemSeeder;
+use Database\Seeders\PurchaseOrderItemSeeder;
+use Database\Seeders\PurchaseOrderSeeder;
+use Database\Seeders\VendorSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,13 +19,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        
+
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-        
+
         $this->call(DepartmentSeeder::class);
+        $this->call(VendorSeeder::class);
+        $this->call([
+            InventoryItemSeeder::class,
+            StockAdjustmentSeeder::class,
+        ]);
     }
 }

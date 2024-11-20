@@ -1,9 +1,18 @@
 <?php
 
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\PurchaseOrderItemController;
+use App\Http\Controllers\StockAdjustmentController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+
+
+
 
 
 
@@ -28,3 +37,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('departments', DepartmentController::class);
+Route::resource('vendors', VendorController::class);
+Route::resource('inventory_items', InventoryItemController::class);
+Route::resource('stock_adjustments', StockAdjustmentController::class);
+
+// Route::resource('purchase_orders', PurchaseOrderController::class);
+// Route::resource('purchase_orders.items', PurchaseOrderItemController::class); 

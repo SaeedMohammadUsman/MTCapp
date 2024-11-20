@@ -1,21 +1,20 @@
-
 @extends('adminlte::page')
 
-@section('title', 'Departments')
+@section('title', 'Inventory Items')
 
 @section('content_header')
-    <h1>Departments</h1>
+    <h1>Inventory Items</h1>
 @stop
 
 @section('content')
     {{-- Search Section --}}
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('departments.index') }}" method="GET" class="form-inline">
+            <form action="{{ route('inventory_items.index') }}" method="GET" class="form-inline">
                 <input type="text" name="search" value="{{ request('search') }}" class="form-control mr-2"
-                    placeholder="Search by ID or Title">
+                    placeholder="Search by Item Name, Item Code, Price or Stock">
                 <button type="submit" class="btn btn-primary">Search</button>
-                <a href="{{ route('departments.index') }}" class="btn btn-secondary ml-2">Clear</a>
+                <a href="{{ route('inventory_items.index') }}" class="btn btn-secondary ml-2">Clear</a>
             </form>
         </div>
     </div>
@@ -23,32 +22,36 @@
     {{-- Table Section --}}
     <div class="card">
         <div class="card-header">
-            <a href="{{ route('departments.create') }}" class="btn btn-primary">Create New Department</a>
+            <a href="{{ route('inventory_items.create') }}" class="btn btn-primary">Create New Inventory Item</a>
         </div>
         <div class="card-body">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Title (EN)</th>
-                        <th>Title (FA)</th>
-                        <th>Status</th>
+                        <th>Item Name (EN)</th>
+                        <th>Item Code</th>
+                        <th>Cost Price</th>
+                        <th>Selling Price</th>
+                        <th>Quantity in Stock</th>
+                        <th>Expiration Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($departments as $department)
+                    @forelse ($inventoryItems as $item)
                         <tr>
-                            <td>{{ $department->id }}</td>
-                            <td>{{ $department->title_en }}</td>
-                            <td>{{ $department->title_fa }}</td>
-                            <td>{{ ucfirst($department->status) }}</td>
+                            <td>{{ $item->item_name_en }}</td>
+                            <td>{{ $item->item_code }}</td>
+                            <td>{{ $item->cost_price }}</td>
+                            <td>{{ $item->selling_price }}</td>
+                            <td>{{ $item->quantity_in_stock }}</td>
+                            <td>{{ $item->expiration_date }}</td>
                             <td>
-                                <a href="{{ route('departments.show', $department->id) }}"
+                                <a href="{{ route('inventory_items.show', $item->id) }}"
                                     class="btn btn-info btn-sm">View</a>
-                                <a href="{{ route('departments.edit', $department->id) }}"
+                                <a href="{{ route('inventory_items.edit', $item->id) }}"
                                     class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('departments.destroy', $department->id) }}" method="POST"
+                                <form action="{{ route('inventory_items.destroy', $item->id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -58,7 +61,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">No departments found.</td>
+                            <td colspan="7" class="text-center">No inventory items found.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -66,7 +69,7 @@
         </div>
         <div class="card-footer">
             {{-- Pagination Links --}}
-            {{ $departments->links('vendor.pagination.bootstrap-4') }}
+            {{ $inventoryItems->links('vendor.pagination.bootstrap-4') }}
         </div>
     </div>
 @stop
@@ -77,6 +80,6 @@
 
 @section('js')
     <script>
-        console.log("Welcome to the departments management page!");
+        console.log("Welcome to the inventory items management page!");
     </script>
 @stop

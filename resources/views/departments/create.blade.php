@@ -31,7 +31,8 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-success">Create Department</button>
+                <button type="submit" class="btn btn-success">Save Item</button>
+                <a href="{{ route('departments.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
         </div>
     </div>

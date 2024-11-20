@@ -32,7 +32,8 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-warning">Update Department</button>
+                <button type="submit" class="btn btn-success">Update Department</button>
+                <a href="{{ route('departments.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
         </div>
     </div>

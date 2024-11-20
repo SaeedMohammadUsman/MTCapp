@@ -15,11 +15,13 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
+        $fakerIR = Faker::create('fa_IR');
+        
 
-        foreach (range(1, 50) as $index) {
+        foreach (range(1, 5) as $index) {
             DB::table('departments')->insert([
                 'title_en' => $faker->words(3, true), // Random English title
-                'title_fa' => $faker->words(3, true), // Random Farsi title
+                'title_fa' => $fakerIR->words(3, true), // Random Farsi title
                 'status' => $faker->randomElement(['active', 'inactive', 'archived']),
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -20,6 +20,11 @@
         <div class="card-footer">
             <a href="{{ route('departments.index') }}" class="btn btn-secondary">Back to List</a>
             <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-warning">Edit</a>
+            <form action="{{ route('departments.destroy', $department->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
         </div>
     </div>
 @stop
