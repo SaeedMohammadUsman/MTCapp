@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('stock_adjustments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('item_id')->constrained('inventory_items')->onDelete('cascade'); 
+            
             $table->enum('adjustment_type_en', ['damaged', 'returns'])->comment('Reason for adjustment in English');
             $table->enum('adjustment_type_fa', ['خرابی', 'بازگشت'])->comment('Reason for adjustment in Persian');
             $table->integer('quantity'); // Number of items adjusted

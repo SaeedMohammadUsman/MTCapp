@@ -29,7 +29,9 @@
                 <thead>
                     <tr>
                         <th>Item Name</th>
-                        <th>Adjustment Type</th>
+                        <th>Adjustment Type (EN)</th>
+                        <th>Adjustment Type (FA)</th>
+                        
                         <th>Quantity</th>
                         <th>Reason</th>
                         <th>Actions</th>
@@ -38,8 +40,11 @@
                 <tbody>
                     @forelse ($stockAdjustments as $adjustment)
                         <tr>
-                            <td>{{ $adjustment->inventoryItem->item_name_en }}</td>
+                            <td>{{ $adjustment->inventoryItem ? $adjustment->inventoryItem->item_name_en : 'No Item Found' }}</td>
+
+                            {{-- <td>{{ $adjustment->inventoryItem->item_name_en }}</td> --}}
                             <td>{{ $adjustment->adjustment_type_en }}</td>
+                            <td>{{ $adjustment->adjustment_type_fa }}</td>
                             <td>{{ $adjustment->quantity }}</td>
                             <td>{{ $adjustment->reason_en }}</td>
                             <td>
@@ -47,9 +52,6 @@
                                     
                                     <a href="{{ route('stock_adjustments.show', $adjustment->id) }}
 " class="btn btn-info btn-sm">View</a>
-
-
-                                    
                                     
                                 <a href="{{ route('stock_adjustments.edit', $adjustment->id) }}" 
                                     class="btn btn-warning btn-sm">Edit</a>

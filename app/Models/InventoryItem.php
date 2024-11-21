@@ -23,6 +23,11 @@ class InventoryItem extends Model
 
     public function stockAdjustments()
     {
-        return $this->hasMany(StockAdjustment::class, 'item_id');
+        return $this->hasMany(StockAdjustment::class, 'item_id'); // Use 'item_id' instead of 'inventory_item_id'
+    }
+    
+    public function purchaseOrderItems()
+    {
+        return $this->hasMany(PurchaseOrderItem::class, 'item_id');
     }
 }

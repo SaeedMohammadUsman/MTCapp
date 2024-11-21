@@ -2,33 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StockAdjustment;
+
+use App\Http\Controllers\Controller;
 use App\Models\InventoryItem;
+use App\Models\StockAdjustment;
 use Illuminate\Http\Request;
 
 class StockAdjustmentController extends Controller
 {
-    /**
-     * Display a listing of the stock adjustments.
-     */
-    public function index(Request $request)
-    {
-        // Fetch stock adjustments with optional search and filtering
-        $stockAdjustments = StockAdjustment::with('inventoryItem')
-            ->when($request->input('search'), function ($query, $search) {
-                $query->whereHas('inventoryItem', function ($q) use ($search) {
-                    $q->where('item_name_en', 'like', "%$search%")
-                        ->orWhere('item_name_fa', 'like', "%$search%");
-                });
+public function index(Request $request)
+{
+    // Fetch stock adjustments with optional search and filtering
+    $stockAdjustments = StockAdjustment::with('inventoryItem')
+        ->when($request->input('search'), function ($query, $search) {
+            // Search by item name in English or Persian
+            $query->whereHas('inventoryItem', function ($q) use ($search) {
+                $q->where('item_name_en', 'like', "%$search%")
+                    ->orWhere('item_name_fa', 'like', "%$search%");
             })
-            ->when($request->input('adjustment_type'), function ($query, $type) {
-                $query->where('adjustment_type_en', $type);
-            })
-            ->paginate(10); // Paginate results
+            // Allow searching for adjustment type in both English and Persian
+            ->orWhere('adjustment_type_en', 'like', "%$search%")
+            ->orWhere('adjustment_type_fa', 'like', "%$search%");
+        })
+        ->when($request->input('adjustment_type'), function ($query, $type) {
+            // Filter by adjustment type (both English and Persian)
+            $query->where(function ($q) use ($type) {
+                $q->where('adjustment_type_en', 'like', "%$type%")
+                  ->orWhere('adjustment_type_fa', 'like', "%$type%");
+            });
+        })
+        ->paginate(10); // Paginate results (10 per page)
 
-        return view('stock_adjustments.index', compact('stockAdjustments'));
-    }
+    return view('stock_adjustments.index', compact('stockAdjustments'));
+}
 
+
+     
     /**
      * Show the form for creating a new stock adjustment.
      */

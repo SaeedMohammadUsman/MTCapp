@@ -17,9 +17,9 @@ class StockAdjustment extends Model
         'reason_en',
         'reason_fa',
     ];
-
     public function inventoryItem()
     {
-        return $this->belongsTo(InventoryItem::class, 'item_id');
+        return $this->belongsTo(InventoryItem::class, 'item_id'); // Use 'item_id' instead of 'inventory_item_id'
     }
+    
 }
