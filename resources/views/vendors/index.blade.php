@@ -25,7 +25,7 @@
             <a href="{{ route('vendors.create') }}" class="btn btn-primary">Create New Vendor</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover table-striped table-sm">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -47,7 +47,7 @@
                             <td>{{ $vendor->phone_number }}</td>
                             <td>{{ $vendor->country_name }}</td>
                             <td>
-                              
+                                <div class="btn-group">
                                 <a href="{{ route('vendors.show', $vendor->id) }}"
                                     class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('vendors.edit', $vendor->id) }}"
@@ -58,7 +58,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
-                            
+                                </div>
                             </td>
                         </tr>
                     @empty

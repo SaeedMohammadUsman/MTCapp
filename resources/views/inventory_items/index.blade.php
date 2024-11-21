@@ -25,7 +25,7 @@
             <a href="{{ route('inventory_items.create') }}" class="btn btn-primary">Create New Inventory Item</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover table-striped table-sm">
                 <thead>
                     <tr>
                         <th>Item Name (EN)</th>
@@ -47,6 +47,7 @@
                             <td>{{ $item->quantity_in_stock }}</td>
                             <td>{{ $item->expiration_date }}</td>
                             <td>
+                                <div class="btn-group">
                                 <a href="{{ route('inventory_items.show', $item->id) }}"
                                     class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('inventory_items.edit', $item->id) }}"
@@ -57,6 +58,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

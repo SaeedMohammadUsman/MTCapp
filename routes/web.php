@@ -39,6 +39,8 @@ Route::resource('departments', DepartmentController::class);
 Route::resource('vendors', VendorController::class);
 Route::resource('inventory_items', InventoryItemController::class);
 Route::resource('stock_adjustments', StockAdjustmentController::class);
+Route::resource('purchase_orders', PurchaseOrderController::class);
+// Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
 
 // Route::resource('purchase_orders', PurchaseOrderController::class);
 // Route::resource('purchase_orders.items', PurchaseOrderItemController::class); 

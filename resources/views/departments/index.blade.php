@@ -26,7 +26,7 @@
             <a href="{{ route('departments.create') }}" class="btn btn-primary">Create New Department</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover table-striped table-sm">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -44,6 +44,7 @@
                             <td>{{ $department->title_fa }}</td>
                             <td>{{ ucfirst($department->status) }}</td>
                             <td>
+                                <div class="btn-group">
                                 <a href="{{ route('departments.show', $department->id) }}"
                                     class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('departments.edit', $department->id) }}"
@@ -54,6 +55,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

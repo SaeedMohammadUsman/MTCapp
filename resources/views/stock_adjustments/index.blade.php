@@ -25,13 +25,12 @@
             <a href="{{ route('stock_adjustments.create') }}" class="btn btn-primary">Create New Adjustment</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover table-striped table-sm">
                 <thead>
                     <tr>
                         <th>Item Name</th>
                         <th>Adjustment Type (EN)</th>
                         <th>Adjustment Type (FA)</th>
-                        
                         <th>Quantity</th>
                         <th>Reason</th>
                         <th>Actions</th>
@@ -41,31 +40,25 @@
                     @forelse ($stockAdjustments as $adjustment)
                         <tr>
                             <td>{{ $adjustment->inventoryItem ? $adjustment->inventoryItem->item_name_en : 'No Item Found' }}</td>
-
-                            {{-- <td>{{ $adjustment->inventoryItem->item_name_en }}</td> --}}
                             <td>{{ $adjustment->adjustment_type_en }}</td>
                             <td>{{ $adjustment->adjustment_type_fa }}</td>
                             <td>{{ $adjustment->quantity }}</td>
                             <td>{{ $adjustment->reason_en }}</td>
                             <td>
-                          
-                                    
-                                    <a href="{{ route('stock_adjustments.show', $adjustment->id) }}
-" class="btn btn-info btn-sm">View</a>
-                                    
-                                <a href="{{ route('stock_adjustments.edit', $adjustment->id) }}" 
-                                    class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('stock_adjustments.destroy', $adjustment->id) }}" 
-                                    method="POST" style="display:inline;">
+                                <div class="btn-group">
+                                <a href="{{ route('stock_adjustments.show', $adjustment->id) }}" class="btn btn-info btn-sm">View</a>
+                                <a href="{{ route('stock_adjustments.edit', $adjustment->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('stock_adjustments.destroy', $adjustment->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">No stock adjustments found.</td>
+                            <td colspan="6" class="text-center">No stock adjustments found.</td>
                         </tr>
                     @endforelse
                 </tbody>
