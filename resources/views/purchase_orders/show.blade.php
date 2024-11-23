@@ -3,16 +3,12 @@
 @section('title', 'Purchase Order Details')
 
 @section('content_header')
-    <h1>Purchase Order Details</h1>
+    <h1>Purchase Order #{{ $purchaseOrder->order_number }}</h1>
 @stop
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <h3>Purchase Order for Vendor: {{ $purchaseOrder->vendor->company_name_en }} ({{ $purchaseOrder->vendor->company_name_fa }})</h3>
-        </div>
         <div class="card-body">
-            <p><strong>ID:</strong> {{ $purchaseOrder->id }}</p>
             <p><strong>Order Number:</strong> {{ $purchaseOrder->order_number }}</p>
             <p><strong>Vendor (EN):</strong> {{ $purchaseOrder->vendor->company_name_en }}</p>
             <p><strong>Vendor (FA):</strong> {{ $purchaseOrder->vendor->company_name_fa }}</p>
@@ -20,15 +16,46 @@
             <p><strong>Status (EN):</strong> {{ $purchaseOrder->status_en }}</p>
             <p><strong>Status (FA):</strong> {{ $purchaseOrder->status_fa }}</p>
             <p><strong>Remarks:</strong> {{ $purchaseOrder->remarks ?? 'No remarks' }}</p>
-        </div>
-        <div class="card-footer">
-            <a href="{{ route('purchase_orders.index') }}" class="btn btn-secondary">Back to List</a>
-            <a href="{{ route('purchase_orders.edit', $purchaseOrder->id) }}" class="btn btn-warning">Edit</a>
-            <form action="{{ route('purchase_orders.destroy', $purchaseOrder->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+
+            <h3>Purchase Order Items</h3>
+            <table class="table table-bordered table-hover table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Item Name (EN)</th>
+                        <th>Item Name (FA)</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($purchaseOrder->items as $item)
+                        <tr>
+                            <td>{{ $item->trade_name_en }}</td>
+                            <td>{{ $item->trade_name_fa }}</td>
+                            <td>{{ number_format($item->unit_price, 2) }}</td>
+                            <td>{{ $item->quantity }}</td>
+                            <td>{{ number_format($item->total_price, 2) }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ route('purchase_orders.items.show', $item->id) }}" class="btn btn-info btn-sm">View</a>
+
+                                    <a href="{{ route('purchase_orders.items.edit', ['purchase_order' => $purchaseOrder->id, 'purchase_order_item' => $item->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('purchase_orders.items.destroy', [$purchaseOrder->id, $purchaseOrderItem->id]) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            
+            <a href="{{ route('purchase_orders.items.create', $purchaseOrder->id) }}" class="btn btn-primary mt-3">Add New Item</a>
+            <a href="{{ route('purchase_orders.index') }}" class="btn btn-secondary mt-3">Back to List</a>
         </div>
     </div>
 @stop

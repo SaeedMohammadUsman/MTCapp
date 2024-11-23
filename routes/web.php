@@ -39,8 +39,20 @@ Route::resource('departments', DepartmentController::class);
 Route::resource('vendors', VendorController::class);
 Route::resource('inventory_items', InventoryItemController::class);
 Route::resource('stock_adjustments', StockAdjustmentController::class);
-Route::resource('purchase_orders', PurchaseOrderController::class);
-// Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
 
-// Route::resource('purchase_orders', PurchaseOrderController::class);
-// Route::resource('purchase_orders.items', PurchaseOrderItemController::class); 
+
+// Resource route for purchase orders (index, create, store, etc.)
+Route::resource('purchase_orders', PurchaseOrderController::class);
+
+// Shallow routes for purchase order items (create, store)
+Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
+
+// Nested routes for showing, editing, updating, and deleting purchase order items
+
+
+Route::get('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'show'])->name('purchase_orders.items.show');
+
+Route::get('purchase_orders/{purchase_order}/items/{item}/edit', [PurchaseOrderItemController::class, 'edit'])->name('purchase_orders.items.edit');
+Route::put('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'update'])->name('purchase_orders.items.update');
+Route::delete('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'destroy'])->name('purchase_orders.items.destroy');
+

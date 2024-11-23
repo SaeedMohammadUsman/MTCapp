@@ -365,11 +365,24 @@ return [
                     'url'  => 'inventory_items',
                     'icon' => 'fas fa-boxes',
                 ],
+                // [
+                //     'text' => 'Purchase Orders',
+                //     'url'  => 'purchase_orders',
+                //     'icon' => 'fas fa-shopping-cart',
+                // ],
                 [
                     'text' => 'Purchase Orders',
                     'url'  => 'purchase_orders',
                     'icon' => 'fas fa-shopping-cart',
                 ],
+                [
+                    'text' => 'Purchase Order Items',
+                    'url'  => 'purchase_order_items',
+                    'icon' => 'fas fa-box',
+                ],
+               
+                
+                
             ],
         ],
         

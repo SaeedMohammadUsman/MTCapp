@@ -54,28 +54,61 @@ public function index(Request $request)
 }
 
 
+    // public function create()
+    // {
+    //     $vendors = Vendor::all();
+    //     return view('purchase_orders.create', compact('vendors'));
+    // }
+
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'order_number' => 'required|unique:purchase_orders,order_number|max:50',
+    //         'vendor_id' => 'required|exists:vendors,id',
+    //         'total_price' => 'required|numeric|min:0',
+    //         'status_en' => 'required',
+    //         'status_fa' => 'required',
+    //     ]);
+
+    //     $purchaseOrder = PurchaseOrder::create($request->only([
+    //         'order_number', 'vendor_id', 'total_price', 'status_en', 'status_fa', 'remarks'
+    //     ]));
+
+    //     return redirect()->route('purchase_orders.index')->with('success', 'Purchase order created successfully.');
+    // }
+    
     public function create()
-    {
-        $vendors = Vendor::all();
-        return view('purchase_orders.create', compact('vendors'));
-    }
+{
+    $vendors = Vendor::all();
+    return view('purchase_orders.create', compact('vendors'));
+}
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'order_number' => 'required|unique:purchase_orders,order_number|max:50',
-            'vendor_id' => 'required|exists:vendors,id',
-            'total_price' => 'required|numeric|min:0',
-            'status_en' => 'required',
-            'status_fa' => 'required',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'order_number' => 'required|unique:purchase_orders,order_number|max:50',
+        'vendor_id' => 'required|exists:vendors,id',
+        'status_en' => 'required',
+        'status_fa' => 'required',
+    ]);
 
-        $purchaseOrder = PurchaseOrder::create($request->only([
-            'order_number', 'vendor_id', 'total_price', 'status_en', 'status_fa', 'remarks'
-        ]));
+    // Create purchase order with default total_price = 0
+    $purchaseOrder = PurchaseOrder::create([
+        'order_number' => $request->order_number,
+        'vendor_id' => $request->vendor_id,
+        'total_price' => 0, // Default to 0
+        'status_en' => $request->status_en,
+        'status_fa' => $request->status_fa,
+        'remarks' => $request->remarks,
+    ]);
 
-        return redirect()->route('purchase_orders.index')->with('success', 'Purchase order created successfully.');
-    }
+    // Redirect to the Add Items page for the created purchase order
+    return redirect()->route('purchase_orders.items.create', $purchaseOrder->id)
+                     ->with('success', 'Purchase order created successfully. Now add items.');
+                     
+                  
+}
+
 
     public function show($id)
     {
