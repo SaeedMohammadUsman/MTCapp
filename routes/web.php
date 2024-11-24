@@ -41,18 +41,36 @@ Route::resource('inventory_items', InventoryItemController::class);
 Route::resource('stock_adjustments', StockAdjustmentController::class);
 
 
-// Resource route for purchase orders (index, create, store, etc.)
+// // Resource route for purchase orders (index, create, store, etc.)
+// Route::resource('purchase_orders', PurchaseOrderController::class);
+
+// // Shallow routes for purchase order items (create, store)
+// Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
+
+// // Nested routes for showing, editing, updating, and deleting purchase order items
+
+
+// Route::get('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'show'])->name('purchase_orders.items.show');
+
+// Route::get('purchase_orders/{purchase_order}/items/{item}/edit', [PurchaseOrderItemController::class, 'edit'])->name('purchase_orders.items.edit');
+// Route::put('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'update'])->name('purchase_orders.items.update');
+// Route::delete('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'destroy'])->name('purchase_orders.items.destroy');
+
+// Resource routes for managing purchase orders
 Route::resource('purchase_orders', PurchaseOrderController::class);
 
-// Shallow routes for purchase order items (create, store)
+// Shallow resource routes for purchase order items (create, store only)
 Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
 
-// Nested routes for showing, editing, updating, and deleting purchase order items
+// Nested routes for purchase order items (show, edit, update, delete)
+Route::get('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'show'])
+    ->name('purchase_orders.items.show');
 
+Route::get('purchase_orders/{purchase_order}/items/{item}/edit', [PurchaseOrderItemController::class, 'edit'])
+    ->name('purchase_orders.items.edit');
 
-Route::get('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'show'])->name('purchase_orders.items.show');
+Route::put('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'update'])
+    ->name('purchase_orders.items.update');
 
-Route::get('purchase_orders/{purchase_order}/items/{item}/edit', [PurchaseOrderItemController::class, 'edit'])->name('purchase_orders.items.edit');
-Route::put('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'update'])->name('purchase_orders.items.update');
-Route::delete('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'destroy'])->name('purchase_orders.items.destroy');
-
+Route::delete('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'destroy'])
+    ->name('purchase_orders.items.destroy');

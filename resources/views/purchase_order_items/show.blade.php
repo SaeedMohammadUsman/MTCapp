@@ -25,24 +25,18 @@
             <p><strong>Remarks:</strong> {{ $purchaseOrderItem->remarks ?? 'No remarks' }}</p>
         </div>
         <div class="card-footer">
+            <!-- Back to Purchase Order Button -->
             <a href="{{ route('purchase_orders.show', $purchaseOrderItem->purchase_order_id) }}" class="btn btn-secondary">Back to Order</a>
+            
+            <!-- Edit Purchase Order Item Button -->
             <a href="{{ route('purchase_orders.items.edit', ['purchase_order' => $purchaseOrderItem->purchase_order_id, 'item' => $purchaseOrderItem->id]) }}" class="btn btn-warning">Edit</a>
-            {{-- <a href="{{ route('purchase_orders.items.show', ['purchase_order' => $purchaseOrderItem->purchase_order_id, 'item' => $purchaseOrderItem->id]) }}" class="btn btn-info">View Item</a> --}}
-
-            <a href="{{ route('purchase_orders.items.show', ['purchase_order' => $purchaseOrder->id, 'item' => $purchaseOrderItem->id]) }}">
-                @php
-                dd($purchaseOrder->id, $purchaseOrderItem->id);
-            @endphp
             
-                View Item
-            </a>
-            
+            <!-- Delete Purchase Order Item Form -->
             <form action="{{ route('purchase_orders.items.destroy', ['purchase_order' => $purchaseOrderItem->purchase_order_id, 'purchase_order_item' => $purchaseOrderItem->id]) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
-            
         </div>
     </div>
 @stop
