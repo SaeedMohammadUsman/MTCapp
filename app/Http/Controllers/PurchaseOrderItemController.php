@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PurchaseOrderItem;
 use App\Models\InventoryItem;
 use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseOrderItemController extends Controller
 {
@@ -26,6 +27,8 @@ class PurchaseOrderItemController extends Controller
      */
     public function store(Request $request, $purchaseOrderId)
     {
+        
+        // Log::info('Request data:', $request->all());
         // Validate incoming request
         $validatedData = $request->validate([
             'items' => 'required|array',
@@ -40,6 +43,7 @@ class PurchaseOrderItemController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.remarks' => 'nullable|string',
         ]);
+        
     
         try {
             // Fetch the purchase order
