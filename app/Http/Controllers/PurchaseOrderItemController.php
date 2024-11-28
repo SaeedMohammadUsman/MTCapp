@@ -100,41 +100,92 @@ class PurchaseOrderItemController extends Controller
     /**
      * Show the form for editing an item in the purchase order.
      */
-    public function edit($id)
+    // public function edit($id)
+    // {
+    //     $purchaseOrderItem = PurchaseOrderItem::with('inventoryItem')->findOrFail($id);
+    //     $inventoryItems = InventoryItem::all();
+
+    //     return view('purchase_order_items.edit', compact('purchaseOrderItem', 'inventoryItems'));
+    // }
+
+    public function edit($purchaseOrderId, $itemId)
     {
-        $purchaseOrderItem = PurchaseOrderItem::with('inventoryItem')->findOrFail($id);
-        $inventoryItems = InventoryItem::all();
+        $purchaseOrder = PurchaseOrder::findOrFail($purchaseOrderId);
+        $purchaseOrderItem = $purchaseOrder->items()->findOrFail($itemId);
+        $inventoryItems = InventoryItem::all(); // or filtered list of items
+        return view('purchase_order_items.edit', compact('purchaseOrder', 'purchaseOrderItem', 'inventoryItems'));
 
-        return view('purchase_order_items.edit', compact('purchaseOrderItem', 'inventoryItems'));
     }
-
+    
     /**
      * Update the specified item in the purchase order.
      */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-        ]);
+    // public function update(Request $request, $id)
+    // {
+        
+    //     $request->validate([
+    //         'quantity' => 'required|integer|min:1',
+    //         'unit_price' => 'required|numeric|min:0',
+    //     ]);
 
-        $purchaseOrderItem = PurchaseOrderItem::findOrFail($id);
-        $totalPrice = $request->unit_price * $request->quantity;
+    //     $purchaseOrderItem = PurchaseOrderItem::findOrFail($id);
+    //     $totalPrice = $request->unit_price * $request->quantity;
 
-        $purchaseOrderItem->update([
-            'quantity' => $request->quantity,
-            'unit_price' => $request->unit_price,
-            'total_price' => $totalPrice,
-            'remarks' => $request->remarks,
-        ]);
+    //     $purchaseOrderItem->update([
+    //         'quantity' => $request->quantity,
+    //         'unit_price' => $request->unit_price,
+    //         'total_price' => $totalPrice,
+    //         'remarks' => $request->remarks,
+    //     ]);
 
-        $purchaseOrderItem->purchaseOrder->update([
-            'total_price' => $purchaseOrderItem->purchaseOrder->items()->sum('total_price'),
-        ]);
+    //     $purchaseOrderItem->purchaseOrder->update([
+    //         'total_price' => $purchaseOrderItem->purchaseOrder->items()->sum('total_price'),
+    //     ]);
 
-        return redirect()->route('purchase_orders.show', $purchaseOrderItem->purchase_order_id)
-            ->with('success', 'Purchase order item updated successfully.');
-    }
+    //     return redirect()->route('purchase_orders.show', $purchaseOrderItem->purchase_order_id)
+    //         ->with('success', 'Purchase order item updated successfully.');
+    // }
+
+    public function update(Request $request, $purchaseOrderId, $id)
+{
+    // Validate input fields
+    $request->validate([
+        'quantity' => 'required|integer|min:1',
+        'unit_price' => 'required|numeric|min:0',
+        'trade_name_en' => 'required|string|max:255',
+        'trade_name_fa' => 'required|string|max:255',
+        'item_id' => 'required|exists:inventory_items,id',
+    ]);
+
+    // Find the purchase order and the purchase order item
+    $purchaseOrder = PurchaseOrder::findOrFail($purchaseOrderId);
+    $purchaseOrderItem = $purchaseOrder->items()->findOrFail($id); // Ensure you're only fetching items for the correct purchase order
+
+    // Calculate the new total price for the item
+    $totalPrice = $request->unit_price * $request->quantity;
+
+    // Update the purchase order item details
+    $purchaseOrderItem->update([
+        'quantity' => $request->quantity,
+        'unit_price' => $request->unit_price,
+        'total_price' => $totalPrice,
+        'remarks' => $request->remarks,
+        'trade_name_en' => $request->trade_name_en, // Update trade name in English
+        'trade_name_fa' => $request->trade_name_fa, // Update trade name in Farsi
+        'item_id' => $request->item_id, 
+    ]);
+
+    // Update the total price of the parent purchase order
+    $purchaseOrder->update([
+        'total_price' => $purchaseOrder->items()->sum('total_price'),
+    ]);
+
+    // Redirect to the current purchase order details page with a success message
+    return redirect()->route('purchase_orders.show', $purchaseOrder->id)
+        ->with('success', 'Purchase order item updated successfully.');
+}
+
+    
 
     /**
      * Show a purchase order and a specific item.
@@ -144,7 +195,8 @@ class PurchaseOrderItemController extends Controller
         $purchaseOrder = PurchaseOrder::findOrFail($purchaseOrder);
         $purchaseOrderItem = PurchaseOrderItem::findOrFail($item);
 
-        return view('purchase_orders.show', compact('purchaseOrder', 'purchaseOrderItem'));
+        // return view('purchase_orders.show', compact('purchaseOrder', 'purchaseOrderItem'));
+        return view('purchase_order_items.show', compact('purchaseOrder', 'purchaseOrderItem'));
     }
 
     /**
