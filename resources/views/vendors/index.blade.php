@@ -25,7 +25,7 @@
             <a href="{{ route('vendors.create') }}" class="btn btn-primary">Create New Vendor</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover table-striped table-sm">
+            <table class="table table-hover table-striped table-sm">
                 <thead>
                     <tr>
                         <th>ID</th>
