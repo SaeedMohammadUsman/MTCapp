@@ -15,7 +15,7 @@ class VendorController extends Controller
                 ->orWhere('company_name_en', 'like', "%$search%")
                 ->orWhere('company_name_fa', 'like', "%$search%")
                 ->orWhere('country_name', 'like', "%$search%");
-        })->paginate(7); // Paginate results (7 per page)
+        })->paginate(10); // Paginate results (7 per page)
 
         return view('vendors.index', compact('vendors'));
     }

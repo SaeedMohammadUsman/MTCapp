@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('address_en'); // English address
             $table->text('address_fa'); // Persian address
             $table->enum('country_name', ['Pakistan', 'India', 'Iran']);
+            $table->string('currency')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

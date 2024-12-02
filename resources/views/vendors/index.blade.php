@@ -25,7 +25,9 @@
             <a href="{{ route('vendors.create') }}" class="btn btn-primary">Create New Vendor</a>
         </div>
         <div class="card-body">
-            <table class="table table-hover table-striped table-sm">
+            {{-- <table class="table table-hover table-striped table-sm"> --}}
+                <table class="table table-sm table-striped table-hover table-borderless">
+           
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -34,6 +36,7 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Country</th>
+                        <th>Currency</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -46,24 +49,31 @@
                             <td>{{ $vendor->email }}</td>
                             <td>{{ $vendor->phone_number }}</td>
                             <td>{{ $vendor->country_name }}</td>
+                            <td>{{ $vendor->currency }}</td>
                             <td>
                                 <div class="btn-group">
                                 <a href="{{ route('vendors.show', $vendor->id) }}"
                                     class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('vendors.edit', $vendor->id) }}"
                                     class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('vendors.destroy', $vendor->id) }}" method="POST"
+                                {{-- <form action="{{ route('vendors.destroy', $vendor->id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form> --}}
+                                <form action="{{ route('vendors.destroy', $vendor->id) }}" method="POST" id="delete-form-{{ $vendor->id }}" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $vendor->id }}')" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
+                        
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">No vendors found.</td>
+                            <td colspan="8" class="text-center">No vendors found.</td>
                         </tr>
                     @endforelse
                 </tbody>

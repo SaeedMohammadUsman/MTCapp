@@ -22,7 +22,7 @@ class DepartmentSeeder extends Seeder
         foreach (range(1, 10) as $index) {
             DB::table('departments')->insert([
                 'title_en' => $faker->Company, // Random English title
-                'title_fa' => $fakerIR->sentence, // Random Farsi title
+                'title_fa' => $fakerIR->company, // Random Farsi title
                 'position'=>$faker->randomElement(['salesman', 'visitor', 'cook', 'manager', 'administrator']),
                 'status' => $faker->randomElement(['active', 'inactive', 'archived']),
                 'created_at' => now(),

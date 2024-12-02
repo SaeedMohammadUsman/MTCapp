@@ -20,14 +20,15 @@
             <p><strong>Address (EN):</strong> {{ $vendor->address_en }}</p>
             <p><strong>Address (FA):</strong> {{ $vendor->address_fa }}</p>
             <p><strong>Country:</strong> {{ $vendor->country_name }}</p>
+            <p><strong>Currency:</strong> {{ $vendor->currency }}</p>
         </div>
         <div class="card-footer">
             <a href="{{ route('vendors.index') }}" class="btn btn-secondary">Back to List</a>
             <a href="{{ route('vendors.edit', $vendor->id) }}" class="btn btn-warning">Edit</a>
-            <form action="{{ route('vendors.destroy', $vendor->id) }}" method="POST" style="display:inline;">
+            <form action="{{ route('vendors.destroy', $vendor->id) }}" method="POST" id="delete-form-{{ $vendor->id }}" style="display:inline;">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $vendor->id }}')" class="btn btn-danger">Delete</button>
             </form>
         </div>
     </div>

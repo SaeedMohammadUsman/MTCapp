@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\purchaseOrders;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Vendor extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'vendors';
     protected $fillable = [
         'company_name_en',
@@ -17,12 +19,34 @@ class Vendor extends Model
         'address_en',
         'address_fa',
         'country_name',
+        'currency',
     ];
     
-//     public function purchaseOrders()
-// {
-//     return $this->hasMany(PurchaseOrder::class);
-// }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($vendor) {
+            if ($vendor->country_name == 'Pakistan') {
+                $vendor->currency = 'PKR';
+            } elseif ($vendor->country_name == 'India') {
+                $vendor->currency = 'INR';
+            } elseif ($vendor->country_name == 'Iran') {
+                $vendor->currency = 'Toman';
+            }
+        });
+
+        static::updating(function ($vendor) {
+            if ($vendor->country_name == 'Pakistan') {
+                $vendor->currency = 'PKR';
+            } elseif ($vendor->country_name == 'India') {
+                $vendor->currency = 'INR';
+            } elseif ($vendor->country_name == 'Iran') {
+                $vendor->currency = 'Toman';
+            }
+        });
+    }
 public function purchaseOrders()
 {
     return $this->hasMany(PurchaseOrder::class);

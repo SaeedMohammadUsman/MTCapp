@@ -18,7 +18,16 @@ class VendorSeeder extends Seeder
         $fakerIR = Faker::create('fa_IR');
         
         $countries = ['Pakistan', 'India', 'Iran'];
-        foreach (range(1, 5) as $index) {
+        foreach (range(1, 10) as $index) {
+            $country = $countries[array_rand($countries)];
+            $currency = '';
+            if ($country == 'Pakistan') {
+                $currency = 'PKR';
+            } elseif ($country == 'India') {
+                $currency = 'INR';
+            } elseif ($country == 'Iran') {
+                $currency = 'Toman';
+            }
             DB::table('vendors')->insert([
                 'company_name_en' => $faker->company,  
                 'company_name_fa' => $fakerIR->company,  
@@ -26,7 +35,8 @@ class VendorSeeder extends Seeder
                 'phone_number' => $faker->phoneNumber,  
                 'address_en' => $faker->address, 
                 'address_fa' => $faker->address,  
-                'country_name' => $countries[array_rand($countries)],  
+                'country_name' => $country,  
+                'currency' => $currency,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
