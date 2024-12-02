@@ -49,12 +49,20 @@
                                     class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('departments.edit', $department->id) }}"
                                     class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('departments.destroy', $department->id) }}" method="POST"
+                                {{-- <form action="{{ route('departments.destroy', $department->id) }}  id="delete-form-{{ $department->id }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    
+                                    <button type="button"  onclick="confirmDelete(event,'delete-form-{{ $department->id }}')" class="btn btn-danger btn-sm">Delete</button>
+                                    {{-- <button type="submit"  class="btn btn-danger btn-sm">Delete</button> 
+                                </form> --}}
+                                <form action="{{ route('departments.destroy', $department->id) }}" method="POST" id="delete-form-{{ $department->id }}" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $department->id }}')" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
+                                
                                 </div>
                             </td>
                         </tr>
@@ -78,6 +86,11 @@
 @stop
 
 @section('js')
+
+@section('js')
+   
+@stop
+
     <script>
         console.log("Welcome to the departments management page!");
     </script>

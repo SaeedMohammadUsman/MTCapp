@@ -76,5 +76,9 @@
             @yield('content')
         </main>
     </div>
+    {{-- @include('components.sweetalert') --}}
+    @include('components.sweetalert')
+    <p>SweetAlert component included successfully.</p>
+    
 </body>
 </html>

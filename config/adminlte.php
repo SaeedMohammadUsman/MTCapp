@@ -350,7 +350,7 @@ return [
                 ],
             ]
         ],
-        
+
         [
             'text'    => 'Vendor Management',
             'icon'    => 'fas fa-store',
@@ -380,18 +380,18 @@ return [
                     'url'  => 'purchase_order_items',
                     'icon' => 'fas fa-box',
                 ],
-               
-                
-                
+
+
+
             ],
         ],
-        
+
         [
-        'text' => 'Stock Adjustments', // The label of the menu item
-        'url'  => 'stock_adjustments', // URL to the stock adjustments index page
-        'icon' => 'fas fa-cogs', 
+            'text' => 'Stock Adjustments', // The label of the menu item
+            'url'  => 'stock_adjustments', // URL to the stock adjustments index page
+            'icon' => 'fas fa-cogs',
         ]
-       
+
     ],
 
     /*
@@ -474,16 +474,34 @@ return [
                 ],
             ],
         ],
-        'Sweetalert2' => [
-            'active' => false,
-            'files' => [
-                [
-                    'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
-                ],
-            ],
+        // 'Sweetalert2' => [
+        //     'active' => true,
+        //     'files' => [
+        //         [
+        //             'type' => 'js',
+        //             'asset' => false,
+        //             'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+        //         ],
+        //     ],
+        // ],
+       'sweetalert2' => [
+    'active' => true,
+    'files' => [
+        [
+            'type' => 'js',
+            'asset' => false,
+            'location' => 'https://cdn.jsdelivr.net/npm/sweetalert2@11.6.0/dist/sweetalert2.all.min.js',
         ],
+        [
+            'type' => 'css',
+            'asset' => false,
+            'location' => 'https://cdn.jsdelivr.net/npm/sweetalert2@11.6.0/dist/sweetalert2.min.css',
+        ],
+    ],
+],
+
+
+
         'Pace' => [
             'active' => false,
             'files' => [

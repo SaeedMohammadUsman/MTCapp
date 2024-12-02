@@ -23,7 +23,7 @@ class DepartmentController extends Controller
                 ->orWhere('title_fa', 'like', "%$search%");
         })->paginate(7); // Paginate results (7 per page)
 
-        return view('departments.index', compact('departments'));
+        return view('departments.index', compact('departments'))->with('info', 'Your changes will be applied after saving.');;
     }
 
 
@@ -49,7 +49,14 @@ class DepartmentController extends Controller
 
         Department::create($request->all());
 
+        // return redirect()->route('departments.index')->with('success', 'Department created successfully!');
+        
         return redirect()->route('departments.index')->with('success', 'Department created successfully!');
+        
+    //     return redirect()->route('departments.index')->with('success', 'Department created successfully!')
+    // ->with('debug', dd(session()->all()));
+
+
     }
 
     public function edit(Department $department)
