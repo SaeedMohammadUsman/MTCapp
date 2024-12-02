@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title_en');  // Department title in English
             $table->string('title_fa');  // Department title in Farsi
-            $table->enum('status', ['active', 'inactive', 'archived'])->default('active'); 
+            $table->enum('status', ['active', 'inactive', 'archived'])->default('active');
+            $table->enum('position', ['salesman', 'visitor', 'cook', 'manager', 'administrator'])->default('salesman');  
             $table->timestamps();
-            // $table->softDeletes();
+            $table->softDeletes();
         });
     }
 

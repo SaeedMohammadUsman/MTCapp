@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Faker\Provider\ar_EG\Company;
 
 class DepartmentSeeder extends Seeder
 {
@@ -18,10 +19,11 @@ class DepartmentSeeder extends Seeder
         $fakerIR = Faker::create('fa_IR');
         
 
-        foreach (range(1, 5) as $index) {
+        foreach (range(1, 10) as $index) {
             DB::table('departments')->insert([
-                'title_en' => $faker->words(3, true), // Random English title
-                'title_fa' => $fakerIR->words(3, true), // Random Farsi title
+                'title_en' => $faker->Company, // Random English title
+                'title_fa' => $fakerIR->sentence, // Random Farsi title
+                'position'=>$faker->randomElement(['salesman', 'visitor', 'cook', 'manager', 'administrator']),
                 'status' => $faker->randomElement(['active', 'inactive', 'archived']),
                 'created_at' => now(),
                 'updated_at' => now(),

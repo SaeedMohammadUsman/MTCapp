@@ -21,6 +21,17 @@
                     <label for="title_fa">Title (FA)</label>
                     <input type="text" class="form-control" id="title_fa" name="title_fa" value="{{ old('title_fa') }}" required>
                 </div>
+                <div class="form-group">
+                    <label for="position">Position</label>
+                    <select class="form-control" id="position" name="position" required>
+                        <option value="salesman" {{ old('position') == 'salesman' ? 'selected' : '' }}>Salesman</option>
+                        <option value="visitor" {{ old('position') == 'visitor' ? 'selected' : '' }}>Visitor</option>
+                        <option value="cook" {{ old('position') == 'cook' ? 'selected' : '' }}>Cook</option>
+                        <option value="manager" {{ old('position') == 'manager' ? 'selected' : '' }}>Manager</option>
+                        <option value="administrator" {{ old('position') == 'administrator' ? 'selected' : '' }}>Administrator</option>
+                    </select>
+                </div>
+                
 
                 <div class="form-group">
                     <label for="status">Status</label>

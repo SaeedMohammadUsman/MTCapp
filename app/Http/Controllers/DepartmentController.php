@@ -21,7 +21,7 @@ class DepartmentController extends Controller
             $query->where('id', $search)
                 ->orWhere('title_en', 'like', "%$search%")
                 ->orWhere('title_fa', 'like', "%$search%");
-        })->paginate(7); // Paginate results (7 per page)
+        })->paginate(10); // Paginate results (7 per page)
 
         return view('departments.index', compact('departments'))->with('info', 'Your changes will be applied after saving.');;
     }
@@ -45,6 +45,7 @@ class DepartmentController extends Controller
             'title_en' => 'required|string|max:55',
             'title_fa' => 'required|string|max:55',
             'status' => 'required|in:active,inactive,archived',
+            'position' => 'required|string|in:salesman,visitor,cook,manager,administrator',
         ]);
 
         Department::create($request->all());
@@ -77,6 +78,7 @@ class DepartmentController extends Controller
             'title_en' => 'required|string|max:55',
             'title_fa' => 'required|string|max:55',
             'status' => 'required|in:active,inactive,archived',
+            'position' => 'required|string|in:salesman,visitor,cook,manager,administrator',
         ]);
 
         $department->update($request->all());

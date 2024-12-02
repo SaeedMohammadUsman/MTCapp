@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Department extends Model
 {
-    use HasFactory;//,SoftDeletes;
+    use HasFactory, SoftDeletes;
     
-    protected $fillable = ['title_en', 'title_fa', 'status'];
+    protected $fillable = ['title_en', 'title_fa', 'status','position'];
 }

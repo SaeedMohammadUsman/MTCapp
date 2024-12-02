@@ -26,12 +26,15 @@
             <a href="{{ route('departments.create') }}" class="btn btn-primary">Create New Department</a>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-hover table-striped table-sm">
+            {{-- <table class="table  table-hover table-striped table-sm"> --}}
+                <table class="table table-sm table-striped table-hover table-borderless">
+
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Title (EN)</th>
                         <th>Title (FA)</th>
+                        <th>Position</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -42,6 +45,7 @@
                             <td>{{ $department->id }}</td>
                             <td>{{ $department->title_en }}</td>
                             <td>{{ $department->title_fa }}</td>
+                            <td>{{ ucfirst($department->position) }}</td>  
                             <td>{{ ucfirst($department->status) }}</td>
                             <td>
                                 <div class="btn-group">
@@ -49,14 +53,7 @@
                                     class="btn btn-info btn-sm">View</a>
                                 <a href="{{ route('departments.edit', $department->id) }}"
                                     class="btn btn-warning btn-sm">Edit</a>
-                                {{-- <form action="{{ route('departments.destroy', $department->id) }}  id="delete-form-{{ $department->id }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    
-                                    <button type="button"  onclick="confirmDelete(event,'delete-form-{{ $department->id }}')" class="btn btn-danger btn-sm">Delete</button>
-                                    {{-- <button type="submit"  class="btn btn-danger btn-sm">Delete</button> 
-                                </form> --}}
+                              
                                 <form action="{{ route('departments.destroy', $department->id) }}" method="POST" id="delete-form-{{ $department->id }}" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -68,7 +65,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">No departments found.</td>
+                            <td colspan="6" class="text-center">No departments found.</td>
                         </tr>
                     @endforelse
                 </tbody>
