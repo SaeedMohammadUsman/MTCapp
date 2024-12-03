@@ -25,7 +25,7 @@
             <form action="{{ route('departments.destroy', $department->id) }}" method="POST" id="delete-form-{{ $department->id }}" style="display:inline;">
                 @csrf
                 @method('DELETE')
-                <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $department->id }}')" class="btn btn-danger btn-sm">Delete</button>
+                <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $department->id }}')" class="btn btn-danger ">Delete</button>
             </form> 
             
         </div>

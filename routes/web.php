@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\ProfileController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 // Route::get('/', function () {
@@ -29,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Auth::routes();
 
@@ -58,3 +60,7 @@ Route::put('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemCo
 
 Route::delete('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'destroy'])
     ->name('purchase_orders.items.destroy');
+
+
+Route::resource('categories', CategoryController::class);
+Route::post('categories/{category}/restore', [CategoryController::class, 'restore'])->name('categories.restore');

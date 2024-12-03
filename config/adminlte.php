@@ -350,7 +350,6 @@ return [
                 ],
             ]
         ],
-
         [
             'text'    => 'Vendor Management',
             'icon'    => 'fas fa-store',
@@ -361,36 +360,39 @@ return [
                     'icon' => 'fas fa-list',
                 ],
                 [
-                    'text' => 'Inventory Items',
-                    'url'  => 'inventory_items',
-                    'icon' => 'fas fa-boxes',
-                ],
-                // [
-                //     'text' => 'Purchase Orders',
-                //     'url'  => 'purchase_orders',
-                //     'icon' => 'fas fa-shopping-cart',
-                // ],
-                [
                     'text' => 'Purchase Orders',
                     'url'  => 'purchase_orders',
                     'icon' => 'fas fa-shopping-cart',
                 ],
-                [
-                    'text' => 'Purchase Order Items',
-                    'url'  => 'purchase_order_items',
-                    'icon' => 'fas fa-box',
-                ],
-
-
-
             ],
         ],
-
+        
         [
-            'text' => 'Stock Adjustments', // The label of the menu item
-            'url'  => 'stock_adjustments', // URL to the stock adjustments index page
-            'icon' => 'fas fa-cogs',
-        ]
+            'text'    => 'Stock Management',
+            'icon'    => 'fas fa-box',
+            'submenu' => [
+                [
+                    'text' => 'Inventory Items',
+                    'url'  => 'inventory_items',
+                    'icon' => 'fas fa-boxes',
+                ],
+                [
+                    'text' => 'Stock Adjustments',
+                    'url'  => 'stock_adjustments',
+                    'icon' => 'fas fa-cogs',
+                ],
+                [
+                    'text' => 'Categories',
+                    'url'  => 'categories',
+                    'icon' => 'fas fa-tags',
+                ],
+            ],
+        ],
+        
+        
+        
+
+
 
     ],
 
@@ -474,16 +476,7 @@ return [
                 ],
             ],
         ],
-        // 'Sweetalert2' => [
-        //     'active' => true,
-        //     'files' => [
-        //         [
-        //             'type' => 'js',
-        //             'asset' => false,
-        //             'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
-        //         ],
-        //     ],
-        // ],
+  
        'sweetalert2' => [
     'active' => true,
     'files' => [

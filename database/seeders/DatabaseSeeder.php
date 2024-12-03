@@ -37,5 +37,7 @@ class DatabaseSeeder extends Seeder
             PurchaseOrderSeeder::class,
             PurchaseOrderItemSeeder::class,
         ]);
+        
+        $this->call(CategorySeeder::class);
     }
 }

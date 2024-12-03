@@ -53,7 +53,8 @@
                         <tr>
                             <td>{{ $order->id }}</td>
                             <td>{{ $order->order_number }}</td>
-                            <td>{{ $order->vendor->company_name_en }}</td>
+                            {{-- <td>{{ $order->vendor->company_name_en }}</td> --}}
+                            <td>{{ $order->vendor?->company_name_en ?? 'N/A' }}</td>
                             <td>{{ number_format($order->total_price, 2) }}</td>
                             <td>{{ $order->status_en }}</td>
                             <td>
