@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\InventoryItemController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -64,3 +66,9 @@ Route::delete('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderIte
 
 Route::resource('categories', CategoryController::class);
 Route::post('categories/{category}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
+
+// Resource routes for managing items
+Route::resource('items', ItemController::class);
+
+// Route to restore soft-deleted items
+Route::post('items/{item}/restore', [ItemController::class, 'restore'])->name('items.restore');
