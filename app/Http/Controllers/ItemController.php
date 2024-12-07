@@ -36,7 +36,8 @@ class ItemController extends Controller
             $items = $query->onlyTrashed()->paginate(10);
         } else {
             // Show active items by default
-            $items = $query->paginate(10);
+            $items = $query->with('category')->paginate(10);
+
         }
 
         // Fetch all categories for the dropdown filter

@@ -61,6 +61,8 @@ class CategoryController extends Controller
             ->with('success', 'Category created successfully!');
     }
 
+   
+    
     /**
      * Display the specified resource.
      */

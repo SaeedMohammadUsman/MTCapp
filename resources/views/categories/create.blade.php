@@ -1,3 +1,9 @@
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 @extends('adminlte::page')
 
 @section('title', 'Create Category')
@@ -34,7 +40,5 @@
 @stop
 
 @section('js')
-    <script>
-        console.log("Creating a new category.");
-    </script>
+
 @stop

@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0"></script>
 @if (session('success'))
     <script>
         Swal.fire({
@@ -56,7 +57,8 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+
 
 {{-- <script>
     function confirmDelete(event,formId) {
