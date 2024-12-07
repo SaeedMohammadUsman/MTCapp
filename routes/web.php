@@ -48,7 +48,7 @@ Route::resource('stock_adjustments', StockAdjustmentController::class);
 Route::resource('purchase_orders', PurchaseOrderController::class);
 
 // Shallow resource routes for purchase order items (create, store only)
-Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
+// Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
 
 // Nested routes for purchase order items (show, edit, update, delete)
 Route::get('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'show'])

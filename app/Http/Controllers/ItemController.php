@@ -49,25 +49,21 @@ class ItemController extends Controller
     /**
      * Show the form for creating a new item.
      */
-    // public function create()
-    // {
-    //     dd('Create method is being called');
-    //     // Fetch all categories for dropdown selection
-    //     $categories = Category::all();
-    //     return view('items.create', compact('categories'));
-    // }
     public function create()
     {
-        return "Create method is working!";
+     
+        // Fetch all categories for dropdown selection
+        $categories = Category::all();
+        return view('items.create', compact('categories'));
     }
-    
+   
     /**
      * Store a newly created item in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'item_code' => 'required|unique:items,item_code',
+            
             'trade_name_en' => 'required|string|max:255',
             'trade_name_fa' => 'required|string|max:255',
             'used_for_en' => 'required|string|max:255',
@@ -80,7 +76,7 @@ class ItemController extends Controller
 
         // Create the new item
         Item::create($request->only([
-            'item_code', 'trade_name_en', 'trade_name_fa', 'used_for_en', 'used_for_fa', 'size', 
+             'trade_name_en', 'trade_name_fa', 'used_for_en', 'used_for_fa', 'size', 
             'description_en', 'description_fa', 'category_id'
         ]));
 
