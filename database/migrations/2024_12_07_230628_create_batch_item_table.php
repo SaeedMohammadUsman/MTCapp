@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('batch_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('batch_id')->constrained('inventory_batches')->onDelete('cascade');
+            $table->foreignId('inventory_batch_id')->constrained('inventory_batches')->onDelete('cascade');
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->decimal('cost_price', 10, 2); // Specific cost for the item in this batch
             $table->decimal('selling_price', 10, 2); // Specific selling price for the item in this batch

@@ -21,7 +21,7 @@ class BatchItemSeeder extends Seeder
         foreach ($batches as $batch) {
             foreach ($items as $item) {
                 BatchItem::create([
-                    'batch_id' => $batch->id,
+                    'inventory_batch_id' => $batch->id,
                     'item_id' => $item->id,
                     'cost_price' => 200.00,  // Example cost price
                     'selling_price' => 250.00, // Example selling price

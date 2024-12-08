@@ -6,12 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class BatchItem extends Model
 {
-    
-    protected $table = 'batch_items'; 
-    public function inventoryBatches()
+
+    protected $table = 'batch_items';
+    // public function inventoryBatches()
+    // {
+    //     return $this->belongsToMany(InventoryBatch::class, 'batch_items')
+    //         ->withPivot('cost_price', 'selling_price', 'quantity', 'expiration_date')
+    //         ->withTimestamps();
+    // }
+    public function inventoryBatch()
     {
-        return $this->belongsToMany(InventoryBatch::class, 'batch_items')
-            ->withPivot('cost_price', 'selling_price', 'quantity', 'expiration_date')
-            ->withTimestamps();
+        return $this->belongsTo(InventoryBatch::class); // Each BatchItem belongs to an InventoryBatch
+    }
+    public function item()
+    {
+        return $this->belongsTo(Item::class);  // Define the relationship to the Item model
     }
 }

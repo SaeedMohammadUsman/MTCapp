@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\InventoryBatchController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -48,7 +50,7 @@ Route::resource('stock_adjustments', StockAdjustmentController::class);
 Route::resource('purchase_orders', PurchaseOrderController::class);
 
 // Shallow resource routes for purchase order items (create, store only)
-// Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
+Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
 
 // Nested routes for purchase order items (show, edit, update, delete)
 Route::get('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'show'])
@@ -70,5 +72,10 @@ Route::post('categories/{category}/restore', [CategoryController::class, 'restor
 // Resource routes for managing items
 Route::resource('items', ItemController::class);
 
+
 // Route to restore soft-deleted items
 Route::post('items/{item}/restore', [ItemController::class, 'restore'])->name('items.restore');
+Route::resource('batches', InventoryBatchController::class);
+
+
+
