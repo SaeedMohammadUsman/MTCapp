@@ -372,6 +372,12 @@ return [
             'icon'    => 'fas fa-box',
             'submenu' => [
                 [
+                    'text' => 'Items',
+                    'url'  => 'items',
+                    'icon' => 'fas fa-tags',
+                ],
+                
+                [
                     'text' => 'Inventory Items',
                     'url'  => 'inventory_items',
                     'icon' => 'fas fa-boxes',

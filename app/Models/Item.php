@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,14 +13,14 @@ class Item extends Model
 
     // Fillable attributes to allow mass assignment
     protected $fillable = [
-        'item_code', 
-        'trade_name_en', 
-        'used_for_en', 
-        'trade_name_fa', 
-        'used_for_fa', 
-        'size', 
-        'description_fa', 
-        'description_en', 
+        'item_code',
+        'trade_name_en',
+        'used_for_en',
+        'trade_name_fa',
+        'used_for_fa',
+        'size',
+        'description_fa',
+        'description_en',
         'category_id'
     ];
 
@@ -36,10 +37,14 @@ class Item extends Model
             }
         });
     }
-    
+
     // Define the relationship with categories
     public function category()
     {
         return $this->belongsTo(Category::class); // Assuming Category model exists
+    }
+    public function inventoryBatches()
+    {
+        return $this->hasMany(InventoryBatch::class, 'item_id', 'id');
     }
 }

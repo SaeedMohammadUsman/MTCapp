@@ -39,5 +39,10 @@ class DatabaseSeeder extends Seeder
         ]);
         
         $this->call(CategorySeeder::class);
+        $this->call([
+            ItemSeeder::class,            // Seed items first
+            InventoryBatchSeeder::class,  // Then seed inventory batches
+            BatchItemSeeder::class,       // Finally, seed the pivot table (batch_item)
+        ]);
     }
 }
