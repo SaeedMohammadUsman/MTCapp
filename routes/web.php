@@ -78,4 +78,3 @@ Route::post('items/{item}/restore', [ItemController::class, 'restore'])->name('i
 Route::resource('batches', InventoryBatchController::class);
 
 
-
