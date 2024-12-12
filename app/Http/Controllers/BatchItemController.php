@@ -1,115 +1,110 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\BatchItem;
 use App\Models\InventoryBatch;
 use App\Models\Item;
+// use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 
 class BatchItemController extends Controller
 {
-    // Display the list of batch items with pagination and filtering
-    public function index(Request $request)
+    // Show the form for creating batch items
+    public function create(InventoryBatch $batch)
     {
-        $batch_id = $request->get('batch_id');
-        $item_id = $request->get('item_id');
-
-        // Query batch items with filters and paginate
-        $batchItems = BatchItem::with(['inventoryBatch', 'item'])
-            ->when($batch_id, function ($query, $batch_id) {
-                return $query->where('inventory_batch_id', $batch_id);
-            })
-            ->when($item_id, function ($query, $item_id) {
-                return $query->where('item_id', $item_id);
-            })
-            ->latest()
-            ->paginate(10);
-
-        $batches = InventoryBatch::all();
+        
+        // Fetch all items to populate the dropdown (including both English and Persian trade names)
         $items = Item::all();
-
-        return view('batch_items.index', compact('batchItems', 'batches', 'items'));
+        return view('batch_items.create', compact('batch', 'items')); // Adjust with your view path
     }
+    
 
-    // Show the form for creating a new batch item
-    public function create()
+    // Store a newly created batch item
+    public function store(Request $request, InventoryBatch $batch)
     {
-        $batches = InventoryBatch::all();
-        $items = Item::all();
-
-        return view('batch_items.create', compact('batches', 'items'));
-    }
-
-    // Store a newly created batch item in the database
-    public function store(Request $request)
-    {
+        // Validate the incoming request data
         $request->validate([
-            'inventory_batch_id' => 'required|exists:inventory_batches,id',
-            'item_id' => 'required|exists:items,id',
-            'cost_price' => 'required|numeric|min:0',
-            'selling_price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:1',
-            'expiration_date' => 'nullable|date',
+            'items.*.trade_name' => 'required|string',
+            'items.*.cost_price' => 'required|numeric|min:0',
+            'items.*.selling_price' => 'required|numeric|min:0',
+            'items.*.quantity' => 'required|integer|min:1', 
+            'items.*.expiration_date' => 'nullable|date', 
         ]);
 
-        BatchItem::create($request->only([
-            'inventory_batch_id',
-            'item_id',
-            'cost_price',
-            'selling_price',
-            'quantity',
-            'expiration_date',
-        ]));
+        // Loop through each item submitted
+        foreach ($request->input('items') as $itemData) {
+            // Split the trade name into English and Persian
+            list($trade_name_en, $trade_name_fa) = explode('|', $itemData['trade_name']);
 
-        return redirect()->route('batch_items.index')->with('success', 'Batch item created successfully!');
+            // Store the batch item
+            BatchItem::create([
+                'trade_name_en' => $trade_name_en,
+                'trade_name_fa' => $trade_name_fa,
+                'cost_price' => $itemData['cost_price'],
+                'selling_price' => $itemData['selling_price'],
+                'quantity' => $itemData['quantity'],
+                'expiration_date' => $itemData['expiration_date'], // If provided
+            ]);
+        }
+        return redirect()->route('batches.show', $batch->id)->with('success', 'Batch items created successfully.');
+
+        // return redirect()->route('batch-items.create', ['batch' => $batch->id])->with('success', 'Batch items created successfully.');
+
     }
 
-    // Show the form for editing the specified batch item
+    // Show the form for editing a batch item
     public function edit($id)
     {
+        // Fetch the batch item and all items for the dropdown
         $batchItem = BatchItem::findOrFail($id);
-        $batches = InventoryBatch::all();
         $items = Item::all();
 
-        return view('batch_items.edit', compact('batchItem', 'batches', 'items'));
+        return view('batch_items.edit', compact('batchItem', 'items')); // Adjust with your view path
     }
 
-    // Update the specified batch item in the database
+    // Update the specified batch item
     public function update(Request $request, $id)
     {
+        // Validate the incoming request data
         $request->validate([
-            'inventory_batch_id' => 'required|exists:inventory_batches,id',
-            'item_id' => 'required|exists:items,id',
-            'cost_price' => 'required|numeric|min:0',
-            'selling_price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:1',
-            'expiration_date' => 'nullable|date',
+            'items.*.trade_name' => 'required|string',
+            'items.*.cost_price' => 'required|numeric|min:0',
+            'items.*.selling_price' => 'required|numeric|min:0',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.expiration_date' => 'nullable|date', 
         ]);
 
+        // Fetch the batch item
         $batchItem = BatchItem::findOrFail($id);
-        $batchItem->update($request->only([
-            'inventory_batch_id',
-            'item_id',
-            'cost_price',
-            'selling_price',
-            'quantity',
-            'expiration_date',
-        ]));
 
-        return redirect()->route('batch_items.index')->with('success', 'Batch item updated successfully!');
+        // Split the trade name into English and Persian
+        list($trade_name_en, $trade_name_fa) = explode('|', $request->input('items.0.trade_name'));
+
+        // Update the batch item
+        $batchItem->update([
+            'trade_name_en' => $trade_name_en,
+            'trade_name_fa' => $trade_name_fa,
+            'cost_price' => $request->input('items.0.cost_price'),
+            'selling_price' => $request->input('items.0.selling_price'),
+            'quantity' => $request->input('items.0.quantity'),
+            'expiration_date' => $request->input('items.0.expiration_date'), // If provided
+        ]);
+
+        return redirect()->route('batch-items.create')->with('success', 'Batch item updated successfully.');
     }
 
     // Delete a batch item
     public function destroy($id)
     {
+        $batchItem = BatchItem::findOrFail($id);
+        
+        // Fetch the batch item and delete it
         try {
-            $batchItem = BatchItem::findOrFail($id);
             $batchItem->delete();
-
-            return redirect()->route('batch_items.index')->with('success', 'Batch item deleted successfully!');
+    
+            return redirect()->route('batches.show', $batchItem->inventoryBatch->id)->with('success', 'Batch item deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('batch_items.index')->with('error', 'Error deleting batch item: ' . $e->getMessage());
+            return redirect()->route('batches.show')->with('error', 'Error deleting batch item: ' . $e->getMessage());
         }
     }
 }

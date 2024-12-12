@@ -376,7 +376,11 @@ return [
                     'url'  => 'items',
                     'icon' => 'fas fa-tags',
                 ],
-                
+                [
+                    'text' => 'Batches',
+                    'url'  => 'batches',
+                    'icon' => 'fas fa-layer-group',
+                ],
                 [
                     'text' => 'Inventory Items',
                     'url'  => 'inventory_items',

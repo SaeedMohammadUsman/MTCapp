@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BatchItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\InventoryBatchController;
@@ -50,7 +51,8 @@ Route::resource('stock_adjustments', StockAdjustmentController::class);
 Route::resource('purchase_orders', PurchaseOrderController::class);
 
 // Shallow resource routes for purchase order items (create, store only)
-Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
+// Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
+
 
 // Nested routes for purchase order items (show, edit, update, delete)
 Route::get('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'show'])
@@ -75,6 +77,14 @@ Route::resource('items', ItemController::class);
 
 // Route to restore soft-deleted items
 Route::post('items/{item}/restore', [ItemController::class, 'restore'])->name('items.restore');
+
 Route::resource('batches', InventoryBatchController::class);
+Route::resource('batch_items',BatchItemController::class); 
 
 
+// Batch Item Routes
+// Batch Item Routes
+Route::post('batches/{batch}/items', [BatchItemController::class, 'store'])->name('batches.items.store');
+
+// Batch Routes
+Route::get('/batches/{id}', [InventoryBatchController::class, 'show'])->name('batches.show');

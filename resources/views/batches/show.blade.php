@@ -24,7 +24,6 @@
                     <thead>
                         <tr>
                             <th>Trade Name</th>
-
                             <th>Cost Price</th>
                             <th>Selling Price</th>
                             <th>Quantity</th>
@@ -46,17 +45,20 @@
                                     {{-- <a href="{{ route('batches.items.edit', [$batch->id, $batchItem->id]) }}"
                                         class="btn btn-warning btn-sm">Edit</a> --}}
                                     <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                                        {{-- <form action="{{ route('batches.items.destroy', [$batch->id, $batchItem->id]) }}" method="POST" style="display:inline;" id="delete-form-{{ $batchItem->id }}">
+                                    {{-- <form action="{{ route('batches.items.destroy', [$batch->id, $batchItem->id]) }}" method="POST" style="display:inline;" id="delete-form-{{ $batchItem->id }}">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $batchItem->id }}')" class="btn btn-danger btn-sm">Delete</button>
                                         </form> --}}
-                                        
-                                        <form  method="POST" style="display:inline;" id="delete-form-{{ $batchItem->id }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $batchItem->id }}')" class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
+
+                                    <form action="{{ route('batch_items.destroy', $batchItem->id) }}" method="POST"
+                                        style="display:inline;" id="delete-form-{{ $batchItem->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                            onclick="confirmDelete(event, 'delete-form-{{ $batchItem->id }}')"
+                                            class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
@@ -65,6 +67,8 @@
             @endif
 
             <!-- Action Buttons -->
+            <a href="{{ route('batch_items.create') }}" class="btn btn-primary mt-3">Add New Item</a>
+
             <a href="{{ route('batches.index') }}" class="btn btn-secondary mt-3">Back to List</a>
         </div>
     </div>

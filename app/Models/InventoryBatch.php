@@ -14,17 +14,17 @@ class InventoryBatch extends Model
     protected $fillable = [
         'batch_number', 'remark'
     ];
-    protected static function booted()
-    {
-        static::creating(function ($batch) {
-            // Auto-generate batch number if not provided
-            if (!$batch->batch_number) {
-                $latestBatch = self::latest('id')->first();
-                $nextNumber = $latestBatch ? ((int)str_replace('BATCH', '', $latestBatch->batch_number) + 1) : 1;
-                $batch->batch_number = 'BATCH' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT); // Format as BATCH001
-            }
-        });
-    }
+    // protected static function booted()
+    // {
+    //     static::creating(function ($batch) {
+    //         // Auto-generate batch number if not provided
+    //         if (!$batch->batch_number) {
+    //             $latestBatch = self::latest('id')->first();
+    //             $nextNumber = $latestBatch ? ((int)str_replace('BATCH', '', $latestBatch->batch_number) + 1) : 1;
+    //             $batch->batch_number = 'BATCH' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT); // Format as BATCH001
+    //         }
+    //     });
+    // }
 
     /**
      * Define the relationship with the Item model.

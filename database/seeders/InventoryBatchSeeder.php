@@ -17,11 +17,14 @@ class InventoryBatchSeeder extends Seeder
             ['remark' => 'Discounted batch'],
             ['remark' => 'Seasonal item'],
         ];
-
+        $latestBatch = InventoryBatch::latest('id')->first();
+        $startIndex = $latestBatch 
+            ? ((int)str_replace('BATCH', '', $latestBatch->batch_number) + 1)
+            : 1;
         // Create inventory batches
         foreach ($batchData as $index => $batch) {
             InventoryBatch::create([
-                'batch_number' => 'BATCH' . str_pad($index + 1, 3, '0', STR_PAD_LEFT),
+                'batch_number' => 'BATCH' . str_pad($startIndex + $index, 3, '0', STR_PAD_LEFT),
                 'remark' => $batch['remark'],
             ]);
         }

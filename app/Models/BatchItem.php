@@ -16,7 +16,7 @@ class BatchItem extends Model
     // }
     public function inventoryBatch()
     {
-        return $this->belongsTo(InventoryBatch::class); // Each BatchItem belongs to an InventoryBatch
+        return $this->belongsTo(InventoryBatch::class , 'inventory_batch_id'); // Each BatchItem belongs to an InventoryBatch
     }
     public function item()
     {

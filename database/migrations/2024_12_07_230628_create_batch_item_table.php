@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('batch_item');
+        Schema::dropIfExists('batch_items');
     }
 };
