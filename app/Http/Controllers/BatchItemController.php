@@ -38,6 +38,7 @@ class BatchItemController extends Controller
 
             // Store the batch item
             BatchItem::create([
+                'inventory_batch_id' => $batch->id, 
                 'trade_name_en' => $trade_name_en,
                 'trade_name_fa' => $trade_name_fa,
                 'cost_price' => $itemData['cost_price'],
