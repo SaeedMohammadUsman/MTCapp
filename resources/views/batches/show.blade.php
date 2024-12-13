@@ -67,7 +67,7 @@
             @endif
 
             <!-- Action Buttons -->
-            <a href="{{ route('batches.items.store', ['batch' => $batch->id]) }}" class="btn btn-primary mt-3">Add New Item</a>
+            <a href="{{ route('batches.items.create', ['batch' => $batch->id]) }}" class="btn btn-primary mt-3">Add New Item</a>
 
             <a href="{{ route('batches.index') }}" class="btn btn-secondary mt-3">Back to List</a>
         </div>

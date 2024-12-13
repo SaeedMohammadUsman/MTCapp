@@ -51,7 +51,7 @@ Route::resource('stock_adjustments', StockAdjustmentController::class);
 Route::resource('purchase_orders', PurchaseOrderController::class);
 
 // Shallow resource routes for purchase order items (create, store only)
-// Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
+Route::resource('purchase_orders.items', PurchaseOrderItemController::class)->shallow();
 
 
 // Nested routes for purchase order items (show, edit, update, delete)
@@ -91,3 +91,4 @@ Route::prefix('batch_items')->name('batch_items.')->group(function () {
     Route::resource('/', BatchItemController::class)->parameters(['' => 'batch_item']);
 });
 
+// Route::post('/batches/{batch}/items', [BatchItemController::class, 'store'])->name('saveBatchItems');

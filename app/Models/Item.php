@@ -13,6 +13,7 @@ class Item extends Model
 
     // Fillable attributes to allow mass assignment
     protected $fillable = [
+       
         'item_code',
         'trade_name_en',
         'used_for_en',

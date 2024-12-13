@@ -9,10 +9,10 @@
     <div class="card">
         <div class="card-body">
             <form id="batchItemsForm" method="POST" action="{{ route('batches.items.store', ['batch' => $batch->id]) }}">
-
                 @csrf
-                <input type="hidden" name="batch_id" value="{{ $batch->id }}">
+             
                 <div id="batch-items-container">
+                   
                     <div class="batch-item-row-template d-none">
                         <div class="batch-item-row">
                             <div class="form-group">
@@ -20,14 +20,14 @@
                                 <select name="items[0][trade_name]" class="form-control" required>
                                     <option value="">Select Trade Name</option>
                                     @foreach ($items as $item)
-                                        <option value="{{ $item->trade_name_en }}|{{ $item->trade_name_fa }}">
-                                            {{ $item->trade_name_en }} (EN) / {{ $item->trade_name_fa }} (FA)
+                                    
+                                        <option value="{{ $item->id }} | {{ $item->trade_name_en }}| {{ $item->trade_name_fa }}">
+                                            {{ $item->trade_name_en }}| {{ $item->trade_name_fa }}
                                         </option>
+
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        
                             <div class="form-group">
                                 <label>Cost Price</label>
                                 <input type="number" name="items[0][cost_price]" class="form-control" step="0.01" required>
@@ -47,10 +47,8 @@
                         </div>
                         <hr>
                     </div>
+                 
                 </div>
-                <button type="button" class="btn btn-primary" id="add-batch-item-btn">Add Another Item</button>
-                <button type="button" class="btn btn-success" id="save-batch-items-btn">Save Items</button>
-                <a href="{{ route('batches.index') }}" class="btn btn-secondary">Back to Batches</a>
             </form>
 
             <h3 class="mt-4">Items to Add</h3>
@@ -69,17 +67,19 @@
                     <!-- Dynamically added batch items will appear here -->
                 </tbody>
             </table>
+            <button type="button" class="btn btn-primary" id="add-batch-item-btn">Add Another Item</button>
+            <button type="button" class="btn btn-success" id="save-batch-items-btn">Save Items</button>
+            <a href="{{ route('batches.index') }}" class="btn btn-secondary">Back to Batches</a>
         </div>
     </div>
 @stop
 
 @section('js')
-<script src="{{ asset('js/batchItems.js') }}"></script>
-
 <script>
     window.routes = {
         saveBatchItems: "{{ route('batches.items.store', ['batch' => $batch->id]) }}",
         index: "{{ route('batches.index') }}"
     };
 </script>
+<script src="{{ asset('js/batchItems.js') }}"></script>
 @stop
