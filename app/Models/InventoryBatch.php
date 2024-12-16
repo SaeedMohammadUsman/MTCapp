@@ -32,7 +32,7 @@ class InventoryBatch extends Model
     public function items()
     {
         return $this->belongsToMany(Item::class, 'batch_items')
-                    ->withPivot('cost_price', 'selling_price', 'quantity', 'expiration_date')
+                    ->withPivot('id','cost_price', 'selling_price', 'quantity', 'expiration_date')
                     ->withTimestamps();
     }
     

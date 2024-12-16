@@ -49,23 +49,23 @@ class BatchItemController extends Controller
                 'redirect_url' => route('batches.index'),
                 'flash_message' => 'Batch items saved successfully.',
             ]);
-            
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
     // Show the form for editing a batch item
-    public function edit($id)
+    public function edit($batchId, $batchItemId)
     {
-        // Fetch the batch item and all items for the dropdown
-        $batchItem = BatchItem::findOrFail($id);
-        $items = Item::all();
+        $batchItem = BatchItem::with(['inventoryBatch', 'item'])
+            ->where('id', $batchItemId)
+            ->where('inventory_batch_id', $batchId) // Direct check instead of whereHas
+            ->firstOrFail();
 
-        return view('batch_items.edit', compact('batchItem', 'items')); // Adjust with your view path
+        $items = Item::all();
+        return view('batch_items.edit', compact('batchItem', 'items'));
     }
 
-    // Update the specified batch item
-    public function update(Request $request, $id)
+    public function update(Request $request, $batchId, $id)
     {
         // Validate the incoming request data
         $request->validate([
@@ -77,36 +77,46 @@ class BatchItemController extends Controller
         ]);
 
         // Fetch the batch item
-        $batchItem = BatchItem::findOrFail($id);
+        $batchItem = BatchItem::where('id', $id)
+            ->where('inventory_batch_id', $batchId)
+            ->firstOrFail();
 
         // Split the trade name into English and Persian
-        list($trade_name_en, $trade_name_fa) = explode('|', $request->input('items.0.trade_name'));
+        list($itemId, $trade_name_en, $trade_name_fa) = explode('|', $request->input('items.0.trade_name'));
+        $item = $batchItem->item;
+        $item->update([
+            'trade_name_en' => $trade_name_en,
+            'trade_name_fa' => $trade_name_fa,
+        ]);
 
         // Update the batch item
         $batchItem->update([
-            'trade_name_en' => $trade_name_en,
-            'trade_name_fa' => $trade_name_fa,
             'cost_price' => $request->input('items.0.cost_price'),
             'selling_price' => $request->input('items.0.selling_price'),
             'quantity' => $request->input('items.0.quantity'),
             'expiration_date' => $request->input('items.0.expiration_date'), // If provided
         ]);
 
-        return redirect()->route('batch-items.create')->with('success', 'Batch item updated successfully.');
+        // return redirect()->route('batches.items.edit', [
+        //     'batch' => $batchItem->inventory_batch_id,
+        //     // 'batch_item' => $batchItem->id
+        // ])->with('success', 'Batch item updated successfully.');
+
+        return redirect()->route('batches.show', ['id' => $batchId])
+        ->with('success', 'Batch item updated successfully.');
+    
     }
 
     // Delete a batch item
-    public function destroy($id)
+    public function destroy($batchId, $batchItemId)
     {
-        $batchItem = BatchItem::findOrFail($id);
+        $batchItem = BatchItem::where('id', $batchItemId)
+            ->where('inventory_batch_id', $batchId)
+            ->firstOrFail();
 
-        // Fetch the batch item and delete it
-        try {
-            $batchItem->delete();
+        $batchItem->delete();
 
-            return redirect()->route('batches.show', $batchItem->inventoryBatch->id)->with('success', 'Batch item deleted successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('batches.show')->with('error', 'Error deleting batch item: ' . $e->getMessage());
-        }
+        return redirect()->route('batches.show', $batchId)
+            ->with('success', 'Batch item deleted successfully.');
     }
 }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('selling_price', 10, 2); // Specific selling price for the item in this batch
             $table->integer('quantity'); // Quantity of the item in this batch
             $table->date('expiration_date')->nullable(); // Expiration date for the item in this batch
+            $table->unique(['inventory_batch_id', 'item_id']);
             $table->timestamps();
         });
         

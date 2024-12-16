@@ -23,6 +23,6 @@ class BatchItem extends Model
     }
     public function item()
     {
-        return $this->belongsTo(Item::class);  // Define the relationship to the Item model
+        return $this->belongsTo(Item::class, 'item_id');  // Define the relationship to the Item model
     }
 }

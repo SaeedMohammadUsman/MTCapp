@@ -78,17 +78,30 @@ Route::resource('items', ItemController::class);
 // Route to restore soft-deleted items
 Route::post('items/{item}/restore', [ItemController::class, 'restore'])->name('items.restore');
 
+
+
 Route::prefix('batches')->name('batches.')->group(function () {
     Route::resource('/', InventoryBatchController::class)->parameters(['' => 'batch']);
     Route::get('/{id}', [InventoryBatchController::class, 'show'])->name('show');
+
+    // Batch Items Routes
     Route::post('/{batch}/items', [BatchItemController::class, 'store'])->name('items.store');
     Route::get('/{batch}/items/create', [BatchItemController::class, 'create'])->name('items.create');
+    
+    
+    Route::get('/{batch}/items/{batch_item}/edit', [BatchItemController::class, 'edit'])->name('items.edit');
+ 
+    Route::put('/{batch}/items/{batch_item}', [BatchItemController::class, 'update'])->name('items.update');
+    Route::delete('/{batch}/items/{batch_item}', [BatchItemController::class, 'destroy'])->name('items.destroy');
 });
 
 
 
-Route::prefix('batch_items')->name('batch_items.')->group(function () {
-    Route::resource('/', BatchItemController::class)->parameters(['' => 'batch_item']);
-});
 
-// Route::post('/batches/{batch}/items', [BatchItemController::class, 'store'])->name('saveBatchItems');
+
+
+
+
+
+
+

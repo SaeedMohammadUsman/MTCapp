@@ -36,13 +36,10 @@ class InventoryBatchController extends Controller
     // }
     public function show($id)
     {
-        // Eager load 'items' relationship in 'BatchItem' with the 'item' relationship
-       
-      //  $batch = InventoryBatch::with('items.item')->findOrFail($id); 
-        $batch = InventoryBatch::with('items')->findOrFail($id); 
+     //   $batch = InventoryBatch::with(['items.item'])->findOrFail($id); 
+      $batch = InventoryBatch::with('items')->findOrFail($id); 
 
-        // dd($batch);
-        // dd($batch->items); 
+
         return view('batches.show', compact('batch'));
     }
     
