@@ -8,19 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class PurchaseOrderItem extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'purchase_order_id',
         'item_id',
-        'trade_name_en',
-        'trade_name_fa',
-        'used_for_en',
-        'used_for_fa',
-        'size',
-        'c_size',
-        'unit_price',
         'quantity',
-        'total_price',
         'remarks',
     ];
     public function purchaseOrder()
@@ -28,9 +19,8 @@ class PurchaseOrderItem extends Model
         return $this->belongsTo(PurchaseOrder::class);
     }
 
-    public function inventoryItem()
+    public function item()
     {
-        return $this->belongsTo(InventoryItem::class, 'item_id');
+        return $this->belongsTo(Item::class);
     }
-    
 }

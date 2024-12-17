@@ -97,11 +97,7 @@ class BatchItemController extends Controller
             'expiration_date' => $request->input('items.0.expiration_date'), // If provided
         ]);
 
-        // return redirect()->route('batches.items.edit', [
-        //     'batch' => $batchItem->inventory_batch_id,
-        //     // 'batch_item' => $batchItem->id
-        // ])->with('success', 'Batch item updated successfully.');
-
+    
         return redirect()->route('batches.show', ['id' => $batchId])
         ->with('success', 'Batch item updated successfully.');
     

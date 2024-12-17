@@ -19,30 +19,40 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-
+        // Seed the User table (if necessary)
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
 
-        $this->call(DepartmentSeeder::class);
-        $this->call(VendorSeeder::class);
+        // Seed department and vendor tables
         $this->call([
-            InventoryItemSeeder::class,
-            StockAdjustmentSeeder::class,
+            DepartmentSeeder::class,
+            VendorSeeder::class,
         ]);
-        $this->call([
-            PurchaseOrderSeeder::class,
-            PurchaseOrderItemSeeder::class,
-        ]);
-        
+
+        // Seed categories first (items depend on categories)
         $this->call(CategorySeeder::class);
+
+        // Seed items
+        $this->call(ItemSeeder::class);
+
+        // Seed inventory items
+        $this->call(InventoryItemSeeder::class);
+
+        // Seed inventory batches and batch items
         $this->call([
-            ItemSeeder::class,            // Seed items first
-            InventoryBatchSeeder::class,  // Then seed inventory batches
-            BatchItemSeeder::class,       // Finally, seed the pivot table (batch_item)
+            InventoryBatchSeeder::class,
+            BatchItemSeeder::class,
         ]);
+
+        // Seed purchase orders after items and vendors are created
+        $this->call(PurchaseOrderSeeder::class);
+
+        // Finally, seed purchase order items (dependent on purchase orders and items)
+        $this->call(PurchaseOrderItemSeeder::class);
+
+        // Optional: Seed stock adjustments
+        $this->call(StockAdjustmentSeeder::class);
     }
 }

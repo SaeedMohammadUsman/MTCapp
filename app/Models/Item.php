@@ -13,7 +13,7 @@ class Item extends Model
 
     // Fillable attributes to allow mass assignment
     protected $fillable = [
-       
+
         'item_code',
         'trade_name_en',
         'used_for_en',
@@ -47,5 +47,10 @@ class Item extends Model
     public function inventoryBatches()
     {
         return $this->hasMany(InventoryBatch::class, 'item_id', 'id');
+    }
+
+    public function purchaseOrderItems()
+    {
+        return $this->hasMany(PurchaseOrderItem::class, 'item_id', 'id');
     }
 }
