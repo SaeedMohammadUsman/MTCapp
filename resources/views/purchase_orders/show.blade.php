@@ -13,7 +13,6 @@
             <p><strong>Order Number:</strong> {{ $purchaseOrder->order_number }}</p>
             <p><strong>Vendor (EN):</strong> {{ $purchaseOrder->vendor->company_name_en }}</p>
             <p><strong>Vendor (FA):</strong> {{ $purchaseOrder->vendor->company_name_fa }}</p>
-            <p><strong>Total Price:</strong> {{ number_format($purchaseOrder->total_price, 2) }}</p>
             <p><strong>Status (EN):</strong> {{ $purchaseOrder->status_en }}</p>
             <p><strong>Status (FA):</strong> {{ $purchaseOrder->status_fa }}</p>
             <p><strong>Remarks:</strong> {{ $purchaseOrder->remarks ?? 'No remarks' }}</p>
@@ -26,48 +25,43 @@
                 <table class="table table-bordered table-hover table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>Item Name</th>
+                            <th>Item Code</th>
                             <th>Trade Name (EN)</th>
-                            <th>Trade Name (Fa)</th>
-                            <th>Unit Price</th>
+                            <th>Trade Name (FA)</th>
+                            <th>Used For (EN)</th>
+                            <th>Used For (FA)</th>
+                            <th>Size</th>
                             <th>Quantity</th>
-                            <th>Total Price</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($purchaseOrder->items as $item)
                             <tr>
-                                <td>{{ $item->inventoryItem->item_name_en }} {{ $item->inventoryItem->item_name_fa }}</td>
-                                {{-- <td>{{  }}</td> --}}
-
-                                <td>{{ $item->trade_name_en }}</td>
-                                <td>{{ $item->trade_name_fa }}</td>
-                                <td>{{ number_format($item->unit_price, 2) }}</td>
+                                <td>{{ $item->item->item_code }}</td>
+                                <td>{{ $item->item->trade_name_en }}</td>
+                                <td>{{ $item->item->trade_name_fa }}</td>
+                                <td>{{ $item->item->used_for_en }}</td>
+                                <td>{{ $item->item->used_for_fa }}</td>
+                                <td>{{ $item->item->size }}</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->unit_price * $item->quantity, 2) }}</td>
+                                
                                 <td>
-                                    <div class="btn-group">
-                                        {{-- <a href="{{ route('purchase_orders.items.show', [$purchaseOrder->id, $item->id]) }}"
-                                            class="btn btn-info btn-sm">View</a> --}}
-                                        
-                                      
-
-                                        
-                                        <a href="{{ route('purchase_orders.items.edit', [$purchaseOrder->id, $item->id]) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
-                                        <form
+                                    <div class="btn-group text-center">
+                                        <!-- Delete Action with Icon -->
+                                        <form id="delete-form-{{ $item->id }}"
                                             action="{{ route('purchase_orders.items.destroy', [$purchaseOrder->id, $item->id]) }}"
                                             method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                            >
-                                                Delete
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                onclick="confirmDelete(event, 'delete-form-{{ $item->id }}')">
+                                                <i class="fas fa-trash"></i> <!-- Trash Icon -->
                                             </button>
                                         </form>
                                     </div>
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>

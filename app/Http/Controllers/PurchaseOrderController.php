@@ -18,13 +18,24 @@ class PurchaseOrderController extends Controller
         $purchaseOrders = PurchaseOrder::when($request->vendor_id, function ($query) use ($request) {
             $query->where('vendor_id', $request->vendor_id);
         })
-        ->when($request->status, function ($query) use ($request) {
-            $query->where('status_en', $request->status);
-        })
-        ->paginate(10);
+            ->when($request->status, function ($query) use ($request) {
+                $query->where('status_en', $request->status);
+            })
+            ->when($request->filter === 'trashed', function ($query) {
+                $query->onlyTrashed(); // Show trashed records when 'trashed' is selected
+            })
+            ->when($request->filter === 'active', function ($query) {
+                $query->whereNull('deleted_at'); // Only active records
+            })
+            ->paginate(10);
 
-        return view('purchase_orders.index', compact('vendors', 'purchaseOrders'));
+        // Add a flag to check if there are trashed records
+        $hasTrashed = PurchaseOrder::onlyTrashed()->exists();
+
+        return view('purchase_orders.index', compact('vendors', 'purchaseOrders', 'hasTrashed'));
     }
+
+
 
     /**
      * Show the form for creating a new purchase order.
@@ -41,18 +52,15 @@ class PurchaseOrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'order_number' => 'required|unique:purchase_orders,order_number|max:50',
+
             'vendor_id' => 'required|exists:vendors,id',
-            'status_en' => 'required',
-            'status_fa' => 'required',
+            'remarks' => 'nullable|string',
         ]);
 
         $purchaseOrder = PurchaseOrder::create([
-            'order_number' => $request->order_number,
             'vendor_id' => $request->vendor_id,
-            'total_price' => 0, // Default to 0
-            'status_en' => $request->status_en,
-            'status_fa' => $request->status_fa,
+            'status_en' => 'Pending', // Status is always Pending when a new order is created
+            'status_fa' => 'در انتظار', // Persian equivalent of "Pending"
             'remarks' => $request->remarks,
         ]);
 
@@ -66,7 +74,7 @@ class PurchaseOrderController extends Controller
      */
     public function show($id)
     {
-        $purchaseOrder = PurchaseOrder::with('items.inventoryItem')->findOrFail($id);
+        $purchaseOrder = PurchaseOrder::with('items.item')->findOrFail($id);
         return view('purchase_orders.show', compact('purchaseOrder'));
     }
 
@@ -88,15 +96,18 @@ class PurchaseOrderController extends Controller
         $purchaseOrder = PurchaseOrder::findOrFail($id);
 
         $request->validate([
-            'order_number' => "required|max:50|unique:purchase_orders,order_number,$id",
+
             'vendor_id' => 'required|exists:vendors,id',
-            'total_price' => 'required|numeric|min:0',
+
             'status_en' => 'required',
             'status_fa' => 'required',
         ]);
 
         $purchaseOrder->update($request->only([
-            'order_number', 'vendor_id', 'total_price', 'status_en', 'status_fa', 'remarks'
+            'vendor_id',
+            'status_en',
+            'status_fa',
+            'remarks'
         ]));
 
         return redirect()->route('purchase_orders.index')->with('success', 'Purchase order updated successfully.');
@@ -111,5 +122,13 @@ class PurchaseOrderController extends Controller
         $purchaseOrder->delete();
 
         return redirect()->route('purchase_orders.index')->with('success', 'Purchase order deleted successfully.');
+    }
+
+    public function restore($id)
+    {
+        $order = PurchaseOrder::withTrashed()->findOrFail($id);
+        $order->restore();
+
+        return redirect()->route('purchase_orders.index')->with('success', 'Purchase order restored successfully.');
     }
 }
