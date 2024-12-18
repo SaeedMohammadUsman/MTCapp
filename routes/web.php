@@ -67,6 +67,12 @@ Route::put('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemCo
 Route::delete('purchase_orders/{purchase_order}/items/{item}', [PurchaseOrderItemController::class, 'destroy'])
     ->name('purchase_orders.items.destroy');
 
+Route::get('purchase_orders/{purchase_order}/pdf', [PurchaseOrderController::class, 'generatePdf'])
+    ->name('purchase_orders.pdf');
+
+
+
+
 
 Route::resource('categories', CategoryController::class);
 Route::post('categories/{category}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
@@ -87,21 +93,10 @@ Route::prefix('batches')->name('batches.')->group(function () {
     // Batch Items Routes
     Route::post('/{batch}/items', [BatchItemController::class, 'store'])->name('items.store');
     Route::get('/{batch}/items/create', [BatchItemController::class, 'create'])->name('items.create');
-    
-    
+
+
     Route::get('/{batch}/items/{batch_item}/edit', [BatchItemController::class, 'edit'])->name('items.edit');
- 
+
     Route::put('/{batch}/items/{batch_item}', [BatchItemController::class, 'update'])->name('items.update');
     Route::delete('/{batch}/items/{batch_item}', [BatchItemController::class, 'destroy'])->name('items.destroy');
 });
-
-
-
-
-
-
-
-
-
-
-

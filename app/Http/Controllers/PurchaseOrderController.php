@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PurchaseOrder;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class PurchaseOrderController extends Controller
 {
@@ -26,7 +27,7 @@ class PurchaseOrderController extends Controller
             })
             ->when($request->filter === 'active', function ($query) {
                 $query->whereNull('deleted_at'); // Only active records
-            })
+            })->orderBy('created_at', 'desc')
             ->paginate(10);
 
         // Add a flag to check if there are trashed records
@@ -116,6 +117,19 @@ class PurchaseOrderController extends Controller
     /**
      * Remove the specified purchase order from storage.
      */
+
+
+    public function generatePdf($purchaseOrderId)
+    {
+        $purchaseOrder = PurchaseOrder::with(['vendor', 'items.item'])->findOrFail($purchaseOrderId);
+        $pdf = PDF::loadView('purchase_orders.pdf', compact('purchaseOrder'))
+            ->setOption('enable-local-file-access', true)
+            ->setOption('no-images', true)
+            ->setOption('no-outline', true)
+            ->setOption('javascript-delay', 5000)
+            ->setOption('disable-smart-shrinking', true);
+        return $pdf->download('purchase_order_' . $purchaseOrder->order_number . '.pdf');
+    }
     public function destroy($id)
     {
         $purchaseOrder = PurchaseOrder::findOrFail($id);
