@@ -111,7 +111,14 @@ class PurchaseOrderController extends Controller
             'remarks'
         ]));
 
-        return redirect()->route('purchase_orders.index')->with('success', 'Purchase order updated successfully.');
+        // If status is completed, download the PDF and redirect with a success message
+        if ($purchaseOrder->status_en === 'Completed') {
+            $this->generatePdf($purchaseOrder->id); 
+            return redirect()->route('purchase_orders.index')
+            ->with('success', 'Purchase order updated successfully and PDF downloaded.');
+        }
+        return redirect()->route('purchase_orders.index')
+            ->with('success', 'Purchase order updated successfully.');
     }
 
     /**
@@ -122,14 +129,21 @@ class PurchaseOrderController extends Controller
     public function generatePdf($purchaseOrderId)
     {
         $purchaseOrder = PurchaseOrder::with(['vendor', 'items.item'])->findOrFail($purchaseOrderId);
+        $fileName = $purchaseOrder->order_number . '.pdf';
+        $filePath = 'C:\\Users\\mohus\\Downloads\\' . $fileName;
+        $counter = 1;
+        while (file_exists($filePath)) {
+            $filePath = 'C:\\Users\\mohus\\Downloads\\' . $purchaseOrder->order_number . '_' . $counter . '.pdf';
+            $counter++;
+        }
+     
+        
         $pdf = PDF::loadView('purchase_orders.pdf', compact('purchaseOrder'))
-            ->setOption('enable-local-file-access', true)
-            ->setOption('no-images', true)
-            ->setOption('no-outline', true)
-            ->setOption('javascript-delay', 5000)
-            ->setOption('disable-smart-shrinking', true);
-        return $pdf->download('purchase_order_' . $purchaseOrder->order_number . '.pdf');
+        ->setOption('enable-local-file-access', true);            
+            $pdf->save($filePath);
+            return response()->download($filePath);
     }
+    
     public function destroy($id)
     {
         $purchaseOrder = PurchaseOrder::findOrFail($id);

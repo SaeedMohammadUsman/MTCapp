@@ -60,30 +60,41 @@
                             <td>{{ $order->id }}</td>
                             <td>{{ $order->order_number }}</td>
                             <td>
-                                {{ $order->vendor?->company_name_en ?? 'N/A' }} / {{ $order->vendor?->company_name_fa ?? 'N/A' }}
+                                {{ $order->vendor?->company_name_en ?? 'N/A' }} /
+                                {{ $order->vendor?->company_name_fa ?? 'N/A' }}
                             </td>
                             <td>{{ $order->remarks }}</td>
-                            
+
                             <td>{{ $order->status_en }}</td>
-                            
+
                             <td>
                                 <div class="btn-group">
                                     @if ($order->trashed())
                                         {{-- Restore button for soft-deleted orders --}}
-                                        <form action="{{ route('purchase_orders.restore', $order->id) }}" method="POST" style="display:inline;">
+                                        <form action="{{ route('purchase_orders.restore', $order->id) }}" method="POST"
+                                            style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-success btn-sm">Restore</button>
                                         </form>
                                     @else
                                         {{-- View, Edit, Delete buttons for active orders --}}
-                                        <a href="{{ route('purchase_orders.show', $order->id) }}" class="btn btn-info btn-sm">View</a>
-                                        <a href="{{ route('purchase_orders.edit', $order->id) }}" class="btn btn-warning btn-sm">Edit</a>
-
-                                        <form action="{{ route('purchase_orders.destroy', $order->id) }}" method="POST" id="delete-form-{{ $order->id }}" style="display:inline;">
+                                        <a href="{{ route('purchase_orders.show', $order->id) }}"
+                                            class="btn btn-info btn-sm">View</a>
+                                        <a href="{{ route('purchase_orders.edit', $order->id) }}"
+                                            class="btn btn-warning btn-sm">Edit</a>
+                                        <form action="{{ route('purchase_orders.destroy', $order->id) }}" method="POST"
+                                            id="delete-form-{{ $order->id }}" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button onclick="confirmDelete(event, 'delete-form-{{ $order->id }}')" type="button" class="btn btn-danger btn-sm">Delete</button>
+                                            <button onclick="confirmDelete(event, 'delete-form-{{ $order->id }}')"
+                                                type="button" class="btn btn-danger btn-sm">Delete</button>
                                         </form>
+                                        @if ($order->status_en === 'Completed')
+                                            <a href="{{ route('purchase_orders.pdf', $order->id) }}"
+                                                class="btn btn-primary btn-sm">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
