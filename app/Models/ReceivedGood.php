@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ReceivedGood extends Model
 {
     use HasFactory, SoftDeletes;
-
+    protected $dates = ['date'];  // Add other date fields if needed
+    protected $casts = [
+        'date' => 'date',
+    ];
+    
     protected $fillable = [
         'batch_number',
         'remark',
