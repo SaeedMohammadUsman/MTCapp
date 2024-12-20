@@ -51,4 +51,9 @@ public function purchaseOrders()
 {
     return $this->hasMany(PurchaseOrder::class);
 }
+
+public function receivedGoods()
+    {
+        return $this->hasMany(ReceivedGood::class, 'vendor_id');
+    }
 }

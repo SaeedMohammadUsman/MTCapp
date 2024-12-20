@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Category;
+use App\Models\InventoryBatch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -48,6 +50,11 @@ class Item extends Model
     {
         return $this->hasMany(InventoryBatch::class, 'item_id', 'id');
     }
+    public function receivedGoodsDetails()
+    {
+        return $this->hasMany(ReceivedGoodDetail::class, 'item_id');
+    } 
+   
 
     public function purchaseOrderItems()
     {

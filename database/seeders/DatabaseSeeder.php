@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ReceivedGoodDetail;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -46,6 +47,8 @@ class DatabaseSeeder extends Seeder
             BatchItemSeeder::class,
         ]);
 
+
+
         // Seed purchase orders after items and vendors are created
         $this->call(PurchaseOrderSeeder::class);
 
@@ -54,5 +57,8 @@ class DatabaseSeeder extends Seeder
 
         // Optional: Seed stock adjustments
         $this->call(StockAdjustmentSeeder::class);
+        
+        $this->call(ReceivedGoodSeeder::class); 
+        $this->call(ReceivedGoodDetail::class); 
     }
 }
