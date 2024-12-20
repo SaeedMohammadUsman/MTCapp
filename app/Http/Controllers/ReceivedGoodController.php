@@ -28,10 +28,12 @@ class ReceivedGoodController extends Controller
             })
             ->when($vendor_id, function ($query, $vendor_id) {
                 return $query->where('vendor_id', $vendor_id);
-            })
-            ->when($is_finalized, function ($query, $is_finalized) {
+            }) ->when($is_finalized !== null, function ($query) use ($is_finalized) {
                 return $query->where('is_finalized', $is_finalized);
             })
+            // ->when($is_finalized, function ($query, $is_finalized) {
+            //     return $query->where('is_finalized', $is_finalized);
+            // })
             ->when($filter === 'trashed', function ($query) {
                 $query->onlyTrashed(); // Show trashed records when 'trashed' is selected
             })
@@ -58,32 +60,41 @@ class ReceivedGoodController extends Controller
 
     /**
      * Store a newly created received good in storage.
-     */
+    **/
     public function store(Request $request)
     {
         $request->validate([
             'vendor_id' => 'required|exists:vendors,id',
             'remark' => 'nullable|string',
             'bill_attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-           
         ]);
 
-        // Handle bill attachment if available
-        if ($request->hasFile('bill_attachment')) {
-            $billAttachmentPath = $request->file('bill_attachment')->store('bill_attachments');
-        } else {
-            $billAttachmentPath = null;
-        }
+        $billAttachmentPath = null;
 
-        ReceivedGood::create([
+        // Create a new record to fetch the auto-generated batch number
+        $receivedGood = ReceivedGood::create([
             'vendor_id' => $request->vendor_id,
             'remark' => $request->remark,
-            'bill_attachment' => $billAttachmentPath,
+            'bill_attachment' => null, // Placeholder until file is stored
             'date' => now(),
         ]);
 
+        // Handle bill attachment with custom naming logic
+        if ($request->hasFile('bill_attachment')) {
+            $vendor = Vendor::findOrFail($request->vendor_id); // Fetch vendor details
+            $vendorPrefix = substr($vendor->company_name_en, 0, 3); // First 3 letters of vendor name
+            $batchNumber = $receivedGood->batch_number; // Get auto-generated batch number
+
+            $originalExtension = $request->file('bill_attachment')->getClientOriginalExtension();
+            $customFileName = "{$vendorPrefix}_Batch{$batchNumber}." . $originalExtension;
+
+            $billAttachmentPath = $request->file('bill_attachment')->storeAs('bill_attachments', $customFileName, 'public');
+            $receivedGood->update(['bill_attachment' => $billAttachmentPath]); // Update the record
+        }
+
         return redirect()->route('received_goods.index')->with('success', 'Received good created successfully!');
     }
+
 
     /**
      * Display the specified received good and its details.
@@ -118,11 +129,17 @@ class ReceivedGoodController extends Controller
 
         $receivedGood = ReceivedGood::findOrFail($id);
 
-        // Handle bill attachment if available
+        $billAttachmentPath = $receivedGood->bill_attachment; // Retain existing attachment by default
+
         if ($request->hasFile('bill_attachment')) {
-            $billAttachmentPath = $request->file('bill_attachment')->store('bill_attachments');
-        } else {
-            $billAttachmentPath = $receivedGood->bill_attachment; // Keep the existing attachment if not updated
+            $vendor = Vendor::findOrFail($request->vendor_id); // Fetch vendor details
+            $vendorPrefix = substr($vendor->company_name_en, 0, 3); // First 3 letters of vendor name
+            $batchNumber = $receivedGood->batch_number; // Use the existing batch number
+
+            $originalExtension = $request->file('bill_attachment')->getClientOriginalExtension();
+            $customFileName = "{$vendorPrefix}_Batch{$batchNumber}." . $originalExtension;
+
+            $billAttachmentPath = $request->file('bill_attachment')->storeAs('bill_attachments', $customFileName, 'public');
         }
 
         $receivedGood->update([

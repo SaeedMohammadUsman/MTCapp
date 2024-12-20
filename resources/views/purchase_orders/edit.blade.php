@@ -52,7 +52,7 @@
                 </div>
 
                 {{-- Submit and Cancel Buttons --}}
-                <button type="submit" class="btn btn-success">Update Order</button>
+                <button type="submit" class="btn btn-success">Update</button>
                 <a href="{{ route('purchase_orders.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
         </div>

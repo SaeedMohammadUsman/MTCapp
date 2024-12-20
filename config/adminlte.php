@@ -377,6 +377,12 @@ return [
                     'icon' => 'fas fa-tags',
                 ],
                 [
+                    'text'    => 'Received Goods',
+                    'url'     => 'received-goods',
+                    'icon'    => 'fas fa-box', // or use 'fas fa-box-open'
+                    
+                ],
+                [
                     'text' => 'Batches',
                     'url'  => 'batches',
                     'icon' => 'fas fa-layer-group',

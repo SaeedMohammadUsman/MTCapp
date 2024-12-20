@@ -59,30 +59,46 @@
             <a href="{{ route('received_goods.create') }}" class="btn btn-primary">Add</a>
         </div>
         <div class="card-body">
-            <table class="table table-sm table-striped table-hover table-borderless py-3">
+            <table class="table table-sm table-striped table-hover  ">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                    <th>No</th>
+                        <th>Batch Number</th>
                         <th>Vendor</th>
+                        <th>Remark</th>
                         <th>Received Date</th>
                         <th>Bill Attachment</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($receivedGoods as $receivedGood)
                         <tr>
-                            <td>{{ $receivedGood->id }}</td>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $receivedGood->batch_number }}</td>
                             <td>{{ $receivedGood->vendor->company_name_en }} ({{ $receivedGood->vendor->company_name_fa }})</td>
+                            <td>{{ $receivedGood->remark }}</td>
                             <td>{{ $receivedGood->date->format('Y-m-d') }}</td>
 
                             <td>
                                 @if ($receivedGood->bill_attachment)
-                                    <a href="{{ Storage::url($receivedGood->bill_attachment) }}" target="_blank">
+                                    {{-- <a href="{{ Storage::url($receivedGood->bill_attachment) }}" target="_blank">
+                                        {{ basename($receivedGood->bill_attachment) }}
+                                    </a> --}}
+                                    <a href="{{ asset('storage/' . $receivedGood->bill_attachment) }}" target="_blank">
                                         {{ basename($receivedGood->bill_attachment) }}
                                     </a>
+                                    
                                 @else
                                     No Attachment Available
+                                @endif
+                            </td>
+                            <td>
+                                @if ($receivedGood->is_finalized)
+                                    <span class="badge bg-success">Completed</span>
+                                @else
+                                    <span class="badge bg-warning">Pending</span>
                                 @endif
                             </td>
 

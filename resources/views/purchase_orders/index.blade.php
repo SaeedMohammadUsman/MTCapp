@@ -40,7 +40,7 @@
     {{-- Table Section --}}
     <div class="card">
         <div class="card-header">
-            <a href="{{ route('purchase_orders.create') }}" class="btn btn-primary">Create New Order</a>
+            <a href="{{ route('purchase_orders.create') }}" class="btn btn-primary">Create</a>
         </div>
         <div class="card-body">
             <table class="table table-hover table-striped table-sm">
@@ -65,7 +65,13 @@
                             </td>
                             <td>{{ $order->remarks }}</td>
 
-                            <td>{{ $order->status_en }}</td>
+                            {{-- <td>{{ $order->status_en }}</td> --}}
+                            <td>
+                                @if ($order->status_en === 'Completed')
+                                    <span class="badge bg-success">Completed</span>
+                                @else
+                                    <span class="badge bg-warning">Pending</span>
+                                @endif
 
                             <td>
                                 <div class="btn-group">
