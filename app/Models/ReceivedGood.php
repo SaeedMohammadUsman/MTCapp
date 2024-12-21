@@ -43,4 +43,10 @@ class ReceivedGood extends Model
     {
         return $this->hasMany(ReceivedGoodDetail::class, 'received_good_id');
     }
+    
+    
+    public function stockTransactions()
+    {
+        return $this->morphMany(StockTransaction::class, 'reference');
+    }
 }
