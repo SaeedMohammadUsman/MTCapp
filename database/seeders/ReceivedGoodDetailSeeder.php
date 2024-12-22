@@ -19,7 +19,7 @@ class ReceivedGoodDetailSeeder extends Seeder
 
         foreach ($receivedGoods as $receivedGood) {
             
-            $items = Item::inRandomOrder()->take(rand(1, 5))->get();
+            $items = Item::inRandomOrder()->take(rand(4, 7))->get();
 
             foreach ($items as $item) {
                 ReceivedGoodDetail::create([

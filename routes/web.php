@@ -13,9 +13,11 @@ use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ReceivedGoodController;
 use App\Http\Controllers\ReceivedGoodDetailController;
 use App\Http\Controllers\StockAdjustmentController;
+use App\Http\Controllers\StockTransactionController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -104,13 +106,18 @@ Route::prefix('received-goods')->name('received_goods.')->group(function () {
     Route::resource('/', ReceivedGoodController::class)->except(['show'])->parameters(['' => 'received_good']);
     Route::get('/{received_good}', [ReceivedGoodController::class, 'show'])->name('show');
     Route::post('/{received_good}/restore', [ReceivedGoodController::class, 'restore'])->name('restore');
-    
-    
-    
+
+
+
     Route::resource('/{received_good}/details', ReceivedGoodDetailController::class)->except(['index', 'show']);
-    
+
     // Route::get('/{received_good}/details/create', [ReceivedGoodDetailController::class, 'create'])->name('details.create');
     // Route::post('/{received_good}/details', [ReceivedGoodDetailController::class, 'store'])->name('details.store');
     // Route::get('/{received_good}/details/{received_good_detail}/edit', [ReceivedGoodDetailController::class, 'edit'])->name('details.edit');
     // Route::delete('/{received_good}/details/{received_good_detail}', [ReceivedGoodDetailController::class, 'destroy'])->name('details.destroy');
+});
+
+Route::prefix('stock-transactions')->name('stock_transactions.')->group(function () {
+    Route::resource('/', StockTransactionController::class);
+    
 });

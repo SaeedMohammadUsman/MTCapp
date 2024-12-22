@@ -47,6 +47,6 @@ class ReceivedGood extends Model
     
     public function stockTransactions()
     {
-        return $this->morphMany(StockTransaction::class, 'reference');
+        return $this->hasMany(StockTransaction::class, 'received_good_id');
     }
 }

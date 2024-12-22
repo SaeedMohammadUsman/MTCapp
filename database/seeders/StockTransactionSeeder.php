@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\StockTransaction;
 use App\Models\ReceivedGood;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
+use Carbon\Carbon;
 
 class StockTransactionSeeder extends Seeder
 {
@@ -19,32 +19,41 @@ class StockTransactionSeeder extends Seeder
         // Fetch all received goods
         $receivedGoods = ReceivedGood::all();
 
-        // Select 5-7 received goods to create stock transactions with type 1 (Stock In)
-        $stockInReceivedGoods = $receivedGoods->random(rand(5, 7));
+        // For each received good, create a Stock In (type 1) transaction
+        foreach ($receivedGoods as $receivedGood) {
+            // Generate a random date within the current year for the transaction
+            $randomDate = Carbon::now()->startOfYear()->addMonths(rand(0, 11))->addDays(rand(0, 30));
 
-        // Select 2-3 received goods to create stock transactions with type 2 (Stock Out)
-        $stockOutReceivedGoods = $receivedGoods->random(rand(2, 3));
-
-        // Insert Stock In transactions
-        foreach ($stockInReceivedGoods as $receivedGood) {
             StockTransaction::create([
                 'transaction_type' => 1, // Stock In
-                'reference_id' => $receivedGood->id,
-                'reference_type' => 'received_goods',
+                'received_good_id' => $receivedGood->id, // Foreign key to ReceivedGood
                 'remarks' => 'Stock In for received good ' . $receivedGood->batch_number,
-                'transaction_date' => now(),
+                'transaction_date' => $randomDate,
             ]);
         }
 
-        // Insert Stock Out transactions
-        foreach ($stockOutReceivedGoods as $receivedGood) {
-            StockTransaction::create([
-                'transaction_type' => 2, // Stock Out
-                'reference_id' => null,  // No reference for Stock Out
-                'reference_type' => null, 
-                'remarks' => 'Stock Out for received good ' . $receivedGood->batch_number,
-                'transaction_date' => now(),
-            ]);
-        }
+        
+        StockTransaction::create([
+            'transaction_type' => 2, // Stock Out
+            'received_good_id' => null,  // No reference for Stock Out
+            'remarks' => 'Stock Out transaction',
+            'transaction_date' => Carbon::now()->startOfYear()->addMonths(rand(0, 11))->addDays(rand(0, 30)),
+        ]);
+
+        // Return transaction
+        StockTransaction::create([
+            'transaction_type' => 3, // Return
+            'received_good_id' => null,  // No reference for Return
+            'remarks' => 'Return transaction',
+            'transaction_date' => Carbon::now()->startOfYear()->addMonths(rand(0, 11))->addDays(rand(0, 30)),
+        ]);
+
+        // Damaged transaction
+        StockTransaction::create([
+            'transaction_type' => 4, // Damaged
+            'received_good_id' => null,  // No reference for Damaged
+            'remarks' => 'Damaged transaction',
+            'transaction_date' => Carbon::now()->startOfYear()->addMonths(rand(0, 11))->addDays(rand(0, 30)),
+        ]);
     }
 }

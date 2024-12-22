@@ -14,7 +14,7 @@ class ReceivedGoodSeeder extends Seeder
         $faker = Faker::create();
 
         // Get 5 to 7 vendors
-        $vendors = Vendor::inRandomOrder()->take(rand(5, 7))->get();
+        $vendors = Vendor::inRandomOrder()->take(rand(8, 12))->get();
 
         foreach ($vendors as $vendor) {
             ReceivedGood::create([

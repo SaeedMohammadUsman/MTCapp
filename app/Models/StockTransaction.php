@@ -10,47 +10,25 @@ class StockTransaction extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    
     protected $fillable = [
         'transaction_type',
-        'reference_id',
-        'reference_type',
+        'received_good_id',
         'remarks',
         'transaction_date',
     ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'transaction_date' => 'datetime',
     ];
-
-    /**
-     * Get the related reference model (e.g., ReceivedGoods, Sells, DamageReports).
-     */
-    public function reference()
+    public function receivedGood()
     {
-        return $this->morphTo();
+        return $this->belongsTo(ReceivedGood::class, 'received_good_id');
     }
-
+   
     public function details()
     {
         return $this->hasMany(StockTransactionDetail::class);
     }
-    /**
-     * Scope to filter transactions by type.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $type
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function scopeOfType($query, $type)
     {
         return $query->where('transaction_type', $type);

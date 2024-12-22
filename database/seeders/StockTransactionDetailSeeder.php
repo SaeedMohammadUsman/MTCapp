@@ -3,45 +3,54 @@
 namespace Database\Seeders;
 
 use App\Models\StockTransaction;
-use App\Models\StockTransactionDetail;
 use App\Models\ReceivedGood;
-use Illuminate\Database\Seeder;
+use App\Models\StockTransactionDetail;
 use Faker\Factory as Faker;
-
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 class StockTransactionDetailSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        // Initialize Faker for random data generation
         $faker = Faker::create();
-
+        
         // Fetch all stock transactions
         $stockTransactions = StockTransaction::all();
-
-        // Loop through each stock transaction
+        Log::info('Starting to seed StockTransactionDetails...');
+        Log::info('Total Stock Transactions: ' . $stockTransactions->count());
+    
         foreach ($stockTransactions as $stockTransaction) {
-            // Fetch the received good related to the stock transaction
-            if ($stockTransaction->reference_type === 'received_goods') {
-                // Fetch the corresponding received good
-                $receivedGood = ReceivedGood::find($stockTransaction->reference_id);
-                
+            // Log the actual transaction type for debugging
+            Log::info('Processing StockTransaction ID: ' . $stockTransaction->id . ' with transaction type: ' . $stockTransaction->transaction_type);
+    
+            // Process only "Stock In" type (transaction_type 1)
+            if ($stockTransaction->transaction_type === 1) {  // Correct condition for "Stock In"
+                // Find the related ReceivedGood by the 'received_good_id'
+                $receivedGood = $stockTransaction->receivedGood; // Use the relationship defined on StockTransaction
+    
                 if ($receivedGood) {
-                    // Loop through each item in the batch (assuming each received good has many items)
+                    // Loop through all ReceivedGoodDetails of this ReceivedGood
                     foreach ($receivedGood->details as $receivedGoodDetail) {
-                        // Create a StockTransactionDetail for each item in the received good batch
+                        // Get the associated Item
+                        $item = $receivedGoodDetail->item;
+    
+                        // Create StockTransactionDetail for each item
                         StockTransactionDetail::create([
-                            'stock_transaction_id' => $stockTransaction->id, // Link to stock transaction
+                            'stock_transaction_id' => $stockTransaction->id, // Link to StockTransaction
                             'arrival_price' => $faker->randomFloat(2, 10, 100), // Random arrival price between 10 and 100
                             'remarks' => $faker->sentence, // Random remarks
                         ]);
+    
+                        Log::info('Created StockTransactionDetail for Item ID: ' . $item->id);
                     }
+                } else {
+                    Log::warning('No received good found for StockTransaction ID: ' . $stockTransaction->id);
                 }
+            } else {
+                Log::info('Skipping StockTransaction ID ' . $stockTransaction->id . ' as it is not of type "Stock In".');
             }
         }
+    
+        Log::info('Finished seeding StockTransactionDetails.');
     }
 }
