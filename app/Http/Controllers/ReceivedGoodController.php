@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ReceivedGood;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
-
+use App\Models\StockTransaction;
+use Illuminate\Support\Facades\DB;
 class ReceivedGoodController extends Controller
 {
     /**
@@ -151,6 +152,70 @@ class ReceivedGoodController extends Controller
 
         return redirect()->route('received_goods.index')->with('success', 'Received good updated successfully!');
     }
+
+    public function getDetails($id)
+    {
+        // Eager load the details and the associated items.
+        $receivedGood = ReceivedGood::with('details.item')->findOrFail($id);
+    
+        // Return the details with the associated items as a response
+        return response()->json([
+            'details' => $receivedGood->details->map(function ($detail) {
+                return [
+                    'id' => $detail->id,
+                    'item' => [
+                        'id' => $detail->item->id,
+                        'trade_name_en' => $detail->item->trade_name_en,
+                        'trade_name_fa' => $detail->item->trade_name_fa,
+                    ],
+                    'quantity' => $detail->quantity,
+                    'vendor_price' => $detail->vendor_price,
+                    'expiration_date' => $detail->expiration_date,
+                ];
+            })
+        ]);
+    }
+    
+    
+  
+  
+    public function stockIn(Request $request, $id)
+    {
+        $receivedGood = ReceivedGood::findOrFail($id);
+    
+        // Validate the arrival prices input
+        $request->validate([
+            'arrival_prices' => 'required|array',
+            'arrival_prices.*' => 'required|numeric|min:0',
+        ]);
+    
+        // Loop through each item and update the stock
+        DB::transaction(function () use ($receivedGood, $request) {
+            foreach ($request->arrival_prices as $detailId => $arrivalPrice) {
+                $detail = $receivedGood->details()->findOrFail($detailId);
+                
+                // Create a stock transaction for each item
+                StockTransaction::create([
+                    'transaction_type' => 1, // Stock In
+                    'received_good_id' => $receivedGood->id,
+                    'remarks' => 'Stock in for received goods',
+                    'transaction_date' => now(),
+                ])->details()->create([
+                    'item_id' => $detail->item_id,
+                    'quantity' => $detail->quantity,
+                    'arrival_price' => $arrivalPrice,
+                    'remarks' => 'Added to stock',
+                ]);
+            }
+    
+            // Mark the received good as stocked in
+            $receivedGood->update(['is_stocked' => true]);
+        });
+    
+        return redirect()->route('received_goods.index')->with('success', 'Stock in completed successfully.');
+    }
+    
+
 
     /**
      * Remove the specified received good from storage.

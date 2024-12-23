@@ -59,8 +59,7 @@
                                                 @if ($purchaseOrder->status_en === 'Completed') onclick="event.preventDefault();" 
                                                 style="pointer-events: none; opacity: 0.6;" 
                                             @else
-                                                onclick="confirmDelete(event, 'delete-form-{{ $item->id }}')"
-                                                @endif>
+                                                onclick="confirmDelete(event, 'delete-form-{{ $item->id }}')" @endif>
                                                 <i class="fas fa-trash"></i> <!-- Trash Icon -->
                                             </button>
                                         </form>
@@ -70,22 +69,22 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table> @endif
-                                                <!-- Action Buttons -->
-                                                {{-- <a href="{{ route('purchase_orders.items.create', $purchaseOrder->id) }}" class="btn btn-primary mt-3" 
+                </table>
+            @endif
+            <!-- Action Buttons -->
+            {{-- <a href="{{ route('purchase_orders.items.create', $purchaseOrder->id) }}" class="btn btn-primary mt-3" 
                 @if ($purchaseOrder->status_en === 'Completed') disabled @endif>Add New
                 Item</a>
                  --}}
-                                                <a href="{{ $purchaseOrder->status_en === 'Completed' ? '#' : route('purchase_orders.items.create', $purchaseOrder->id) }}"
-                                                    class="btn btn-primary mt-3 {{ $purchaseOrder->status_en === 'Completed' ? 'disabled' : '' }}"
-                                                    @if ($purchaseOrder->status_en === 'Completed') onclick="event.preventDefault();" 
+            <a href="{{ $purchaseOrder->status_en === 'Completed' ? '#' : route('purchase_orders.items.create', $purchaseOrder->id) }}"
+                class="btn btn-primary mt-3 {{ $purchaseOrder->status_en === 'Completed' ? 'disabled' : '' }}"
+                @if ($purchaseOrder->status_en === 'Completed') onclick="event.preventDefault();" 
                         style="pointer-events: none; opacity: 0.6;" @endif>
-                                                    Add New Item
-                                                </a>
+                Add New Item
+            </a>
 
 
-                                                <a href="{{ route('purchase_orders.index') }}"
-                                                    class="btn btn-secondary mt-3">Back to List</a>
-                                    </div>
+            <a href="{{ route('purchase_orders.index') }}" class="btn btn-secondary mt-3">Back to List</a>
         </div>
-    @stop
+    </div>
+@stop

@@ -63,13 +63,19 @@
                                 <td>
                                     <div class="btn-group text-center">
                                         <!-- Edit Action -->
-                                        <a href="{{ route('received_goods.details.edit', [$receivedGood->id, $detail->id]) }}"
+                                        {{-- <a href="{{ route('received_goods.details.edit', [$receivedGood->id, $detail->id]) }}"
                                             class="btn btn-warning btn-sm">
                                             Edit
-                                        </a>
-
+                                        </a> --}}
+                                        <a href="{{ $receivedGood->is_finalized ? '#' : route('received_goods.details.edit', [$receivedGood->id, $detail->id]) }}"
+                                            class="btn btn-warning btn-sm {{ $receivedGood->is_finalized ? 'disabled' : '' }}"
+                                            @if ($receivedGood->is_finalized) onclick="event.preventDefault();"
+                                                style="pointer-events: none; opacity: 0.6;" @endif>
+                                             Edit
+                                         </a>
+                                         
                                         <!-- Delete Action -->
-                                        <form id="delete-form-{{ $detail->id }}"
+                                        {{-- <form id="delete-form-{{ $detail->id }}"
                                             action="{{ route('received_goods.details.destroy', [$receivedGood->id, $detail->id]) }}"
                                             method="POST" style="display:inline;">
                                             @csrf
@@ -78,7 +84,23 @@
                                                 onclick="confirmDelete(event, 'delete-form-{{ $detail->id }}')">
                                                 Delete
                                             </button>
-                                        </form>
+                                        </form> --}}
+                                        <form id="delete-form-{{ $detail->id }}"
+                                            action="{{ route('received_goods.details.destroy', [$receivedGood->id, $detail->id]) }}"
+                                            method="POST" style="display:inline;">
+                                          @csrf
+                                          @method('DELETE')
+                                          <button type="button"
+                                                  class="btn btn-danger btn-sm {{ $receivedGood->is_finalized ? 'disabled' : '' }}"
+                                                  @if ($receivedGood->is_finalized) onclick="event.preventDefault();"
+                                                  style="pointer-events: none; opacity: 0.6;"
+                                              @else
+                                                  onclick="confirmDelete(event, 'delete-form-{{ $detail->id }}')" @endif>
+                                              Delete
+                                          </button>
+                                      </form>
+                                        
+                                        
                                     </div>
                                 </td>
 
@@ -90,9 +112,16 @@
             @endif
 
             <!-- Add New Item Button -->
-            <a href="{{ route('received_goods.details.create', $receivedGood->id) }}" class="btn btn-primary mt-3">
+            {{-- <a href="{{ route('received_goods.details.create', $receivedGood->id) }}" class="btn btn-primary mt-3">
                 Add New Item
-            </a>
+            </a> --}}
+            
+            <a href="{{ $receivedGood->is_finalized ? '#' : route('received_goods.details.create', $receivedGood->id) }}"
+                class="btn btn-primary mt-3 {{ $receivedGood->is_finalized ? 'disabled' : '' }}"
+                @if ($receivedGood->is_finalized) onclick="event.preventDefault();"
+                    style="pointer-events: none; opacity: 0.6;" @endif>
+                 Add New Item
+             </a>
 
             <!-- Action Buttons -->
             <a href="{{ route('received_goods.index') }}" class="btn btn-secondary mt-3">Back to List</a>

@@ -27,7 +27,7 @@ class StockTransaction extends Model
    
     public function details()
     {
-        return $this->hasMany(StockTransactionDetail::class);
+        return $this->hasMany(StockTransactionDetail::class, 'stock_transaction_id');
     }
     public function scopeOfType($query, $type)
     {

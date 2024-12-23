@@ -100,8 +100,6 @@ Route::prefix('batches')->name('batches.')->group(function () {
 });
 
 
-
-
 Route::prefix('received-goods')->name('received_goods.')->group(function () {
     Route::resource('/', ReceivedGoodController::class)->except(['show'])->parameters(['' => 'received_good']);
     Route::get('/{received_good}', [ReceivedGoodController::class, 'show'])->name('show');
@@ -110,11 +108,11 @@ Route::prefix('received-goods')->name('received_goods.')->group(function () {
 
 
     Route::resource('/{received_good}/details', ReceivedGoodDetailController::class)->except(['index', 'show']);
-
-    // Route::get('/{received_good}/details/create', [ReceivedGoodDetailController::class, 'create'])->name('details.create');
-    // Route::post('/{received_good}/details', [ReceivedGoodDetailController::class, 'store'])->name('details.store');
-    // Route::get('/{received_good}/details/{received_good_detail}/edit', [ReceivedGoodDetailController::class, 'edit'])->name('details.edit');
-    // Route::delete('/{received_good}/details/{received_good_detail}', [ReceivedGoodDetailController::class, 'destroy'])->name('details.destroy');
+   
+   
+    Route::get('/{received_good}/details', [ReceivedGoodController::class, 'getDetails'])->name('details');
+    // Route::post('/{received_good}/stock-in', [ReceivedGoodController::class, 'stockIn'])->name('stock_in');
+    Route::post('/{received_good}/stock-in', [ReceivedGoodController::class, 'stockIn'])->name('stock_in');
 });
 
 Route::prefix('stock-transactions')->name('stock_transactions.')->group(function () {

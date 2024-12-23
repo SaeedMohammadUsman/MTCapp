@@ -21,6 +21,7 @@ class ReceivedGood extends Model
         'bill_attachment',
         'date',
         'is_finalized',
+        'stocked_in',
     ];
 
     protected static function booted()

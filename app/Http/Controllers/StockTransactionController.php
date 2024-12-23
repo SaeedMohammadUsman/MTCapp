@@ -40,7 +40,6 @@ class StockTransactionController extends Controller
          // Return the view with filtered stock transactions
          return view('stock_transactions.index', compact('stockTransactions'));
      }
-     
-
+    
 
 }
