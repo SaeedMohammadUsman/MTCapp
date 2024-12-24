@@ -388,10 +388,16 @@ return [
                     'icon' => 'fas fa-layer-group',
                 ],
                 [
-                    'text' => 'Inventory Items',
-                    'url'  => 'inventory_items',
-                    'icon' => 'fas fa-boxes',
+                    'text' => 'Stock Transaction',
+                    'url'  => 'stock-transactions',
+                    'icon' => 'fas fa-warehouse',
+
                 ],
+                // [
+                //     'text' => 'Inventory Items',
+                //     'url'  => 'inventory_items',
+                //     'icon' => 'fas fa-boxes',
+                // ],
                 [
                     'text' => 'Stock Adjustments',
                     'url'  => 'stock_adjustments',

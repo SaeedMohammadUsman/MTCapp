@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReceivedGood;
+use App\Models\ReceivedGoodDetail;
+use App\Models\StockTransaction;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
-use App\Models\StockTransaction;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 class ReceivedGoodController extends Controller
 {
     /**
@@ -178,44 +181,62 @@ class ReceivedGoodController extends Controller
     
     
   
-  
     public function stockIn(Request $request, $id)
     {
-        $receivedGood = ReceivedGood::findOrFail($id);
+        Log::info('Stock In Request Received', $request->all());
     
-        // Validate the arrival prices input
+        // Validate the request
         $request->validate([
             'arrival_prices' => 'required|array',
             'arrival_prices.*' => 'required|numeric|min:0',
         ]);
     
-        // Loop through each item and update the stock
-        DB::transaction(function () use ($receivedGood, $request) {
-            foreach ($request->arrival_prices as $detailId => $arrivalPrice) {
-                $detail = $receivedGood->details()->findOrFail($detailId);
-                
-                // Create a stock transaction for each item
-                StockTransaction::create([
+        // Fetch the ReceivedGood and its details
+        $receivedGood = ReceivedGood::with('details')->find($id);
+        if (!$receivedGood) {
+            Log::error("ReceivedGood with ID $id not found.");
+            return response()->json(['message' => 'ReceivedGood not found'], 400);
+        }
+    
+        if ($receivedGood->is_finalized != 1) {
+            Log::error("ReceivedGood with ID $id is not finalized.");
+            return response()->json(['message' => 'ReceivedGood not finalized'], 400);
+        }
+    
+        try {
+            // Process the stock-in within a database transaction
+            DB::transaction(function () use ($receivedGood, $request) {
+                $stockTransaction = StockTransaction::create([
                     'transaction_type' => 1, // Stock In
                     'received_good_id' => $receivedGood->id,
                     'remarks' => 'Stock in for received goods',
                     'transaction_date' => now(),
-                ])->details()->create([
-                    'item_id' => $detail->item_id,
-                    'quantity' => $detail->quantity,
-                    'arrival_price' => $arrivalPrice,
-                    'remarks' => 'Added to stock',
                 ]);
-            }
     
-            // Mark the received good as stocked in
-            $receivedGood->update(['is_stocked' => true]);
-        });
+                foreach ($receivedGood->details as $detail) {
+                    $arrivalPrice = $request->arrival_prices[$detail->id] ?? null;
     
-        return redirect()->route('received_goods.index')->with('success', 'Stock in completed successfully.');
+                    if (!$arrivalPrice) {
+                        throw new \Exception("Arrival price missing for detail ID: {$detail->id}");
+                    }
+    
+                    $stockTransaction->details()->create([
+                        'stock_transaction_id' => $stockTransaction->id,
+                        'arrival_price' => $arrivalPrice,
+                        'remarks' => 'Added to stock',
+                    ]);
+                }
+    
+                $receivedGood->update(['stocked_in' => true]);
+            });
+    
+            return response()->json(['success' => true, 'message' => 'Stock in completed successfully.']);
+        } catch (\Exception $e) {
+            Log::error('Error during stock-in process: ' . $e->getMessage());
+            return response()->json(['message' => 'Stock-in process failed.'], 500);
+        }
     }
     
-
 
     /**
      * Remove the specified received good from storage.

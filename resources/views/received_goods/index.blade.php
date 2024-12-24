@@ -129,13 +129,6 @@
                                                 class="btn btn-danger btn-sm">Delete</button>
                                         </form>
 
-
-                                        {{-- @if ($receivedGood->is_finalized)
-                                                    <a title="Stock In" href="{{ route('received_goods.stock_in', $receivedGood->id) }}" class="btn btn-success btn-sm">
-                                                        <i class="fas fa-arrow-down"></i> 
-                                                    </a>
-                                                @endif
-                                             --}}
                                         @if ($receivedGood->is_finalized)
                                             <button type="button" class="btn btn-success btn-sm" title="Stock In"
                                                 data-id="{{ $receivedGood->id }}" data-toggle="modal"
@@ -161,75 +154,50 @@
             {{ $receivedGoods->links('vendor.pagination.bootstrap-4') }}
         </div>
     </div>
-    
-    
-    <!-- Stock In Modal -->
-    <!-- Stock In Modal -->
-{{-- <div class="modal fade" id="stockInModal" tabindex="-1" role="dialog" aria-labelledby="stockInModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="stockInModalLabel">Stock In - Add Arrival Prices</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="{{ route('received_goods.stock_in', ['received_good' => $receivedGood->id]) }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div id="modal-items-container">
-                        <!-- Dynamic items will be loaded here -->
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> --}}
 
-<!-- Stock In Modal -->
-<div class="modal fade" id="stockInModal" tabindex="-1" role="dialog" aria-labelledby="stockInModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="stockInModalLabel">Stock In - Add Arrival Prices</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {{-- <form action="{{ route('received_goods.stock_in', ['received_good' => $receivedGood->id]) }}" method="POST"> --}}
-                
-                <form action="{{ route('received_goods.stock_in', ['received_good' => $receivedGood->id]) }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div id="modal-items-container">
-                        <!-- Table to display items dynamically -->
-                        <table class="table table-sm table-striped table-hover  ">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Item Name</th>
-                                    <th>Vendor Price</th>
-                                    <th>Arrival Price</th>
-                                </tr>
-                            </thead>
-                            <tbody id="items-table-body">
-                                <!-- Dynamic rows will be added here -->
-                            </tbody>
-                        </table>
+    <!-- Stock In Modal -->
+    <div class="modal fade" id="stockInModal" tabindex="-1" role="dialog" aria-labelledby="stockInModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="stockInModalLabel">Stock In - Add Arrival Prices</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {{-- <form action="{{ route('received_goods.stock_in', ['received_good' => $receivedGood->id]) }}" method="POST"> --}}
+
+                <form action="{{ route('received_goods.stock_in', ['received_good' => $receivedGood->id]) }}"
+                    method="POST" id="stockInForm">
+                    @csrf
+                    <input type="hidden" id="receivedGoodId" value="{{ $receivedGood->id }}">
+                    <div class="modal-body">
+                        <div id="modal-items-container">
+                            <!-- Table to display items dynamically -->
+                            <table class="table table-sm table-striped table-hover  ">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Item Name</th>
+                                        <th>Vendor Price</th>
+                                        <th>Arrival Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items-table-body">
+                                    <!-- Dynamic rows will be added here -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 
 @stop
@@ -242,79 +210,72 @@
 
 @section('js')
 <script>
-    // When the Stock In button is clicked, fetch the received good details
-    // $('#stockInModal').on('show.bs.modal', function (event) {
-    //     var button = $(event.relatedTarget); // Button that triggered the modal
-    //     var receivedGoodId = button.data('id'); // Get the received good ID
-
-    //     var modal = $(this);
-
-    //     // Fetch the received good details using AJAX
-    //     $.ajax({
-    //         url: '/received-goods/' + receivedGoodId + '/details', // Use the correct URL here
-    //         method: 'GET',
-    //         success: function (response) {
-    //             var itemsContainer = modal.find('#modal-items-container');
-    //             itemsContainer.empty(); // Clear any previous data
-
-    //             // Check if 'details' is an array
-    //             if (Array.isArray(response.details)) {
-    //                 response.details.forEach(function(detail) {
-    //                     // Add the input fields for each item
-    //                     itemsContainer.append(`
-    //                         <div class="form-group">
-    //                             <label for="arrival_price_${detail.id}">${detail.item.trade_name_en}</label>
-    //                             <input type="number" name="arrival_prices[${detail.id}]" id="arrival_price_${detail.id}" class="form-control" placeholder="Enter arrival price for ${detail.item.trade_name_en}" required>
-    //                         </div>
-    //                     `);
-    //                 });
-    //             } else {
-    //                 alert('No details available for this received good.');
-    //             }
-    //         },
-    //         error: function() {
-    //             alert('Failed to load received good details');
-    //         }
-    //     });
-    // });
-    
-    
     $('#stockInModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var receivedGoodId = button.data('id'); // Get the received good ID
+        const button = $(event.relatedTarget); // Button that triggered the modal
+        const receivedGoodId = button.data('id'); // Get the received good ID
+        $('#receivedGoodId').val(receivedGoodId);
+        const modal = $(this);
 
-    var modal = $(this);
+        // Fetch the received good details using AJAX
+        $.ajax({
+            url: `/received-goods/${receivedGoodId}/details`,
+            method: 'GET',
+            success: function (response) {
+                const tableBody = modal.find('#items-table-body');
+                tableBody.empty(); // Clear any previous rows
 
-    // Fetch the received good details using AJAX
+                // Populate the table with details
+                response.details.forEach((detail, index) => {
+                    tableBody.append(`
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${detail.item.trade_name_en} ${detail.item.trade_name_fa}</td>
+                            <td>${detail.vendor_price}</td>
+                            <td>
+                                <input type="number" name="arrival_prices[${detail.id}]" 
+                                       id="arrival_price_${detail.id}" 
+                                       class="form-control" 
+                                       placeholder="Enter arrival price" 
+                                       required>
+                            </td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function () {
+                alert('Failed to load received good details');
+            },
+        });
+    });
+    
+    
+    $('#stockInForm').on('submit', function (e) {
+    e.preventDefault();
+
+    const form = document.getElementById('stockInForm');
+    const formData = new FormData(form);
+
+    const receivedGoodId = $('#receivedGoodId').val(); // Ensure this is populated correctly
+
     $.ajax({
-        url: '/received-goods/' + receivedGoodId + '/details', // Use the correct URL here
-        method: 'GET',
+        url: `/received-goods/${receivedGoodId}/stock-in`,
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
-            var itemsContainer = modal.find('#modal-items-container');
-            var tableBody = modal.find('#items-table-body');
-            tableBody.empty(); // Clear any previous rows
-
-            // Create rows for each item
-            response.details.forEach(function (detail, index) {
-                tableBody.append(`
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${detail.item.trade_name_en}${detail.item.trade_name_fa} </td>
-                        <td>${detail.vendor_price}</td>
-                        <td>
-                            <input type="number" name="arrival_prices[${detail.id}]" id="arrival_price_${detail.id}" class="form-control" placeholder="Enter arrival price" required>
-                        </td>
-                    </tr>
-                `);
-            });
+            alert(response.message || 'Stock in completed successfully.');
+            $('#stockInModal').modal('hide');
+            location.reload();
         },
-        error: function () {
-            alert('Failed to load received good details');
-        }
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            alert(xhr.responseJSON?.message || 'Failed to submit stock-in.');
+        },
     });
 });
 
+   
 </script>
-
 
 @stop
