@@ -6,22 +6,18 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use Database\Seeders\BatchItemSeeder;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\DepartmentSeeder;
-use Database\Seeders\InventoryBatchSeeder;
-use Database\Seeders\InventoryItemSeeder;
 use Database\Seeders\ItemSeeder;
 use Database\Seeders\PurchaseOrderItemSeeder;
 use Database\Seeders\PurchaseOrderSeeder;
 
-use Database\Seeders\StockAdjustmentSeeder;
 use Database\Seeders\VendorSeeder;
 use Illuminate\Database\Seeder;
 use Database\Seeders\ReceivedGoodSeeder;  
 use Database\Seeders\ReceivedGoodDetailSeeder; 
 use Database\Seeders\StockTransactionSeeder; 
-
+use OpenAfghanistan\Provinces\Database\Seeders\ProvincesSeeder;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -62,7 +58,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ReceivedGoodSeeder::class); 
         $this->call(ReceivedGoodDetailSeeder::class); 
         $this->call(StockTransactionSeeder::class);
-
+        $this->call(ProvincesSeeder::class);
 
     }
 }

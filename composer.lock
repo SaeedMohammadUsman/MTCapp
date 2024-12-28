@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba194084e3a5c1c4ed1b2a01ebd07235",
+    "content-hash": "1a924e5f99371db07f13e4d5f0743867",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -2641,6 +2641,66 @@
                 }
             ],
             "time": "2024-11-21T10:39:51+00:00"
+        },
+        {
+            "name": "open-afghanistan/provinces",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenAfghanistan/provinces.git",
+                "reference": "5ffa721a1b7aa90fc8e8e5ce013ddfba55d0e455"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenAfghanistan/provinces/zipball/5ffa721a1b7aa90fc8e8e5ce013ddfba55d0e455",
+                "reference": "5ffa721a1b7aa90fc8e8e5ce013ddfba55d0e455",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": ">=9.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "OpenAfghanistan\\Provinces\\ProvincesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OpenAfghanistan\\Provinces\\": "src/",
+                    "OpenAfghanistan\\Provinces\\Database\\Seeders\\": "database/seeders/",
+                    "OpenAfghanistan\\Provinces\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "hamidafghan",
+                    "email": "i@hamidafghan.me"
+                }
+            ],
+            "description": "Afghanistan provinces laravel package",
+            "keywords": [
+                "afghanistan",
+                "afghanistan provinces",
+                "afghanistan provinces laravel",
+                "laravel",
+                "provinces"
+            ],
+            "support": {
+                "issues": "https://github.com/OpenAfghanistan/provinces/issues",
+                "source": "https://github.com/OpenAfghanistan/provinces/tree/1.0.2"
+            },
+            "time": "2024-05-17T21:09:56+00:00"
         },
         {
             "name": "phpoption/phpoption",
