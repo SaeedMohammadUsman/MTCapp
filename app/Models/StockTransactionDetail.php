@@ -14,6 +14,7 @@ class StockTransactionDetail extends Model
         'stock_transaction_id',  // Foreign key to StockTransaction
         'arrival_price',         // Price on arrival (including transport, tax, etc.)
         'remarks',               // Any remarks for the transaction
+        'received_good_detail_id',
     ];
 
     /**
@@ -23,6 +24,15 @@ class StockTransactionDetail extends Model
     {
         return $this->belongsTo(StockTransaction::class);  // Belongs to one StockTransaction
     }
-
    
+    public function receivedGoodDetail()
+    {
+        return $this->belongsTo(ReceivedGoodDetail::class, 'received_good_detail_id');  // Make sure this column exists
+    }
+    public function item()
+    {
+        return $this->belongsTo(ReceivedGoodDetail::class, 'received_good_detail_id')->with('item');
+    }
+    
+  
 }

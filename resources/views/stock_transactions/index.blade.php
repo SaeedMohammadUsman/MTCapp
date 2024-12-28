@@ -11,7 +11,17 @@
     <div class="card">
         <div class="card-header">
             <form action="{{ route('stock_transactions.index') }}" method="GET" class="form-inline">
-             
+                <div class="input-group input-group-sm mr-2">
+                    <select name="item_id" class="form-control">
+                        <option value="">All Items</option>
+                        @foreach($items as $item)
+                            {{-- <option value="{{ $item->id }}" {{ request('item_id') == $item->id ? 'selected' : '' }}>
+                                {{ $item->trade_name_en }}
+                            </option> --}}
+                        @endforeach
+                    </select>
+                </div>
+                
                 <div class="input-group input-group-sm mr-2">
                     <select name="transaction_type" class="form-control">
                         <option value="">All Types</option>
@@ -94,9 +104,13 @@
                             </td>
                             <td>
                                 <div class="btn-group">
+                                    {{-- <a href="{{ route('stock_transactions.show', $stockTransaction->id) }}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> View
+                                    </a> --}}
                                     <a href="{{ route('stock_transactions.show', $stockTransaction->id) }}" class="btn btn-info btn-sm">
                                         <i class="fas fa-eye"></i> View
                                     </a>
+                                    
                                 </div>
                             </td>
                         </tr>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\StockTransaction;
-use Illuminate\Http\Request;
+use App\Models\StockTransactionDetail;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class StockTransactionController extends Controller
 {
@@ -20,8 +22,8 @@ class StockTransactionController extends Controller
      {
       
          $query = StockTransaction::query();
-         
-         
+       
+        
          if ($request->has('transaction_type') && $request->input('transaction_type') !== '') {
              $transactionType = $request->input('transaction_type');
             
@@ -35,11 +37,29 @@ class StockTransactionController extends Controller
              $query->whereBetween('transaction_date', [$startDate, $endDate]);
          }
          // Fetch the stock transactions based on the applied filters
-         $stockTransactions = $query->with('receivedGood:id,batch_number')->paginate(10);
-     
+         $stockTransactions = $query->with('receivedGood:id,batch_number')
+         ->latest()
+         ->paginate(10);
+         
+    
+    $items = ['id','name','usman','ali']; 
          // Return the view with filtered stock transactions
-         return view('stock_transactions.index', compact('stockTransactions'));
+         return view('stock_transactions.index', compact('stockTransactions', 'items'));
      }
     
+     public function show($id)
+     {
+      
+         $stockTransaction = StockTransaction::with([
+             'details.item',            // Eager load the 'item' relationship
+             'details.receivedGoodDetail'  // Eager load the 'receivedGoodDetail' relationship
+         ])
+         ->findOrFail($id);
+     
+        //  dd($stockTransaction->details);
+         return view('stock_transactions.show', compact('stockTransaction'));
+     }
+     
+     
 
 }

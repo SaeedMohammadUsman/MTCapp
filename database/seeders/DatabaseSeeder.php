@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ReceivedGoodSeeder::class); 
         $this->call(ReceivedGoodDetailSeeder::class); 
         $this->call(StockTransactionSeeder::class);
-        $this->call(StockTransactionDetailSeeder::class);
+//$this->call(StockTransactionDetailSeeder::class);
 
     }
 }

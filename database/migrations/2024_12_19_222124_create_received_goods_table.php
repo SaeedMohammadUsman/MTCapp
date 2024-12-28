@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('bill_attachment')->nullable();
             $table->date('date')->useCurrent();
             $table->boolean('is_finalized')->default(false);
+            $table->boolean('stocked_in')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -117,5 +117,5 @@ Route::prefix('received-goods')->name('received_goods.')->group(function () {
 
 Route::prefix('stock-transactions')->name('stock_transactions.')->group(function () {
     Route::resource('/', StockTransactionController::class);
-    
+    Route::get('/{id}', [StockTransactionController::class, 'show'])->name('show');
 });

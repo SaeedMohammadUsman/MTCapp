@@ -210,46 +210,54 @@
 
 @section('js')
 <script>
-    $('#stockInModal').on('show.bs.modal', function (event) {
-        const button = $(event.relatedTarget); // Button that triggered the modal
-        const receivedGoodId = button.data('id'); // Get the received good ID
-        $('#receivedGoodId').val(receivedGoodId);
-        const modal = $(this);
+$('#stockInModal').on('show.bs.modal', function (event) {
+    const button = $(event.relatedTarget); // Button that triggered the modal
+    const receivedGoodId = button.data('id'); // Get the received good ID
+    $('#receivedGoodId').val(receivedGoodId);
+    const modal = $(this);
 
-        // Fetch the received good details using AJAX
-        $.ajax({
-            url: `/received-goods/${receivedGoodId}/details`,
-            method: 'GET',
-            success: function (response) {
-                const tableBody = modal.find('#items-table-body');
-                tableBody.empty(); // Clear any previous rows
+    // Fetch the received good details using AJAX
+    $.ajax({
+        url: `/received-goods/${receivedGoodId}/details`,
+        method: 'GET',
+        success: function (response) {
+            const tableBody = modal.find('#items-table-body');
+            tableBody.empty(); // Clear any previous rows
 
-                // Populate the table with details
-                response.details.forEach((detail, index) => {
-                    tableBody.append(`
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${detail.item.trade_name_en} ${detail.item.trade_name_fa}</td>
-                            <td>${detail.vendor_price}</td>
-                            <td>
-                                <input type="number" name="arrival_prices[${detail.id}]" 
-                                       id="arrival_price_${detail.id}" 
-                                       class="form-control" 
-                                       placeholder="Enter arrival price" 
-                                       required>
-                            </td>
-                        </tr>
-                    `);
-                });
-            },
-            error: function () {
-                alert('Failed to load received good details');
-            },
-        });
+            // Populate the table with details
+            response.details.forEach((detail, index) => {
+                tableBody.append(`
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${detail.item.trade_name_en} ${detail.item.trade_name_fa}</td>
+                        <td>${detail.vendor_price}</td>
+                        <td>
+                            <input type="number" name="arrival_prices[${detail.id}]" 
+                                   id="arrival_price_${detail.id}" 
+                                   class="form-control" 
+                                   placeholder="Enter arrival price" 
+                                   required>
+                        </td>
+                    </tr>
+                `);
+            });
+        },
+        error: function () {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to load received good details.',
+                icon: 'error',
+                confirmButtonText: 'Okay',
+                timer: 3000,
+                toast: true,
+                position: 'top-end'
+            });
+        },
     });
-    
-    
-    $('#stockInForm').on('submit', function (e) {
+});
+
+
+$('#stockInForm').on('submit', function (e) {
     e.preventDefault();
 
     const form = document.getElementById('stockInForm');
@@ -264,18 +272,46 @@
         processData: false,
         contentType: false,
         success: function (response) {
-            alert(response.message || 'Stock in completed successfully.');
-            $('#stockInModal').modal('hide');
-            location.reload();
+            // Check if the response indicates the batch is already stocked in
+            if (response.message && response.message.includes('already been stocked in')) {
+                Swal.fire({
+                    title: 'Info!',
+                    text: response.message,
+                    icon: 'info',
+                    confirmButtonText: 'Okay',
+                    timer: 3000,
+                    toast: true,
+                    position: 'top-end'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.message || 'Stock in completed successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'Okay',
+                    timer: 3000,
+                    toast: true,
+                    position: 'top-end'
+                });
+                $('#stockInModal').modal('hide');
+                location.reload();
+            }
         },
         error: function (xhr) {
             console.error(xhr.responseText);
-            alert(xhr.responseJSON?.message || 'Failed to submit stock-in.');
+            Swal.fire({
+                title: 'Error!',
+                text: xhr.responseJSON?.message || 'Failed to submit stock-in.',
+                icon: 'error',
+                confirmButtonText: 'Okay',
+                timer: 3000,
+                toast: true,
+                position: 'top-end'
+            });
         },
     });
 });
 
-   
-</script>
 
+</script>
 @stop
