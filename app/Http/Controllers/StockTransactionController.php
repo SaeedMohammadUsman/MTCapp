@@ -36,15 +36,18 @@ class StockTransactionController extends Controller
              // Apply the date range filter
              $query->whereBetween('transaction_date', [$startDate, $endDate]);
          }
-         // Fetch the stock transactions based on the applied filters
-         $stockTransactions = $query->with('receivedGood:id,batch_number')
-         ->latest()
-         ->paginate(10);
          
     
-    $items = ['id','name','usman','ali']; 
+        // Fetch the stock transactions based on the applied filters
+        $stockTransactions = $query->with('receivedGood:id,batch_number')
+            ->latest()
+            ->paginate(10);
+    
+     
+    
+    
          // Return the view with filtered stock transactions
-         return view('stock_transactions.index', compact('stockTransactions', 'items'));
+         return view('stock_transactions.index', compact('stockTransactions'));
      }
     
      public function show($id)
@@ -61,5 +64,46 @@ class StockTransactionController extends Controller
      }
      
      
+
+     // In StockTransactionController.php
+
+// In StockTransactionController.php
+
+public function getItemsWithTransactions()
+{
+    $items = StockTransactionDetail::with('item') 
+        ->select('received_good_detail_id') 
+        ->distinct()
+        ->get()
+        ->pluck('item'); // Pluck the item from the relationship
+
+    return response()->json($items);
+}
+
+
+public function itemStockDetails(Request $request)
+{
+    $request->validate([
+        'item_id' => 'required|exists:items,id',
+    ]);
+
+    $itemId = $request->item_id;
+
+    // Fetch stock transactions related to the item
+    $stockTransactions = StockTransaction::with(['details' => function ($query) use ($itemId) {
+        $query->where('item_id', $itemId);
+    }])
+    ->whereHas('details', function ($query) use ($itemId) {
+        $query->where('item_id', $itemId);
+    })
+    ->get();
+
+    // Calculate total quantity and other details
+    $totalQuantity = $stockTransactions->sum(function ($transaction) {
+        return $transaction->details->sum('quantity');
+    });
+
+    return view('item_stock_details', compact('stockTransactions', 'totalQuantity'));
+}
 
 }

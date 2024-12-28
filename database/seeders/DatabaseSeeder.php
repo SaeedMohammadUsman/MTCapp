@@ -47,14 +47,7 @@ class DatabaseSeeder extends Seeder
         // Seed items
         $this->call(ItemSeeder::class);
 
-        // Seed inventory items
-        $this->call(InventoryItemSeeder::class);
-
-        // Seed inventory batches and batch items
-        $this->call([
-            InventoryBatchSeeder::class,
-            BatchItemSeeder::class,
-        ]);
+      
 
 
 
@@ -65,11 +58,11 @@ class DatabaseSeeder extends Seeder
         $this->call(PurchaseOrderItemSeeder::class);
 
         // Optional: Seed stock adjustments
-        $this->call(StockAdjustmentSeeder::class);
+     
         $this->call(ReceivedGoodSeeder::class); 
         $this->call(ReceivedGoodDetailSeeder::class); 
         $this->call(StockTransactionSeeder::class);
-//$this->call(StockTransactionDetailSeeder::class);
+
 
     }
 }

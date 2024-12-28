@@ -382,11 +382,7 @@ return [
                     'icon'    => 'fas fa-box', // or use 'fas fa-box-open'
                     
                 ],
-                [
-                    'text' => 'Batches',
-                    'url'  => 'batches',
-                    'icon' => 'fas fa-layer-group',
-                ],
+               
                 [
                     'text' => 'Stock Transaction',
                     'url'  => 'stock-transactions',
@@ -398,11 +394,7 @@ return [
                 //     'url'  => 'inventory_items',
                 //     'icon' => 'fas fa-boxes',
                 // ],
-                [
-                    'text' => 'Stock Adjustments',
-                    'url'  => 'stock_adjustments',
-                    'icon' => 'fas fa-cogs',
-                ],
+              
                 [
                     'text' => 'Categories',
                     'url'  => 'categories',
