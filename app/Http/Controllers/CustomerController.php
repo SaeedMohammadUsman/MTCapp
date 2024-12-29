@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use OpenAfghanistan\Provinces\Models\District;
 use OpenAfghanistan\Provinces\Models\Province;
 
 class CustomerController extends Controller
@@ -52,8 +53,9 @@ class CustomerController extends Controller
     public function create()
     {
         // Fetch all provinces for dropdown selection
-        $provinces = Province::all();
-        return view('customers.create', compact('provinces'));
+       
+        $districts = District::all();
+        return view('customers.create', compact('districts'));
     }
 
     /**
@@ -64,17 +66,27 @@ class CustomerController extends Controller
         $request->validate([
             'customer_name_en' => 'required|string|max:255',
             'customer_name_fa' => 'required|string|max:255',
+          
             'district_id' => 'required|exists:districts,id',
             'address' => 'nullable|string',
             'customer_phone' => 'required|string|unique:customers,customer_phone',
             'email' => 'nullable|email|unique:customers,email',
-            'status' => 'required|in:active,inactive',
+           
         ]);
-
+        if (empty($request->address)) {
+            $district = District::find($request->district_id);
+            $province = Province::find($district->province_id);
+            $request->merge(['address' => $district->name . ' ' . $province->name]);
+        } else {
+            $district = District::find($request->district_id);
+            $province = Province::find($district->province_id);
+            $request->merge(['address' => $request->address . ' ' . $district->name . ' ' . $province->name]);
+        }
+        
         // Create the new customer
         Customer::create($request->only([
             'customer_name_en', 'customer_name_fa', 'district_id', 'address', 
-            'customer_phone', 'email', 'status'
+            'customer_phone', 'email'
         ]));
 
         return redirect()
@@ -82,28 +94,19 @@ class CustomerController extends Controller
             ->with('success', 'Customer created successfully!');
     }
 
-    /**
-     * Display the specified customer.
-     */
-    public function show(Customer $customer)
-    {
-        return view('customers.show', compact('customer'));
-    }
-
-    /**
-     * Show the form for editing the specified customer.
-     */
+ 
+  
     public function edit(Customer $customer)
     {
-        $provinces = Province::all();
-        return view('customers.edit', compact('customer', 'provinces'));
+        $districts = District::with('province')->get();
+        return view('customers.edit', compact('customer', 'districts'));
     }
-
     /**
      * Update the specified customer in storage.
      */
     public function update(Request $request, Customer $customer)
     {
+        // Validate the incoming data
         $request->validate([
             'customer_name_en' => 'required|string|max:255',
             'customer_name_fa' => 'required|string|max:255',
@@ -111,20 +114,39 @@ class CustomerController extends Controller
             'address' => 'nullable|string',
             'customer_phone' => 'required|string|unique:customers,customer_phone,' . $customer->id,
             'email' => 'nullable|email|unique:customers,email,' . $customer->id,
-            'status' => 'required|in:active,inactive',
         ]);
-
-        // Update the customer with the validated data
-        $customer->update($request->only([
-            'customer_name_en', 'customer_name_fa', 'district_id', 'address',
-            'customer_phone', 'email', 'status'
-        ]));
-
+    
+        // Check if the district_id has changed
+        $district = District::find($request->district_id);
+        $province = Province::find($district->province_id);
+        
+        if (empty($request->address)) {
+         
+            $address = $district->name . ' ' . $province->name;
+        } else {
+           
+            $address = $request->address . ' ' . $district->name . ' ' . $province->name;
+        }
+        
+        $request->merge(['address' => $address]);
+        
+    
+        // Update the customer with the validated and processed data
+        $customer->update([
+            'customer_name_en' => $request->customer_name_en,
+            'customer_name_fa' => $request->customer_name_fa,
+            'district_id' => $request->district_id,
+            'address' => $address,
+            'customer_phone' => $request->customer_phone,
+            'email' => $request->email,
+        ]);
+    
         return redirect()
             ->route('customers.index')
             ->with('success', 'Customer updated successfully!');
     }
-
+    
+    
     /**
      * Soft delete the specified customer.
      */

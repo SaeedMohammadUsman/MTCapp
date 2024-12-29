@@ -32,7 +32,12 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('provinces');
+        Schema::enableForeignKeyConstraints();
         Schema::dropIfExists('districts');
+        
+        Schema::dropIfExists('provinces');
+        
+        Schema::disableForeignKeyConstraints();
+
     }
 };

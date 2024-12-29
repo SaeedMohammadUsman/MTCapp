@@ -76,8 +76,8 @@
                                         <button type="submit" class="btn btn-success btn-sm">Restore</button>
                                     </form>
                                     @else
-                                        <a href="{{ route('customers.show', $customer->id) }}"
-                                           class="btn btn-info btn-sm">View</a>
+                                        {{-- <a href="{{ route('customers.show', $customer->id) }}"
+                                           class="btn btn-info btn-sm">View</a> --}}
                                         <a href="{{ route('customers.edit', $customer->id) }}"
                                            class="btn btn-warning btn-sm">Edit</a>
                                         <form action="{{ route('customers.destroy', $customer->id) }}" method="POST"

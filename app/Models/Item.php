@@ -46,10 +46,7 @@ class Item extends Model
     {
         return $this->belongsTo(Category::class); // Assuming Category model exists
     }
-    public function inventoryBatches()
-    {
-        return $this->hasMany(InventoryBatch::class, 'item_id', 'id');
-    }
+    
     public function receivedGoodsDetails()
     {
         return $this->hasMany(ReceivedGoodDetail::class, 'item_id');
