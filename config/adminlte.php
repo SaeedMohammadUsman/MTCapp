@@ -368,6 +368,25 @@ return [
         ],
         
         [
+            'text'    => 'Sells',
+            'icon'    => 'fas fa-cash-register',
+            'submenu' => [
+                [
+                    'text' => 'Customers',
+                    'url'  => 'customers',  
+                    'icon' => 'fas fa-users',  
+                ],
+                // [
+                //     'text' => 'Sales Orders',
+                //     'url'  => 'sales_orders',
+                //     'icon' => 'fas fa-receipt',  // Icon for sales orders submenu
+                // ],
+            ],
+        ],
+                
+        
+        
+        [
             'text'    => 'Stock Management',
             'icon'    => 'fas fa-box',
             'submenu' => [

@@ -41,7 +41,7 @@
         {{-- Table Section --}}
         <div class="card">
             <div class="card-header">
-                <a href="{{ route('items.create') }}" class="btn btn-primary">Create New Item</a>
+                <a href="{{ route('items.create') }}" class="btn btn-primary">Create</a>
             </div>
             <div class="card-body">
                 <table class="table table-sm table-striped table-hover table-borderless py-3">

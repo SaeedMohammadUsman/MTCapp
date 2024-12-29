@@ -14,10 +14,11 @@ use Database\Seeders\PurchaseOrderSeeder;
 
 use Database\Seeders\VendorSeeder;
 use Illuminate\Database\Seeder;
-use Database\Seeders\ReceivedGoodSeeder;  
-use Database\Seeders\ReceivedGoodDetailSeeder; 
-use Database\Seeders\StockTransactionSeeder; 
+use Database\Seeders\ReceivedGoodSeeder;
+use Database\Seeders\ReceivedGoodDetailSeeder;
+use Database\Seeders\StockTransactionSeeder;
 use OpenAfghanistan\Provinces\Database\Seeders\ProvincesSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -43,7 +44,7 @@ class DatabaseSeeder extends Seeder
         // Seed items
         $this->call(ItemSeeder::class);
 
-      
+
 
 
 
@@ -54,11 +55,11 @@ class DatabaseSeeder extends Seeder
         $this->call(PurchaseOrderItemSeeder::class);
 
         // Optional: Seed stock adjustments
-     
-        $this->call(ReceivedGoodSeeder::class); 
-        $this->call(ReceivedGoodDetailSeeder::class); 
+
+        $this->call(ReceivedGoodSeeder::class);
+        $this->call(ReceivedGoodDetailSeeder::class);
         $this->call(StockTransactionSeeder::class);
         $this->call(ProvincesSeeder::class);
-
+        $this->call(CustomerSeeder::class);
     }
 }

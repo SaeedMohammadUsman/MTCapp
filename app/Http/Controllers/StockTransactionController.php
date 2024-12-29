@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
 use App\Models\StockTransaction;
-use App\Models\StockTransactionDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -63,47 +61,5 @@ class StockTransactionController extends Controller
          return view('stock_transactions.show', compact('stockTransaction'));
      }
      
-     
-
-     // In StockTransactionController.php
-
-// In StockTransactionController.php
-
-public function getItemsWithTransactions()
-{
-    $items = StockTransactionDetail::with('item') 
-        ->select('received_good_detail_id') 
-        ->distinct()
-        ->get()
-        ->pluck('item'); // Pluck the item from the relationship
-
-    return response()->json($items);
-}
-
-
-public function itemStockDetails(Request $request)
-{
-    $request->validate([
-        'item_id' => 'required|exists:items,id',
-    ]);
-
-    $itemId = $request->item_id;
-
-    // Fetch stock transactions related to the item
-    $stockTransactions = StockTransaction::with(['details' => function ($query) use ($itemId) {
-        $query->where('item_id', $itemId);
-    }])
-    ->whereHas('details', function ($query) use ($itemId) {
-        $query->where('item_id', $itemId);
-    })
-    ->get();
-
-    // Calculate total quantity and other details
-    $totalQuantity = $stockTransactions->sum(function ($transaction) {
-        return $transaction->details->sum('quantity');
-    });
-
-    return view('item_stock_details', compact('stockTransactions', 'totalQuantity'));
-}
-
+  
 }
