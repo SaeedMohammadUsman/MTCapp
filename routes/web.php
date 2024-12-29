@@ -107,8 +107,6 @@ Route::prefix('stock-transactions')->name('stock_transactions.')->group(function
 // Customer Routes
 Route::prefix('customers')->name('customers.')->group(function () {
     Route::resource('/', CustomerController::class)->except(['show'])->parameters(['' => 'customer']);
-    
-    // Show customer details
-    Route::get('/{customer}', [CustomerController::class, 'show'])->name('show');
+   
     Route::post('/{customer}/restore', [CustomerController::class, 'restore'])->name('restore');
 });
