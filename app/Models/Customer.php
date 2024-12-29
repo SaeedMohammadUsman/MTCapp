@@ -27,6 +27,10 @@ class Customer extends Model
     {
         return $this->belongsTo(District::class);
     }
-
+    public function packageCustomers()
+    {
+        return $this->hasMany(PackageCustomer::class);
+    }
+    
   
 }

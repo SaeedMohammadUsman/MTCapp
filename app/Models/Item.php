@@ -57,4 +57,10 @@ class Item extends Model
     {
         return $this->hasMany(PurchaseOrderItem::class, 'item_id', 'id');
     }
+    
+    
+    public function pricePackageDetails()
+    {
+        return $this->hasMany(PricePackageDetail::class);
+    }
 }
