@@ -12,12 +12,15 @@ use Database\Seeders\ItemSeeder;
 use Database\Seeders\PurchaseOrderItemSeeder;
 use Database\Seeders\PurchaseOrderSeeder;
 
+use Database\Seeders\ReceivedGoodDetailSeeder;
+use Database\Seeders\ReceivedGoodSeeder;
+use Database\Seeders\StockTransactionSeeder;
 use Database\Seeders\VendorSeeder;
 use Illuminate\Database\Seeder;
-use Database\Seeders\ReceivedGoodSeeder;
-use Database\Seeders\ReceivedGoodDetailSeeder;
-use Database\Seeders\StockTransactionSeeder;
 use OpenAfghanistan\Provinces\Database\Seeders\ProvincesSeeder;
+
+use Database\Seeders\PricePackageSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -61,9 +64,8 @@ class DatabaseSeeder extends Seeder
         $this->call(StockTransactionSeeder::class);
         $this->call(ProvincesSeeder::class);
         $this->call(CustomerSeeder::class);
-
-
-
+        // $this->call(PricePackageSeeder::class); 
         $this->call(PricePackageSeeder::class);
+       
     }
 }

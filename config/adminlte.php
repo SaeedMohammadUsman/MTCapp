@@ -367,23 +367,55 @@ return [
             ],
         ],
         
+        // [
+        //     'text'    => 'Sells',
+        //     'icon'    => 'fas fa-cash-register',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'Customers',
+        //             'url'  => 'customers',  
+        //             'icon' => 'fas fa-users',  
+        //         ],
+        //         // [
+        //         //     'text' => 'Sales Orders',
+        //         //     'url'  => 'sales_orders',
+        //         //     'icon' => 'fas fa-receipt',  // Icon for sales orders submenu
+        //         // ],
+        //     ],
+        // ],
         [
-            'text'    => 'Sells',
+            'text'    => 'Sales',
             'icon'    => 'fas fa-cash-register',
             'submenu' => [
                 [
                     'text' => 'Customers',
-                    'url'  => 'customers',  
-                    'icon' => 'fas fa-users',  
+                    'url'  => 'customers',
+                    'icon' => 'fas fa-users',
                 ],
-                // [
-                //     'text' => 'Sales Orders',
-                //     'url'  => 'sales_orders',
-                //     'icon' => 'fas fa-receipt',  // Icon for sales orders submenu
-                // ],
+                [
+                    'text'    => 'Packages',
+                    'icon'    => 'fas fa-box',
+                    'submenu' => [
+                        [
+                            'text' => 'All Packages',
+                            'url'  => 'packages',
+                            'icon' => 'fas fa-list',
+                        ],
+                        // [
+                        //     'text' => 'Active Packages',
+                        //     'url'  => 'packages/active',
+                        //     'icon' => 'fas fa-check-circle',
+                        // ],
+                        // [
+                        //     'text' => 'Expired Packages',
+                        //     'url'  => 'packages/expired',
+                        //     'icon' => 'fas fa-times-circle',
+                        // ],
+                    ],
+                ],
             ],
         ],
-                
+        
         
         
         [

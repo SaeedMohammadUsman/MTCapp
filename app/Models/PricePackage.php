@@ -9,16 +9,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PricePackage extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['title'];
+    protected $fillable = ['title', 'customer_id'];
+    
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
     
     public function details()
     {
         return $this->hasMany(PricePackageDetail::class);
     }
-
-    public function customers()
-    {
-        return $this->hasMany(PackageCustomer::class);
-    }
-
 }

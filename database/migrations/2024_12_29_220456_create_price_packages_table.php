@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('price_packages', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade'); 
             $table->softDeletes();
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -24,6 +26,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
+        
         Schema::dropIfExists('price_packages');
+        Schema::enableForeignKeyConstraints();
+
     }
 };
