@@ -7,6 +7,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PricePackageDetailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\StockTransactionController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -116,4 +118,8 @@ Route::prefix('customers')->name('customers.')->group(function () {
 Route::prefix('packages')->name('packages.')->group(function () {
     Route::resource('/', PackageController::class)->parameters(['' => 'package']);
     Route::post('/{package}/restore', [PackageController::class, 'restore'])->name('restore');
+    
+    Route::get('/{package}/details/create', [PricePackageDetailController::class, 'create'])->name('details.create');
+    Route::post('/{package}/details/store', [PricePackageDetailController::class, 'store'])->name('details.store');
+
 });

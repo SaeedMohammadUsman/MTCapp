@@ -16,7 +16,7 @@ class PricePackage extends Model
         return $this->belongsTo(Customer::class);
     }
     
-    public function details()
+    public function pricePackageDetails()
     {
         return $this->hasMany(PricePackageDetail::class);
     }

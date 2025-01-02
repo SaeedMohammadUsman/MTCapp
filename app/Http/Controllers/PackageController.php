@@ -27,8 +27,8 @@ class PackageController extends Controller
             })
             ->when($statusFilter === 'active', function ($query) {
                 return $query->whereNull('deleted_at'); // Only active packages
-            }) ->when($customerFilter, function ($query, $customerFilter) {
-                return $query->where('customer_id', $customerFilter);  
+            })->when($customerFilter, function ($query, $customerFilter) {
+                return $query->where('customer_id', $customerFilter);
             })
             ->latest()
             ->paginate(10);
@@ -36,7 +36,7 @@ class PackageController extends Controller
         // Check if there are trashed records
         $hasTrashed = PricePackage::onlyTrashed()->exists();
 
-        return view('packages.index', compact('packages', 'search', 'hasTrashed' , 'customers'));
+        return view('packages.index', compact('packages', 'search', 'hasTrashed', 'customers'));
     }
 
     /**
@@ -55,45 +55,48 @@ class PackageController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'customer_id' => 'required|exists:customers,id', 
+            'customer_id' => 'required|exists:customers,id',
         ]);
-    
+
         PricePackage::create($request->only(['title', 'customer_id']));
-    
+
         if ($request->ajax()) {
             return response()->json(['success' => 'Package created successfully!']);
         }
-    
+
         // return redirect()
         //     ->route('packages.index')
         //     ->with('success', 'Package created successfully!');
     }
     
-     
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required|string|max:255',
-    //     ]);
 
-    //     PricePackage::create($request->only(['title']));
-
-    //     return redirect()
-    //         ->route('packages.index')
-    //         ->with('success', 'Package created successfully!');
-    // }
-
-    /**
-     * Show the specified package.
-     */
-    public function show(PricePackage $package)
+    public function show($id)
     {
-        return view('packages.show', compact('package'));
+        // Retrieve the specific Price Package with related models
+        $package = PricePackage::with('pricePackageDetails.stockTransactionDetail.receivedGoodDetail.item')
+            ->findOrFail($id);
+
+        $pricePackageDetails = $package->pricePackageDetails->map(function ($detail) {
+            $stockTransactionDetail = $detail->stockTransactionDetail;
+            if ($stockTransactionDetail) {
+                $item = $stockTransactionDetail->item;
+                return [
+                    'trade_name_en' => $item ? $item->trade_name_en : 'N/A',
+                    'arrival_price' => $stockTransactionDetail->arrival_price,
+                    'discount' => $detail->discount ?? 0,
+                    'final_price' => number_format($detail->price ?? 0, 2),
+                ];
+            }
+            return [];
+        });
+        return view('packages.show', compact('package', 'pricePackageDetails'));
     }
 
-    /**
-     * Soft delete the specified package.
-     */
+
+
+
+
+
     public function destroy(PricePackage $package)
     {
         $package->delete();  // Soft delete

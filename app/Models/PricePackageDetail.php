@@ -15,6 +15,6 @@ class PricePackageDetail extends Model
 
     public function stockTransactionDetail()
     {
-        return $this->belongsTo(StockTransactionDetail::class);
+        return $this->belongsTo (StockTransactionDetail::class);
     }
 }
