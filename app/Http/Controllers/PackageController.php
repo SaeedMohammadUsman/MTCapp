@@ -76,20 +76,31 @@ class PackageController extends Controller
         $package = PricePackage::with('pricePackageDetails.stockTransactionDetail.receivedGoodDetail.item')
             ->findOrFail($id);
 
-        $pricePackageDetails = $package->pricePackageDetails->map(function ($detail) {
-            $stockTransactionDetail = $detail->stockTransactionDetail;
-            if ($stockTransactionDetail) {
-                $item = $stockTransactionDetail->item;
+
+            $pricePackageDetails = $package->pricePackageDetails->map(function ($detail) {
+                $stockTransactionDetail = $detail->stockTransactionDetail;
+                if ($stockTransactionDetail && $stockTransactionDetail->receivedGoodDetail) {
+                    $item = $stockTransactionDetail->receivedGoodDetail->item;
+                    return [
+                        'trade_name_en' => $item ? $item->trade_name_en : 'N/A',
+                        'trade_name_fa' => $item ? $item->trade_name_fa : 'N/A',
+                        
+                        'arrival_price' => $stockTransactionDetail->arrival_price,
+                        'discount' => $detail->discount ?? 0,
+                        'final_price' => number_format($detail->price ?? 0, 2),
+                    ];
+                }
                 return [
-                    'trade_name_en' => $item ? $item->trade_name_en : 'N/A',
-                    'arrival_price' => $stockTransactionDetail->arrival_price,
-                    'discount' => $detail->discount ?? 0,
-                    'final_price' => number_format($detail->price ?? 0, 2),
+                    'trade_name_en' => 'N/A',
+                    'trade_name_fa' => 'N/A',
+                    'arrival_price' => 'N/A',
+                    'discount' => 0,
+                    'final_price' => 'N/A',
                 ];
-            }
-            return [];
-        });
+            });
+            
         return view('packages.show', compact('package', 'pricePackageDetails'));
+
     }
 
 

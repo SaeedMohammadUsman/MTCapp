@@ -33,7 +33,7 @@
                     @foreach ($pricePackageDetails as $detail)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $detail['trade_name_en'] }}</td>
+                            <td>{{ $detail['trade_name_en'] }} {{ $detail['trade_name_fa'] }}</td>
                             <td>{{ $detail['arrival_price'] }}</td>
                             <td>{{ $detail['discount'] }}%</td>
                             <td>{{ $detail['final_price'] }}</td>
