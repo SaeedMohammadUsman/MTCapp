@@ -50,16 +50,15 @@ class StockTransactionController extends Controller
     
      public function show($id)
      {
-      
          $stockTransaction = StockTransaction::with([
-             'details.item',            // Eager load the 'item' relationship
-             'details.receivedGoodDetail'  // Eager load the 'receivedGoodDetail' relationship
-         ])
-         ->findOrFail($id);
+             'details.item' // Directly eager load the item relation
+         ])->findOrFail($id);
      
-        //  dd($stockTransaction->details);
          return view('stock_transactions.show', compact('stockTransaction'));
      }
+     
+    
+    
      
   
 }

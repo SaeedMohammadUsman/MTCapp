@@ -11,9 +11,6 @@
     <div class="card">
         <div class="card-header">
             <form action="{{ route('stock_transactions.index') }}" method="GET" class="form-inline">
-               
-        
-                
                 <div class="input-group input-group-sm mr-2">
                     <select name="transaction_type" class="form-control">
                         <option value="">All Types</option>

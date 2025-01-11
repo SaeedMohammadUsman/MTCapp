@@ -11,10 +11,11 @@ class StockTransactionDetail extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'stock_transaction_id',  // Foreign key to StockTransaction
-        'arrival_price',         // Price on arrival (including transport, tax, etc.)
-        'remarks',               // Any remarks for the transaction
-        'received_good_detail_id',
+        'stock_transaction_id',  
+        'remarks',             
+        'item_id',
+        'quantity',
+        'price',
     ];
 
     /**
@@ -25,14 +26,8 @@ class StockTransactionDetail extends Model
         return $this->belongsTo(StockTransaction::class);  // Belongs to one StockTransaction
     }
    
-    public function receivedGoodDetail()
-    {
-        return $this->belongsTo(ReceivedGoodDetail::class, 'received_good_detail_id');  // Make sure this column exists
-    }
     public function item()
     {
-        return $this->belongsTo(ReceivedGoodDetail::class, 'received_good_detail_id')->with('item');
+        return $this->belongsTo(Item::class, 'item_id');
     }
-    
-  
 }
