@@ -121,5 +121,5 @@ Route::prefix('packages')->name('packages.')->group(function () {
     
     Route::get('/{package}/details/create', [PricePackageDetailController::class, 'create'])->name('details.create');
     Route::post('/{package}/details/store', [PricePackageDetailController::class, 'store'])->name('details.store');
-
+    Route::delete('/details/{id}', [PricePackageDetailController::class, 'destroy'])->name('details.destroy'); 
 });

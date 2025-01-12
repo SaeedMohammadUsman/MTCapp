@@ -7,14 +7,14 @@ class PricePackageDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['price_package_id', 'stock_transaction_detail_id', 'discount', 'price'];
+    protected $fillable = ['price_package_id', 'item_id', 'discount', 'price'];
     public function pricePackage()
     {
         return $this->belongsTo(PricePackage::class);
     }
 
-    public function stockTransactionDetail()
+    public function item()
     {
-        return $this->belongsTo (StockTransactionDetail::class);
+        return $this->belongsTo(Item::class);
     }
 }

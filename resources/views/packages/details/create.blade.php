@@ -16,7 +16,7 @@
                             <select name="items[0][item_id]" id="item_id" class="form-control">
                                 <option value="">Select Item</option>
                                 @foreach($items as $item)
-                                    <option value="{{ $item->id }}" data-arrival-price="{{ $item->fifo_arrival_price }}">
+                                    <option value="{{ $item->id }}" data-arrival-price="{{ $latestPrices[$item->id] ?? 0 }}">
                                         {{ $item->trade_name_en }} ({{ $item->trade_name_fa }})
                                     </option>
                                 @endforeach
@@ -76,18 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let addedItems = [];
 
-    // Update arrival price when item changes
     itemSelect.addEventListener("change", function () {
-    const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-    
-    const arrivalPrice = selectedOption.getAttribute("data-arrival-price") || 0;
-    arrivalPriceInput.value = parseFloat(arrivalPrice).toFixed(2);
-    calculateFinalPrice();
-});
-    
-   
+        const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+        const arrivalPrice = selectedOption.getAttribute("data-arrival-price") || 0;
 
-    // Calculate final price
+        arrivalPriceInput.value = parseFloat(arrivalPrice).toFixed(2);
+        calculateFinalPrice();
+    });
+
     discountInput.addEventListener("input", calculateFinalPrice);
 
     function calculateFinalPrice() {
@@ -98,62 +94,60 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     addItemBtn.addEventListener("click", function () {
-    const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-    const itemId = selectedOption.value;
-    const itemName = selectedOption.textContent;
-    const arrivalPrice = selectedOption.getAttribute("data-arrival-price"); // Use the data attribute for FIFO
-    const discount = discountInput.value;
-    const finalPrice = (parseFloat(arrivalPrice) - (parseFloat(arrivalPrice) * (parseFloat(discount) || 0) / 100)).toFixed(2); // Calculate final price based on FIFO arrival price
+        const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+        const itemId = selectedOption.value;
+        const itemName = selectedOption.textContent;
+        const arrivalPrice = selectedOption.getAttribute("data-arrival-price");
+        const discount = discountInput.value;
+        const finalPrice = (parseFloat(arrivalPrice) - (parseFloat(arrivalPrice) * (parseFloat(discount) || 0) / 100)).toFixed(2);
 
-    if (!itemId || !arrivalPrice || !finalPrice) {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Please fill out all fields before adding an item.',
-            icon: 'error',
-            confirmButtonText: 'Okay',
-            toast: true,
-            position: 'top-end',
-            timer: 3000
-        });
-        return;
-    }
+        if (!itemId || !arrivalPrice || !finalPrice) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please fill out all fields before adding an item.',
+                icon: 'error',
+                confirmButtonText: 'Okay',
+                toast: true,
+                position: 'top-end',
+                timer: 3000
+            });
+            return;
+        }
 
-    if (addedItems.includes(itemId)) {
-        Swal.fire({
-            title: 'Warning!',
-            text: 'This item is already added.',
-            icon: 'warning',
-            confirmButtonText: 'Okay',
-            toast: true,
-            position: 'top-end',
-            timer: 3000
-        });
-        return;
-    }
+        if (addedItems.includes(itemId)) {
+            Swal.fire({
+                title: 'Warning!',
+                text: 'This item is already added.',
+                icon: 'warning',
+                confirmButtonText: 'Okay',
+                toast: true,
+                position: 'top-end',
+                timer: 3000
+            });
+            return;
+        }
 
-    const tableRow = document.createElement("tr");
-    tableRow.innerHTML = `
-        <td>${itemName}</td>
-        <td>${arrivalPrice}</td>
-        <td>${discount || "0"}</td>
-        <td>${finalPrice}</td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm remove-item-btn">Remove</button>
-            <input type="hidden" name="items[${addedItems.length}][item_id]" value="${itemId}">
-            <input type="hidden" name="items[${addedItems.length}][arrival_price]" value="${arrivalPrice}">
-            <input type="hidden" name="items[${addedItems.length}][discount]" value="${discount}">
-            <input type="hidden" name="items[${addedItems.length}][price]" value="${finalPrice}">
-        </td>
-    `;
+        const tableRow = document.createElement("tr");
+        tableRow.innerHTML = `
+            <td>${itemName}</td>
+            <td>${arrivalPrice}</td>
+            <td>${discount || "0"}</td>
+            <td>${finalPrice}</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm remove-item-btn">Remove</button>
+                <input type="hidden" name="items[${addedItems.length}][item_id]" value="${itemId}">
+                <input type="hidden" name="items[${addedItems.length}][price]" value="${arrivalPrice}">
+                <input type="hidden" name="items[${addedItems.length}][discount]" value="${discount}">
+                <input type="hidden" name="items[${addedItems.length}][final_price]" value="${finalPrice}">
+            </td>
+        `;
 
-    itemsTableBody.appendChild(tableRow);
-    addedItems.push(itemId);
+        itemsTableBody.appendChild(tableRow);
+        addedItems.push(itemId);
 
-    // Reset form fields
-    resetForm();
-});
+        resetForm();
+    });
 
-    // Remove item from table
     itemsTableBody.addEventListener("click", function (e) {
         if (e.target.classList.contains("remove-item-btn")) {
             const row = e.target.closest("tr");
@@ -217,9 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
             position: 'top-end'
         });
     @endif
-    
-    
-    
 });
 </script>
 @stop

@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('price_package_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('price_package_id')->constrained('price_packages')->onDelete('cascade'); 
-            $table->foreignId('stock_transaction_detail_id') 
-            ->constrained('stock_transaction_details')
-            ->onDelete('cascade');
+            $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->decimal('discount', 5, 2)->nullable(); 
             $table->decimal('price', 10, 2)->nullable(); 
             $table->timestamps();

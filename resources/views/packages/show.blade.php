@@ -18,31 +18,43 @@
             @if ($package->pricePackageDetails->isEmpty())
                 <p>No items available in this package.</p>
             @else
-            
-            <table class="table table-hover table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Item Name</th>
-                        <th>Arrival Price</th>
-                        <th>Discount (%)</th>
-                        <th>Final Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pricePackageDetails as $detail)
+                <table class="table table-hover table-striped table-sm">
+                    <thead>
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $detail['trade_name_en'] }} {{ $detail['trade_name_fa'] }}</td>
-                            <td>{{ $detail['arrival_price'] }}</td>
-                            <td>{{ $detail['discount'] }}%</td>
-                            <td>{{ $detail['final_price'] }}</td>
+                            <th>No</th>
+                            <th>Item Name</th>
+                            <th>Arrival Price</th>
+                            <th>Discount (%)</th>
+                            <th>Final Price</th>
+                            <th>Action</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            
-            
+                    </thead>
+                    <tbody>
+                        @foreach ($pricePackageDetails as $detail)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $detail->item->trade_name_en }} {{ $detail->item->trade_name_fa }}</td>
+                                <td>{{ $detail->price }}</td>
+                                <td>{{ $detail->discount }}%</td>
+                                <td>{{ $detail->price - $detail->price * ($detail->discount / 100) }}</td>
+
+                                <td>
+                                    <form action="{{ route('packages.details.destroy', $detail->id) }}" method="POST"
+                                        id="delete-form-{{ $detail->id }}" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                            onclick="confirmDelete(event, 'delete-form-{{ $detail->id }}')"
+                                            class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+
             @endif
             <a href="{{ route('packages.details.create', $package->id) }}" class="btn btn-primary mt-3">
                 Add New Item

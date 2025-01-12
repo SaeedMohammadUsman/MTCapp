@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\PricePackage;
+use App\Models\PricePackageDetail;
 use Illuminate\Http\Request;
 
 class PackageController extends Controller
@@ -69,42 +70,39 @@ class PackageController extends Controller
         //     ->with('success', 'Package created successfully!');
     }
     
+    // public function show($id)
+    // {
+    //     $package = PricePackage::with('customer')->findOrFail($id);
+    
+    //     // Fetch price package details along with item information
+    //     $pricePackageDetails = PricePackageDetail::where('price_package_id', $id)
+    //         ->with('item:id,trade_name_en,trade_name_fa')
+    //         ->get()
+    //         ->map(function ($detail) {
+    //             return [
+    //                 'trade_name_en' => $detail->item->trade_name_en,
+    //                 'trade_name_fa' => $detail->item->trade_name_fa,
+    //                 'arrival_price' => $detail->price,
+    //                 'discount' => $detail->discount,
+    //                 'final_price' => $detail->price - ($detail->price * ($detail->discount / 100)),
+    //             ];
+    //         });
+    
+    //     return view('packages.show', compact('package', 'pricePackageDetails'));
+    // }
+
 
     public function show($id)
-    {
-        // Retrieve the specific Price Package with related models
-        $package = PricePackage::with('pricePackageDetails.stockTransactionDetail.receivedGoodDetail.item')
-            ->findOrFail($id);
+{
+    $package = PricePackage::with('customer')->findOrFail($id);
 
+    // Fetch price package details along with item information
+    $pricePackageDetails = PricePackageDetail::where('price_package_id', $id)
+        ->with('item:id,trade_name_en,trade_name_fa')
+        ->get();
 
-            $pricePackageDetails = $package->pricePackageDetails->map(function ($detail) {
-                $stockTransactionDetail = $detail->stockTransactionDetail;
-                if ($stockTransactionDetail && $stockTransactionDetail->receivedGoodDetail) {
-                    $item = $stockTransactionDetail->receivedGoodDetail->item;
-                    return [
-                        'trade_name_en' => $item ? $item->trade_name_en : 'N/A',
-                        'trade_name_fa' => $item ? $item->trade_name_fa : 'N/A',
-                        
-                        'arrival_price' => $stockTransactionDetail->arrival_price,
-                        'discount' => $detail->discount ?? 0,
-                        'final_price' => number_format($detail->price ?? 0, 2),
-                    ];
-                }
-                return [
-                    'trade_name_en' => 'N/A',
-                    'trade_name_fa' => 'N/A',
-                    'arrival_price' => 'N/A',
-                    'discount' => 0,
-                    'final_price' => 'N/A',
-                ];
-            });
-            
-        return view('packages.show', compact('package', 'pricePackageDetails'));
-
-    }
-
-
-
+    return view('packages.show', compact('package', 'pricePackageDetails'));
+}
 
 
 
