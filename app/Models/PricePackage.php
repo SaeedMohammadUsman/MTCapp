@@ -20,4 +20,9 @@ class PricePackage extends Model
     {
         return $this->hasMany(PricePackageDetail::class);
     }
+    
+    public function customerOrders()
+    {
+        return $this->hasMany(CustomerOrder::class);
+    }
 }

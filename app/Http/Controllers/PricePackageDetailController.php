@@ -15,16 +15,16 @@ class PricePackageDetailController extends Controller
 {
     public function create($pricePackageId)
     {
-        Log::info("Fetching Price Package with ID: {$pricePackageId}");
+        // Log::info("Fetching Price Package with ID: {$pricePackageId}");
 
         $pricePackage = PricePackage::findOrFail($pricePackageId);
-        Log::info('Price Package Data:', $pricePackage->toArray());
+        // Log::info('Price Package Data:', $pricePackage->toArray());
 
         // Fetch all items for dropdown selection
         $items = Item::select('id', 'trade_name_en', 'trade_name_fa')->get();
         $latestPrices = [];
 
-        Log::info('Total Items Fetched: ' . $items->count());
+        // Log::info('Total Items Fetched: ' . $items->count());
 
         // Fetch latest prices for all items
         foreach ($items as $item) {

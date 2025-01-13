@@ -55,5 +55,7 @@ class StockTransactionSeeder extends Seeder
             'remarks' => 'Damaged transaction',
             'transaction_date' => Carbon::now()->startOfYear()->addMonths(rand(0, 11))->addDays(rand(0, 30)),
         ]);
+        
+        $this->call(StockTransactionDetailSeeder::class);
     }
 }

@@ -28,6 +28,9 @@ class Customer extends Model
         return $this->belongsTo(District::class);
     }
    
-    
+    public function orders()
+    {
+        return $this->hasMany(CustomerOrder::class);
+    }
   
 }
