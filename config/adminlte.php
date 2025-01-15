@@ -393,6 +393,11 @@ return [
                     'icon' => 'fas fa-users',
                 ],
                 [
+                    'text' => 'Customer Orders',
+                    'url'  => 'customer-orders', // The route to the customer orders index page
+                    'icon' => 'fas fa-shopping-cart', // Relevant icon for Customer Orders
+                ],
+                [
                     'text'    => 'Packages',
                     'icon'    => 'fas fa-box',
                     'submenu' => [
@@ -401,16 +406,7 @@ return [
                             'url'  => 'packages',
                             'icon' => 'fas fa-list',
                         ],
-                        // [
-                        //     'text' => 'Active Packages',
-                        //     'url'  => 'packages/active',
-                        //     'icon' => 'fas fa-check-circle',
-                        // ],
-                        // [
-                        //     'text' => 'Expired Packages',
-                        //     'url'  => 'packages/expired',
-                        //     'icon' => 'fas fa-times-circle',
-                        // ],
+                      
                     ],
                 ],
             ],

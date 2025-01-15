@@ -19,7 +19,7 @@ class Customer extends Model
         'address',
         'customer_phone',
         'email',
-       
+
     ];
 
     // Relationship with District
@@ -27,10 +27,14 @@ class Customer extends Model
     {
         return $this->belongsTo(District::class);
     }
-   
+
     public function orders()
     {
         return $this->hasMany(CustomerOrder::class);
     }
-  
+
+    public function pricePackages()
+    {
+        return $this->hasMany(PricePackage::class);
+    }
 }

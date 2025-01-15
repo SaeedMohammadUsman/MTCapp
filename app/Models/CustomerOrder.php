@@ -17,7 +17,10 @@ class CustomerOrder extends Model
         'remarks',
         'order_date',
     ];
-
+    protected $casts = [
+        'order_date' => 'datetime',
+    ];
+    
     // Relationships
     public function customer()
     {

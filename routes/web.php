@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\CustomerOrderController;
 
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PackageController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\StockTransactionController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -122,4 +124,12 @@ Route::prefix('packages')->name('packages.')->group(function () {
     Route::get('/{package}/details/create', [PricePackageDetailController::class, 'create'])->name('details.create');
     Route::post('/{package}/details/store', [PricePackageDetailController::class, 'store'])->name('details.store');
     Route::delete('/details/{id}', [PricePackageDetailController::class, 'destroy'])->name('details.destroy'); 
+});
+
+Route::prefix('customer-orders')->name('customer_orders.')->group(function () {
+    Route::resource('/', CustomerOrderController::class)->parameters(['' => 'customer_order']);
+    Route::post('/{customer_order}/restore', [CustomerOrderController::class, 'restore'])->name('restore');
+
+    // Any other routes related to customer orders can be added here
+    Route::get('/customer/{customer}/packages', [CustomerOrderController::class, 'getPackages'])->name('getPackages');
 });
