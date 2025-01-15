@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class CustomerOrderController extends Controller
 {
-    
+
     public function index(Request $request)
     {
         // Fetch filter values if available
@@ -35,13 +35,11 @@ class CustomerOrderController extends Controller
             ->latest()
             ->paginate(10);
     
-        // Fetch all customers for dropdown (select customer_name_en or customer_name_fa)
+      
         $customers = Customer::all();
     
-        // Check if there are trashed records
         $hasTrashed = CustomerOrder::onlyTrashed()->exists();
     
-        // Pass data to the view
         return view('customer_orders.index', compact('customerOrders', 'customers', 'hasTrashed'));
     }
     
@@ -55,14 +53,8 @@ class CustomerOrderController extends Controller
         ]);
     }
 
-    // If not AJAX, redirect back or show the index page
     return redirect()->route('customer_orders.index');
 }
-
-
-
-
-
 
 public function store(Request $request)
 {
@@ -77,21 +69,47 @@ public function store(Request $request)
     $customerOrder = CustomerOrder::create([
         'customer_id' => $request->customer_id,
         'price_package_id' => $request->package_id,
-        'status' => 'pending', // Default status
-        'total_amount' => 0,   // Default amount (can be updated later)
+        'status' => 'pending', 
+        'total_amount' => 0,  
         'remarks' => $request->remarks,
         'order_date' => now(),
     ]);
 
-    // Return success response for AJAX request
     return response()->json([
         'success' => 'Customer order created successfully!',
         'order' => $customerOrder
     ]);
 }
 
+public function show($id){
+    $customerOrder = CustomerOrder::with('customer', 'orderItems.item')->findOrFail($id);
+    return view('customer_orders.show', compact('customerOrder'));
+}
+public function edit($id)
+{
+    $customerOrder = CustomerOrder::with('customer')->findOrFail($id);
+    $customers = Customer::all();
+    return view('customer_orders.edit', compact('customerOrder', 'customers'));
+}
 
 
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'customer_id' => 'required|exists:customers,id',
+        'remarks' => 'nullable|string|max:1000',
+        'status' => 'required|in:pending,completed',
+    ]);
+
+    $customerOrder = CustomerOrder::findOrFail($id);
+    $customerOrder->update([
+        'customer_id' => $request->customer_id,
+        'remarks' => $request->remarks,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->route('customer_orders.index')->with('success', 'Customer order updated successfully!');
+}
 
 public function getPackages($customerId)
 {
@@ -104,4 +122,26 @@ public function getPackages($customerId)
 }
 
 
+public function destroy(CustomerOrder $customerOrder)
+{
+    // Soft delete the customer order
+    $customerOrder->delete();
+
+ 
+   return redirect()
+            ->route('customer_orders.index')
+            ->with('success', 'Package deleted successfully!');
+
+}   
+public function restore($id)
+{
+    // Restore the soft deleted customer order
+    $customerOrder = CustomerOrder::onlyTrashed()->findOrFail($id);
+    $customerOrder->restore();
+
+    return redirect()
+        ->route('customer_orders.index')
+        ->with('success', 'Package restored successfully!');
+
+}
 }

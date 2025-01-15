@@ -32,8 +32,8 @@ class CustomerOrder extends Model
         return $this->belongsTo(PricePackage::class);
     }
 
-    // public function orderItems()
-    // {
-    //     return $this->hasMany(CustomerOrderItem::class);
-    // }
+    public function orderItems()
+    {
+        return $this->hasMany(CustomerOrderItem::class);
+    }
 }

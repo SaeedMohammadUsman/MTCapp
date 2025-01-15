@@ -67,7 +67,7 @@ class PricePackageDetailController extends Controller
             'price_package_id' => $pricePackageId,
             'item_id' => $item['item_id'],
             'discount' => $item['discount'] ?? 0,
-            'price' => $item['price'],
+            'price' => $item['price'] - ($item['price'] * ($item['discount'] / 100)),
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -82,58 +82,7 @@ class PricePackageDetailController extends Controller
         ->with('success', 'Price package details saved successfully!');
 }
 
-    // public function store(Request $request, $pricePackageId)
-    // {
-    //     // Validate the incoming request data
-    //     $validatedData = $request->validate([
-    //         'items' => 'required|array',
-    //         'items.*.item_id' => 'required|exists:items,id',
-    //         'items.*.discount' => 'nullable|numeric|min:0|max:100',
-    //         'items.*.price' => 'required|numeric|min:0',
-    //     ]);
-    //     // Initialize an array to hold the price package details
-    //     $pricePackageDetails = [];
 
-    //     // Loop through each item to prepare data for insertion
-    //     foreach ($validatedData['items'] as $item) {
-    //         // Get the first available stock transaction detail for the item
-    //         $stockDetail = StockTransactionDetail::whereHas('receivedGoodDetail', function ($query) use ($item) {
-    //             $query->where('item_id', $item['item_id']);
-    //         })
-    //             ->orderBy('created_at', 'asc') // FIFO: Oldest stock first
-    //             ->first(); // Take only the first one for FIFO
-
-    //         if ($stockDetail) {
-    //             $existingItem = PricePackageDetail::where('price_package_id', $pricePackageId)
-    //             ->where('stock_transaction_detail_id', $stockDetail->id)
-    //             ->exists();
-
-    //         if ($existingItem) {
-    //             // If the item already exists, return an error
-    //             return redirect()->back()
-    //                 ->with('error', 'This item has already been added to the price package.');
-    //         }
-                
-    //             // Add the stock transaction detail if it's not already stored
-    //             $pricePackageDetails[] = [
-    //                 'price_package_id' => $pricePackageId,
-    //                 'stock_transaction_detail_id' => $stockDetail->id,
-    //                 'discount' => $item['discount'] ?? 0,
-    //                 'price' => $item['price'],
-    //                 'created_at' => now(),
-    //                 'updated_at' => now(),
-    //             ];
-    //         }
-    //     }
-
-    //     // Insert all price package details into the database
-    //     if (!empty($pricePackageDetails)) {
-    //         PricePackageDetail::insert($pricePackageDetails);
-    //     }
-
-    //     return redirect()->route('packages.index')
-    //         ->with('success', 'Price package details saved successfully!');
-    // }
 
         public function destroy($id)
     {
