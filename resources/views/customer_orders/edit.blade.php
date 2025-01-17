@@ -14,7 +14,7 @@
                 @method('PUT')
 
                 {{-- Customer Selection --}}
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="customer_id">Customer</label>
                     <select name="customer_id" id="customer_id" class="form-control" required>
                         @foreach ($customers as $customer)
@@ -23,7 +23,16 @@
                             </option>
                         @endforeach
                     </select>
+                </div> --}}
+                {{-- Customer Display --}}
+                <div class="form-group">
+                    <label for="customer_name">Customer</label>
+                    <input type="text" class="form-control"
+                        value="{{ $customerOrder->customer->customer_name_en }} ({{ $customerOrder->customer->customer_name_fa }})"
+                        disabled>
+                    <input type="hidden" name="customer_id" value="{{ $customerOrder->customer_id }}">
                 </div>
+
 
                 {{-- Remarks --}}
                 <div class="form-group">
@@ -36,7 +45,8 @@
                     <label for="status">Status</label>
                     <select name="status" id="status" class="form-control" required>
                         <option value="pending" {{ $customerOrder->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="completed" {{ $customerOrder->status == 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="completed" {{ $customerOrder->status == 'completed' ? 'selected' : '' }}>Completed
+                        </option>
                     </select>
                 </div>
 

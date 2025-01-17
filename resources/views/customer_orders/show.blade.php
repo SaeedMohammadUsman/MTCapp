@@ -11,11 +11,16 @@
             <!-- Order Information -->
             <p><strong>Customer:</strong> {{ $customerOrder->customer->customer_name_en }}
                 {{ $customerOrder->customer->customer_name_fa }}</p>
-            <p><strong>Status:</strong> {{ ucfirst($customerOrder->status) }}</p>
+                <p>
+                    <strong>Status:</strong> 
+                    <span class="badge 
+                        {{ $customerOrder->status === 'completed' ? 'bg-success' : 'bg-warning' }}">
+                        {{ ucfirst($customerOrder->status) }}
+                    </span>
+                </p>
             <p><strong>Total Amount:</strong> {{ number_format($customerOrder->total_amount, 2) }}</p>
             <p><strong>Order Date:</strong> {{ $customerOrder->order_date->format('Y-m-d H:i') }}</p>
             <p><strong>Remarks:</strong> {{ $customerOrder->remarks ?? 'N/A' }}</p>
-
             <!-- Order Items -->
             <h3>Order Items</h3>
             @if ($customerOrder->orderItems->isEmpty())
@@ -44,9 +49,17 @@
                                     <form action="{{ route('customer_orders.items.destroy', ['customer_order' => $customerOrder->id, 'customer_order_item' => $item->id]) }}" method="POST" id="delete-item-{{ $item->id }}" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button"
+                                        {{-- <button type="button"
                                             onclick="confirmDelete(event, 'delete-item-{{ $item->id }}')"
-                                            class="btn btn-danger btn-sm">Delete</button>
+                                            class="btn btn-danger btn-sm">Delete</button> --}}
+                                        
+                                            <button type="button"
+                                            class="btn btn-danger btn-sm {{ $customerOrder->status === 'completed' ? 'disabled' : '' }}"
+                                            @if ($customerOrder->status === 'completed') onclick="event.preventDefault();" style="pointer-events: none; opacity: 0.6;" 
+                                            @else onclick="confirmDelete(event, 'delete-item-{{ $item->id }}')" @endif>
+                                            Delete
+                                        </button>
+                                        
                                     </form>
                                 </td>
                             </tr>
@@ -57,11 +70,19 @@
 
             <!-- Add New Item Button -->
             {{-- <a href="{{ route('customer_orders.items.create', $customerOrder->id) }}" class="btn btn-primary mt-3">Add New Item</a> --}}
-            <button type="button" id="addNewItemBtn" data-id="{{ $customerOrder->id }}" class="btn btn-primary mt-3">
+            {{-- <button type="button" id="addNewItemBtn" data-id="{{ $customerOrder->id }}" class="btn btn-primary mt-3">
                 Add Item
-            </button>
+            </button> --}}
 
-
+            <a href="#"
+            id="addNewItemBtn"
+            data-id="{{ $customerOrder->id }}"
+            class="btn btn-primary mt-3 {{ $customerOrder->status === 'completed' ? 'disabled' : '' }}"
+            @if ($customerOrder->status === 'completed') onclick="event.preventDefault();" style="pointer-events: none; opacity: 0.6;" @else onclick="openAddItemModal({{ $customerOrder->id }});" @endif>
+             Add Item
+         </a>
+         
+             
             <!-- Back to Orders List -->
             <a href="{{ route('customer_orders.index') }}" class="btn btn-secondary mt-3">Back to List</a>
         </div>
