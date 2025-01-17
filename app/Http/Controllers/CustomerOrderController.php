@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerOrder;
+use App\Models\StockTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CustomerOrderController extends Controller
@@ -120,6 +122,68 @@ public function getPackages($customerId)
         'packages' => $customer->pricePackages
     ]);
 }
+
+
+
+
+public function stockOut($id)
+{
+    try {
+        DB::transaction(function () use ($id) {
+            // Log: Starting the process
+
+            // Fetch the customer order with its items
+            $customerOrder = CustomerOrder::with('orderItems')->findOrFail($id);
+
+            // Double-check for existing stock out transaction
+            $alreadyStockedOut = StockTransaction::where('customer_order_id', $customerOrder->id)
+                ->where('transaction_type', 2) // Stock Out
+                ->lockForUpdate()
+                ->exists();
+
+            if ($alreadyStockedOut) {
+                throw new \Exception('Stock out for this order has already been processed.');
+            }
+
+            // Create the stock out transaction
+            $stockTransaction = StockTransaction::create([
+                'transaction_type'   => 2, // Stock Out
+                'customer_order_id'  => $customerOrder->id,
+                // 'remarks'            => 'Stock out for customer order ID: ' . $customerOrder->id,
+           'remarks' => 'Stock out for customer. Customer: ' . $customerOrder->customer->customer_name_en . ' (' . $customerOrder->customer->customer_name_fa . ')',
+
+                'transaction_date'   => now(),
+            ]);
+
+
+            // Process each item in the order
+            foreach ($customerOrder->orderItems as $item) {
+                $stockTransaction->details()->create([
+                    'item_id'   => $item->item_id,
+                    'quantity'  => $item->quantity,
+                    'price'     => $item->price,
+                    'remarks'   => 'Stocked out for customer order ID: ' . $customerOrder->id,
+                ]);
+
+            }
+
+            // Update the order status to completed
+            $customerOrder->update(['status' => 'completed']);
+        });
+
+        return redirect()->back()->with('success', 'Stock out completed successfully.');
+    } catch (\Exception $e) {
+
+        if ($e->getMessage() === 'Stock out for this order has already been processed.') {
+            return redirect()->back()->with('warning', $e->getMessage());
+        }
+
+        return redirect()->back()->with('error', 'Stock out process failed. Please try again.');
+    }
+}
+
+
+
 
 
 public function destroy(CustomerOrder $customerOrder)

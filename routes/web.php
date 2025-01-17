@@ -134,6 +134,8 @@ Route::prefix('customer-orders')->name('customer_orders.')->group(function () {
 
     // Any other routes related to customer orders can be added here
     Route::get('/customer/{customer}/packages', [CustomerOrderController::class, 'getPackages'])->name('getPackages');
+    Route::post('/{customer_order}/stock-out', [CustomerOrderController::class, 'stockOut'])->name('stockOut');
+
     
     Route::resource('{customer_order}/items', CustomerOrderItemController::class)->parameters([
         'items' => 'customer_order_item'
