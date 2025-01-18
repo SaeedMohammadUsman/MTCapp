@@ -11,7 +11,8 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
-        "open-afghanistan/provinces": "^1.0"
+        "open-afghanistan/provinces": "^1.0",
+        "spatie/laravel-permission": "^6.10"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

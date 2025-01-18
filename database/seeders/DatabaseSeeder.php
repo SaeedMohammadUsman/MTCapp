@@ -29,10 +29,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RolePermissionSeeder::class);
+
         // Seed the User table (if necessary)
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'MTC Admin',
+            'email' => 'mtc@example.com',
         ]);
 
         // Seed department and vendor tables

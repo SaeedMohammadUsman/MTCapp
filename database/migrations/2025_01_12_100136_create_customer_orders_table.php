@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('total_amount', 15, 2)->default(0);
             $table->text('remarks')->nullable();
             $table->timestamp('order_date')->useCurrent();
+            $table->timestamps();
             $table->softDeletes();
         });
         
