@@ -8,20 +8,24 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\PricePackageDetailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ReceivedGoodController;
 use App\Http\Controllers\ReceivedGoodDetailController;
-use App\Http\Controllers\StockTransactionController;
-use App\Http\Controllers\VendorController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StockTransactionController;
+use App\Http\Controllers\UserController;
 
+use App\Http\Controllers\UserRolePermissionController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
+
+
 
 Route::get('/', function () {
     return redirect()->route('home');
@@ -49,10 +53,19 @@ Route::bind('role', function ($value) {
 
 // Admin Routes
 Route::middleware(['auth', 'role:Admin'])->group(function () {
+    Route::resource('user-role-permission', UserRolePermissionController::class);
     Route::resource('departments', DepartmentController::class);
     Route::resource('vendors', VendorController::class);
-    Route::resource('users', App\Http\Controllers\UserController::class);
-    Route::resource('roles', App\Http\Controllers\RoleController::class);
+    
+    
+    Route::post('user-role-permission/store-user', [UserRolePermissionController::class, 'storeUser'])->name('user-role-permission.storeUser');
+    Route::post('user-role-permission/store-role', [UserRolePermissionController::class, 'storeRole'])->name('user-role-permission.storeRole');
+    Route::post('user-role-permission/store-permission', [UserRolePermissionController::class, 'storePermission'])->name('user-role-permission.storePermission');
+    
+     // Custom routes for destroying users, roles, and permissions
+     Route::delete('user-role-permission/destroy-user/{user}', [UserRolePermissionController::class, 'destroyUser'])->name('user-role-permission.destroyUser');
+     Route::delete('user-role-permission/destroy-role/{role}', [UserRolePermissionController::class, 'destroyRole'])->name('user-role-permission.destroyRole');
+     Route::delete('user-role-permission/destroy-permission/{permission}', [UserRolePermissionController::class, 'destroyPermission'])->name('user-role-permission.destroyPermission');
 });
 
 // Manager and Admin Routes

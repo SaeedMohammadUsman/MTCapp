@@ -81,7 +81,7 @@ class RolePermissionSeeder extends Seeder
             'email' => 'admin@example.com'
         ], [
             'name' => 'Admin',
-            'password' => 'mtcapp', // Default password
+            'password' => bcrypt('mtcapp'), // Default password
         ]);
 
         $admin->assignRole($adminRole);
