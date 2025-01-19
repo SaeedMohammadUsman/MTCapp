@@ -451,8 +451,20 @@ return [
         ],
         
         
-        
+        ['header' => 'settings'],
 
+        [
+            'text' => 'Management',
+            'icon' => 'fas fa-fw fa-cog',
+            'submenu' => [
+                [
+                    'text' => 'Users',
+                    'url'  => 'users',
+                    'icon' => 'fas fa-user-friends',
+                    // 'can'  => 'manage users',
+                ],
+            ],
+        ],
 
 
     ],

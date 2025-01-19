@@ -80,7 +80,7 @@ class RolePermissionSeeder extends Seeder
         $admin = User::firstOrCreate([
             'email' => 'admin@example.com'
         ], [
-            'name' => 'Admin',
+            'name' => 'Usman Saeed',
             'password' => bcrypt('mtcapp'), // Default password
         ]);
 
