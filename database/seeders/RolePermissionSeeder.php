@@ -19,23 +19,21 @@ class RolePermissionSeeder extends Seeder
 
         // Define Permissions
         $permissions = [
-            // Admin Permissions
-            'user_create',
-            'user_edit',
-            'user_delete',
-            'user_activate',
-            'user_deactivate',
-            'role_assign',
+            // General permissions
+            'view_dashboard',
+            'view_reports',
 
-            // Manager Permissions
-            'purchase_order_create',
-            'package_create',
-            'stock_in_finalize',
-            'stock_out_finalize',
-            'package_edit',
+            // Admin-specific permissions
+            'user_manage',
+            'role_manage',
 
-            // Employee Permissions
-            'process_tasks',
+            // Manager-specific permissions
+            'stock_manage',
+            'purchase_order_manage',
+            'package_manage',
+
+            // Employee-specific permissions
+            'task_process',
         ];
 
         // Create Permissions
@@ -49,41 +47,31 @@ class RolePermissionSeeder extends Seeder
         $employeeRole = Role::firstOrCreate(['name' => 'Employee']);
 
         // Assign Permissions to Roles
-        $adminRole->syncPermissions([
-            'user_create',
-            'user_edit',
-            'user_delete',
-            'user_activate',
-            'user_deactivate',
-            'role_assign',
-            'purchase_order_create',
-            'package_create',
-            'stock_in_finalize',
-            'stock_out_finalize',
-            'package_edit',
-            'process_tasks',
+        $adminRole->givePermissionTo(Permission::all()); // Admin gets all permissions
+        $managerRole->givePermissionTo([
+            'view_dashboard',
+            'view_reports',
+            'stock_manage',
+            'purchase_order_manage',
+            'package_manage',
         ]);
-
-        $managerRole->syncPermissions([
-            'purchase_order_create',
-            'package_create',
-            'stock_in_finalize',
-            'stock_out_finalize',
-            'package_edit',
+        $employeeRole->givePermissionTo([
+            'view_dashboard',
+            'view_reports',
+            'task_process',
         ]);
-
-        $employeeRole->syncPermissions([
-            'process_tasks',
-        ]);
+        
+        # Default Admin Credentials
 
         // Assign Admin Role to Default User
         $admin = User::firstOrCreate([
-            'email' => 'admin@example.com'
+            'email' => env('DEFAULT_ADMIN_EMAIL', 'admin@mtcapp.com'),
         ], [
-            'name' => 'Usman Saeed',
-            'password' => bcrypt('mtcapp'), // Default password
+            'name' => env('DEFAULT_ADMIN_NAME', 'Usman-Saeed'),
+            'password' => bcrypt(env('DEFAULT_ADMIN_PASSWORD', 'mtcapp')),
         ]);
 
         $admin->assignRole($adminRole);
+
     }
 }

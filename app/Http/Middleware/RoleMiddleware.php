@@ -3,13 +3,16 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+// use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasRoles;
+
 class RoleMiddleware
 {
+    
     /**
      * Handle an incoming request.
      *
@@ -18,38 +21,22 @@ class RoleMiddleware
      * @param  string  $role
      * @return mixed
      */
-     
-     public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, $role)
     {
         if (!Auth::check()) {
             throw UnauthorizedException::notLoggedIn();
         }
 
         $user = Auth::user();
+        
+        // Split roles if multiple roles are provided (role1|role2)
+        $roles = is_array($role) ? $role : explode('|', $role);
 
-        if (!$user) {
-            throw UnauthorizedException::notLoggedIn();
+        // Check if the user has any of the required roles
+        if (!$user->hasAnyRole($roles)) {
+            throw UnauthorizedException::forRoles($roles);
         }
-
-        $roles = is_array($role) 
-            ? $role
-            : explode('|', $role);
-
-        // if (!$user->hasAnyRole($roles)) {
-        //     throw UnauthorizedException::forRoles($roles);
-        // }
 
         return $next($request);
     }
-    // public function handle(Request $request, Closure $next, $role)
-    // {
-        
-    //     // Check if the user has the required rolec
-    //     if (!Auth::user()->hasRole($role)) {
-    //         // If not, redirect or abort with a 403 Unauthorized status
-    //         abort(403, 'Unauthorized');
-    //     }
-
-    //     return $next($request);
-    // }
 }
