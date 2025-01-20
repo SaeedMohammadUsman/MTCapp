@@ -461,7 +461,7 @@ return [
                     'text' => 'Users',
                     'url'  => 'users',
                     'icon' => 'fas fa-user-friends',
-                    // 'can'  => 'manage users',
+                    'can'  => 'user_manage',
                 ],
             ],
         ],

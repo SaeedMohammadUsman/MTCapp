@@ -195,9 +195,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::resource('departments', DepartmentController::class);
 Route::resource('vendors', VendorController::class);
-Route::resource('users', UserRolePermissionController::class);
-Route::post('users/{user}/restore', [UserRolePermissionController::class, 'restore'])->name('users.restore');
 
+
+
+Route::middleware(['role:Admin'])->group(function () {
+    Route::resource('users', UserRolePermissionController::class);
+    Route::post('users/{user}/restore', [UserRolePermissionController::class, 'restore'])->name('users.restore');
+});
 Route::prefix('purchase_orders')->name('purchase_orders.')->group(function () {
     Route::resource('/', PurchaseOrderController::class)->parameters(['' => 'purchase_order']);
     Route::get('{purchase_order}/pdf', [PurchaseOrderController::class, 'generatePdf'])->name('pdf');

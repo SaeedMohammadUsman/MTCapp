@@ -32,10 +32,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RolePermissionSeeder::class);
 
         // Seed the User table (if necessary)
-        User::factory()->create([
-            'name' => 'MTC Admin',
-            'email' => 'mtc@example.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'MTC Admin',
+        //     'email' => 'mtc@example.com',
+        // ]);
 
         // Seed department and vendor tables
         $this->call([
