@@ -57,14 +57,8 @@
                     @forelse ($packages as $package)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>
-                                @if ($package->customer)
-                                {{ $package->customer->customer_name_en }} {{ $package->customer->customer_name_fa }}
-                            @else
-                                N/A
-                            @endif
-                            </td>
-                         
+                            <td>{{ $package->customer->customer_name_en }} {{ $package->customer->customer_name_fa }}</td>
+
 
                             <td>{{ $package->title }}</td>
                             <td>
@@ -93,7 +87,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center">No packages found.</td>
+                            <td colspan="3" class="text-center">No packages found.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -148,13 +142,11 @@
         </div>
     </div>
 
-
-
-
     @section('js')
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             // Handle form submission
+            $(document).ready(function(){
             $('#createPackageForm').on('submit', function(e) {
                 e.preventDefault();
 
@@ -184,7 +176,13 @@
                     });
                 });
             });
+        });
         </script>
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
     @stop
 
 

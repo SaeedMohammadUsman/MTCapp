@@ -61,6 +61,8 @@
         <div class="card-body">
             <table class="table table-sm table-striped table-hover  ">
                 <thead>
+                    {{-- {{ dd($receivedGoods) }} --}}
+
                     <tr>
                         <th>No</th>
                         <th>Batch Number</th>
@@ -72,22 +74,23 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
+              
                 <tbody>
                     @forelse ($receivedGoods as $receivedGood)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $receivedGood->batch_number }}</td>
-                            <td>{{ $receivedGood->vendor->company_name_en }}
-                                ({{ $receivedGood->vendor->company_name_fa }})
+                            <td>
+                                @if ($receivedGood->vendor)
+                                    {{ $receivedGood->vendor->company_name_en }} ({{ $receivedGood->vendor->company_name_fa }})
+                                @else
+                                    No Vendor Available
+                                @endif
                             </td>
                             <td>{{ $receivedGood->remark }}</td>
                             <td>{{ $receivedGood->date->format('Y-m-d') }}</td>
-
                             <td>
                                 @if ($receivedGood->bill_attachment)
-                                    {{-- <a href="{{ Storage::url($receivedGood->bill_attachment) }}" target="_blank">
-                                        {{ basename($receivedGood->bill_attachment) }}
-                                    </a> --}}
                                     <a href="{{ asset('storage/' . $receivedGood->bill_attachment) }}" target="_blank">
                                         {{ basename($receivedGood->bill_attachment) }}
                                     </a>
@@ -102,37 +105,26 @@
                                     <span class="badge bg-warning">Pending</span>
                                 @endif
                             </td>
-
                             <td>
                                 <div class="btn-group">
-                                    @if ($receivedGood->trashed())
+                                    {{-- Check if the record is deleted --}}
+                                    @if ($receivedGood->deleted_at)
                                         {{-- Restore button for soft-deleted items --}}
-                                        <form action="{{ route('received_goods.restore', $receivedGood->id) }}"
-                                            method="POST" style="display:inline;">
+                                        <form action="{{ route('received_goods.restore', $receivedGood->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-success btn-sm">Restore</button>
                                         </form>
                                     @else
                                         {{-- View, Edit, Delete buttons for active items --}}
-                                        <a href="{{ route('received_goods.show', $receivedGood->id) }}"
-                                            class="btn btn-info btn-sm">View</a>
-                                        <a href="{{ route('received_goods.edit', $receivedGood->id) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
-
-                                        <form action="{{ route('received_goods.destroy', $receivedGood->id) }}"
-                                            method="POST" id="delete-form-{{ $receivedGood->id }}"
-                                            style="display:inline;">
+                                        <a href="{{ route('received_goods.show', $receivedGood->id) }}" class="btn btn-info btn-sm">View</a>
+                                        <a href="{{ route('received_goods.edit', $receivedGood->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <form action="{{ route('received_goods.destroy', $receivedGood->id) }}" method="POST" id="delete-form-{{ $receivedGood->id }}" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button"
-                                                onclick="confirmDelete(event, 'delete-form-{{ $receivedGood->id }}')"
-                                                class="btn btn-danger btn-sm">Delete</button>
+                                            <button type="button" onclick="confirmDelete(event, 'delete-form-{{ $receivedGood->id }}')" class="btn btn-danger btn-sm">Delete</button>
                                         </form>
-
                                         @if ($receivedGood->is_finalized)
-                                            <button type="button" class="btn btn-success btn-sm" title="Stock In"
-                                                data-id="{{ $receivedGood->id }}" data-toggle="modal"
-                                                data-target="#stockInModal">
+                                            <button type="button" class="btn btn-success btn-sm" title="Stock In" data-id="{{ $receivedGood->id }}" data-toggle="modal" data-target="#stockInModal">
                                                 <i class="fas fa-arrow-down"></i>
                                             </button>
                                         @endif
@@ -141,11 +133,20 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="6" class="text-center">No received goods found.</td>
-                        </tr>
+                        @if (request('filter') === 'trashed')
+                            <tr>
+                                <td colspan="8" class="text-center">No trashed records found.</td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td colspan="8" class="text-center">No received goods found.</td>
+                            </tr>
+                        @endif
                     @endforelse
                 </tbody>
+                
+              
+              
             </table>
         </div>
 

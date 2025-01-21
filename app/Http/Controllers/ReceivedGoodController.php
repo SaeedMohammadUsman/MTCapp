@@ -46,7 +46,7 @@ class ReceivedGoodController extends Controller
 
         // Check if there are trashed records
         $hasTrashed = ReceivedGood::onlyTrashed()->exists();
-
+        // dd($receivedGoods);
         return view('received_goods.index', compact('receivedGoods', 'vendors', 'hasTrashed'));
     }
 
