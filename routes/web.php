@@ -1,8 +1,12 @@
 <?php
+
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerOrderController;
-
 use App\Http\Controllers\CustomerOrderItemController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
@@ -19,6 +23,9 @@ use App\Http\Controllers\UserRolePermissionController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+
+
 
 
 
@@ -42,9 +49,13 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Auth::routes();
+// Auth::routes();
+
+
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
 
 
 
@@ -127,7 +138,7 @@ Route::prefix('customers')->name('customers.')->group(function () {
 
 Route::prefix('packages')->name('packages.')->group(function () {
     Route::resource('/', PackageController::class)->parameters(['' => 'package'])->except(['destroy']);
-    
+
     Route::delete('/{package}', [PackageController::class, 'destroy'])->name('destroy')->middleware('role:Admin|Manager');
     Route::post('/{package}/restore', [PackageController::class, 'restore'])->name('restore')->middleware('role:Admin|Manager');
 
@@ -139,9 +150,9 @@ Route::prefix('packages')->name('packages.')->group(function () {
 
 
 Route::prefix('customer-orders')->name('customer_orders.')->group(function () {
-    Route::resource('/', CustomerOrderController::class)->parameters(['' => 'customer_order'])->except(['edit','destroy']);
-    
-    
+    Route::resource('/', CustomerOrderController::class)->parameters(['' => 'customer_order'])->except(['edit', 'destroy']);
+
+
     Route::get('/{customer_order}/edit', [CustomerOrderController::class, 'edit'])->name('edit')->middleware('role:Admin|Manager');
     Route::delete('/{customer_order}', [CustomerOrderController::class, 'destroy'])->name('destroy')->middleware('role:Admin|Manager');
     Route::post('/{customer_order}/restore', [CustomerOrderController::class, 'restore'])->name('restore')->middleware('role:Admin|Manager');
