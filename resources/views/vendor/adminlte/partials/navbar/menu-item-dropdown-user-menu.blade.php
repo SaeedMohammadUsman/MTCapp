@@ -71,10 +71,15 @@
             @endif
 
        
-            <a href="{{ route('password.change') }}" class="btn btn-default btn-flat d-block text-start">
-                <i class="fa fa-fw fa-lock text-orange"></i>
+            {{-- <a href="#" class="btn btn-default btn-flat d-block text-start"
+            data-toggle="modal"
+                        data-target="#changePasswordModal"
+            >
+                
+                
+                <i class="fa fa-fw fa-key text-orange"></i>
                 Change Password
-            </a>
+            </a> --}}
        
             <a class="btn btn-default btn-flat d-block text-start"
                 href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -119,3 +124,4 @@
     </ul>
 
 </li>
+

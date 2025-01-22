@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -21,21 +24,42 @@ class ProfileController extends Controller
         ]);
     }
 
+
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        // Log the start of the method
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = Auth::user();
+
+        if (!$user instanceof \App\Models\User) {
+            return redirect()->route('profile.edit')->with('error', 'User  not found');
         }
 
-        $request->user()->save();
+        // Validate the input
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:3',
+        ]);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Verify current password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->route('profile.edit')->with('error', 'The current password is incorrect.');
+        }
+
+        if ($request->password !== $request->password_confirmation) {
+            return redirect()->route('profile.edit')->with('error', 'The password confirmation does not match.');
+        }
+        // Update the password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+
+        return redirect()->route('profile.edit')->with('success', 'Your password has been updated successfully.');
     }
+   
 
     /**
      * Delete the user's account.

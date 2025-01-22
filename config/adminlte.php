@@ -265,7 +265,7 @@ return [
     // 'password_email_url' => 'password/email',
     'password_reset_url' => 'password.request',    // Changed
     'password_email_url' => 'password.email',      // Changed
-    'profile_url' => 'profile',
+    'profile_url' => 'profile.edit',
     'disable_darkmode_routes' => false,
 
     /*
