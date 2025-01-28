@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class UserRolePermissionController extends Controller
 {
@@ -30,7 +32,8 @@ class UserRolePermissionController extends Controller
             ->paginate(10);
 
         $roles = Role::all();
-        return view('users.index', compact('users', 'roles'));
+        $customers = Customer::all(); 
+        return view('users.index', compact('users', 'roles','customers'));
     }
 
     public function edit(User $user)
@@ -45,19 +48,25 @@ class UserRolePermissionController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Customer ID passed to store method:', ['customer_id' => $request->customer_id]);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'nullable|confirmed|min:3',
             'role_id' => 'required|exists:roles,id',
+            'customer_id' => 'nullable|exists:customers,id',
         ]);
 
         $password = $request->password ?? Str::random(3);
-
+        $role = Role::find($validated['role_id']);
+        $isCustomer = $role->name === 'Customer';
+        
+        
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($password),
+            'customer_id' => $isCustomer ? $validated['customer_id'] : null,
         ]);
 
         $user->roles()->sync($validated['role_id']);
@@ -72,12 +81,15 @@ class UserRolePermissionController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|confirmed|min:3',
             'role_id' => 'required|exists:roles,id',
+           'customer_id' => 'nullable|exists:customers,id',
         ]);
-
+        $role = Role::find($validated['role_id']);
+        $isCustomer = $role->name === 'Customer';
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'customer_id' => $isCustomer ? $validated['customer_id'] : null, 
         ]);
 
         $user->roles()->sync($validated['role_id']);

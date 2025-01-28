@@ -136,6 +136,16 @@
                                 @endforeach
                             </select>
                         </div>
+                        
+                        <div class="form-group" id="customerIdField" style="display: none;">
+                            <label for="customer_id">Select Customer</label>
+                            <select class="form-control" id="customer_id" name="customer_id">
+                                <option value="">Select Customer</option>
+                                @foreach ($customers as $customer)
+                                    <option value="{{ $customer->id }}">{{ $customer->customer_name_en }} ({{ $customer->customer_name_fa }})</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -191,6 +201,8 @@
                 },
             });
         });
+
+
 
         // Edit User
         $('.editUser').click(function () {
@@ -283,4 +295,39 @@ $('.restoreUser').click(function(e) {
 });
     </script>
   
+  <script>
+    $(document).ready(function () {
+        // Show/hide customer_id field based on role selection
+        $('#role').change(function () {
+            const roleName = $(this).find('option:selected').text();
+            if (roleName === 'Customer') {
+                $('#customerIdField').show();
+            } else {
+                $('#customerIdField').hide();
+            }
+        });
+
+        // Ensure the field is shown/hidden correctly when editing a user
+        $('.editUser').click(function () {
+            const id = $(this).data('id');
+            $.get(`/users/${id}/edit`, function (user) {
+                $('#userId').val(user.id);
+                $('#name').val(user.name);
+                $('#email').val(user.email);
+                $('#role').val(user.roles[0]?.id);
+
+                // Show/hide customer_id field based on role
+                const roleName = $('#role').find('option:selected').text();
+                if (roleName === 'Customer') {
+                    $('#customerIdField').show();
+                } else {
+                    $('#customerIdField').hide();
+                }
+
+                $('#customer_id').val(user.customer_id); // Set customer_id value
+                $('#userModal').modal('show');
+            });
+        });
+    });
+</script>
 @stop
