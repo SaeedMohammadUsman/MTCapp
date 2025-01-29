@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
 
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerOrderController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\UserRolePermissionController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -160,4 +162,10 @@ Route::prefix('customer-orders')->name('customer_orders.')->group(function () {
     Route::resource('{customer_order}/items', CustomerOrderItemController::class)->parameters([
         'items' => 'customer_order_item'
     ]);
+});
+
+
+Route::prefix('accounts')->name('accounts.')->middleware('role:Admin|Manager')->group(function () {
+    Route::resource('/', AccountController::class)->parameters(['' => 'account']);
+    Route::post('{account}/restore', [AccountController::class, 'restore'])->name('restore');
 });

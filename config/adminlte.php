@@ -451,6 +451,22 @@ return [
                 ],
             ],
         ],
+        [
+            'text'    => 'Finance',
+            'icon'    => 'fas fa-money-bill-wave', // Icon for Finance
+            'submenu' => [
+                [
+                    'text' => 'Accounts',
+                    'url'  => 'accounts',
+                    'icon' => 'fas fa-university', // Icon for Accounts
+                ],
+                [
+                    'text' => 'Transactions',
+                    'url'  => 'transactions',
+                    'icon' => 'fas fa-exchange-alt', // Icon for Transactions
+                ],
+            ],
+        ],
         
         
         ['header' => 'settings'],
