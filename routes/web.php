@@ -20,10 +20,12 @@ use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ReceivedGoodController;
 use App\Http\Controllers\ReceivedGoodDetailController;
 use App\Http\Controllers\StockTransactionController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserRolePermissionController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -168,4 +170,15 @@ Route::prefix('customer-orders')->name('customer_orders.')->group(function () {
 Route::prefix('accounts')->name('accounts.')->middleware('role:Admin|Manager')->group(function () {
     Route::resource('/', AccountController::class)->parameters(['' => 'account']);
     Route::post('{account}/restore', [AccountController::class, 'restore'])->name('restore');
+});
+
+
+Route::prefix('transactions')->name('transactions.')->group(function () {
+    Route::resource('/', TransactionController::class)->parameters(['' => 'transaction'])->except(['edit', 'destroy']);
+    
+    Route::middleware(['role:Admin|Manager'])->group(function () {
+        Route::get('{transaction}/edit', [TransactionController::class, 'edit'])->name('edit');
+        Route::delete('{transaction}', [TransactionController::class, 'destroy'])->name('destroy');
+        Route::post('{transaction}/restore', [TransactionController::class, 'restore'])->name('restore');
+    });
 });

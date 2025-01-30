@@ -458,7 +458,8 @@ return [
                 [
                     'text' => 'Accounts',
                     'url'  => 'accounts',
-                    'icon' => 'fas fa-university', // Icon for Accounts
+                    'icon' => 'fas fa-university',
+                   
                 ],
                 [
                     'text' => 'Transactions',
@@ -474,6 +475,7 @@ return [
         [
             'text' => 'Management',
             'icon' => 'fas fa-fw fa-cog',
+            // 'icon_color' => 'primary',
             'submenu' => [
                 [
                     'text' => 'Users',
