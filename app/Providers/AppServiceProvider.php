@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Auth\Notifications\ResetPassword;
 
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -22,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $locale = Session::get('locale', 'en'); // Default to English
+        App::setLocale($locale);
         Schema::defaultStringLength(191);
         
         ResetPassword::createUrlUsing(function ($user, string $token) {

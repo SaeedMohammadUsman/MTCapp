@@ -25,12 +25,25 @@ use App\Http\Controllers\UserRolePermissionController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 
+Route::get('/toggle-language', function (Request $request) {
+    // Check the current language and switch
+    $newLang = Session::get('locale', 'en') == 'en' ? 'fa' : 'en';
+    $newDirection = $newLang == 'fa' ? 'rtl' : 'ltr';
 
+    // Store in session
+    Session::put('locale', $newLang);
+    Session::put('direction', $newDirection);
 
+    // Set the app locale
+    App::setLocale($newLang);
 
-
+    return redirect()->back();
+})->name('toggleLanguage');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -56,7 +69,7 @@ require __DIR__ . '/auth.php';
 
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 
