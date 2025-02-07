@@ -23,17 +23,25 @@ use App\Http\Controllers\StockTransactionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserRolePermissionController;
 use App\Http\Controllers\VendorController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
 
 Route::get('/toggle-language', function (Request $request) {
-    // Check the current language and switch
-    $newLang = Session::get('locale', 'en') == 'en' ? 'fa' : 'en';
+    // Get the current locale
+    $currentLang = Session::get('locale', 'en');
+    $newLang = $currentLang == 'en' ? 'fa' : 'en';
     $newDirection = $newLang == 'fa' ? 'rtl' : 'ltr';
+
+    Log::info('Before toggling language', [
+        'current_locale' => $currentLang,
+        'new_locale' => $newLang,
+        'new_direction' => $newDirection
+    ]);
 
     // Store in session
     Session::put('locale', $newLang);
@@ -42,8 +50,29 @@ Route::get('/toggle-language', function (Request $request) {
     // Set the app locale
     App::setLocale($newLang);
 
+    Log::info('After toggling language', [
+        'app_locale' => App::getLocale(),
+        'session_locale' => Session::get('locale'),
+        'session_direction' => Session::get('direction')
+    ]);
+
     return redirect()->back();
 })->name('toggleLanguage');
+
+// Route::get('/toggle-language', function (Request $request) {
+//     // Check the current language and switch
+//     $newLang = Session::get('locale', 'en') == 'en' ? 'fa' : 'en';
+//     $newDirection = $newLang == 'fa' ? 'rtl' : 'ltr';
+
+//     // Store in session
+//     Session::put('locale', $newLang);
+//     Session::put('direction', $newDirection);
+
+//     // Set the app locale
+//     App::setLocale($newLang);
+
+//     return redirect()->back();
+// })->name('toggleLanguage');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
