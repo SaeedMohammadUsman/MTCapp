@@ -23,8 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $locale = Session::get('locale', 'en'); // Default to English
-        App::setLocale($locale);
+       
         Schema::defaultStringLength(191);
         
         ResetPassword::createUrlUsing(function ($user, string $token) {

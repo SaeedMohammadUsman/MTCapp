@@ -32,50 +32,28 @@ use Illuminate\Support\Facades\Session;
 
 
 Route::get('/toggle-language', function (Request $request) {
-    // Get the current locale
     $currentLang = Session::get('locale', 'en');
-    $newLang = $currentLang == 'en' ? 'fa' : 'en';
-    $newDirection = $newLang == 'fa' ? 'rtl' : 'ltr';
+    $newLang = $currentLang === 'en' ? 'fa' : 'en';
+    $newDirection = $newLang === 'fa' ? 'rtl' : 'ltr';
 
-    Log::info('Before toggling language', [
-        'current_locale' => $currentLang,
-        'new_locale' => $newLang,
-        'new_direction' => $newDirection
-    ]);
+    // Log::info('Before toggling language', [
+    //     'current_locale' => $currentLang,
+    //     'new_locale' => $newLang,
+    //     'new_direction' => $newDirection
+    // ]);
 
-    // Store in session
     Session::put('locale', $newLang);
     Session::put('direction', $newDirection);
+    session()->save(); // Ensure session is stored
 
-    // Set the app locale
-    App::setLocale($newLang);
-
-    Log::info('After toggling language', [
-        'app_locale' => App::getLocale(),
-        'session_locale' => Session::get('locale'),
-        'session_direction' => Session::get('direction')
-    ]);
+    // Log::info('After toggling language', [
+    //     'app_locale' => $newLang,
+    //     'session_locale' => Session::get('locale'),
+    //     'session_direction' => Session::get('direction')
+    // ]);
 
     return redirect()->back();
 })->name('toggleLanguage');
-
-// Route::get('/toggle-language', function (Request $request) {
-//     // Check the current language and switch
-//     $newLang = Session::get('locale', 'en') == 'en' ? 'fa' : 'en';
-//     $newDirection = $newLang == 'fa' ? 'rtl' : 'ltr';
-
-//     // Store in session
-//     Session::put('locale', $newLang);
-//     Session::put('direction', $newDirection);
-
-//     // Set the app locale
-//     App::setLocale($newLang);
-
-//     return redirect()->back();
-// })->name('toggleLanguage');
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/', function () {
     return redirect()->route('home');  // Redirect to /home

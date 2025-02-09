@@ -30,7 +30,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
+        // \Illuminate\Session\Middleware\StartSession::class,
         // ShareErrorsFromSession::class,
         \Illuminate\Cookie\Middleware\EncryptCookies::class,
         \Illuminate\Http\Middleware\TrustProxies::class,
@@ -47,10 +47,10 @@ class Kernel extends HttpKernel
         'web' => [
             EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
+            // \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Foundation\Http\Middleware\ShareErrorsFromSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetLocale::class,
+            // \App\Http\Middleware\SetLocale::class,
         ],
 
         'api' => [

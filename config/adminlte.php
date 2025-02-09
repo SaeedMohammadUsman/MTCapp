@@ -343,26 +343,26 @@ return [
         //     'icon' => 'fas fa-fw fa-lock',
         // ],
         [
-            'text' => 'Department',
+            'text' => 'menu.department', 
             'icon' => 'fas fa-fw fa-bars',
             'submenu' => [
                 [
-                    'text' => 'Department',
+                    'text' => 'department', 
                     'url' => 'departments',
                 ],
             ]
         ],
         [
-            'text'    => 'Vendor Management',
+            'text'    => 'menu.vendor_management',
             'icon'    => 'fas fa-store',
             'submenu' => [
                 [
-                    'text' => 'Vendor List',
+                    'text' => 'vendor_list',
                     'url'  => 'vendors',
                     'icon' => 'fas fa-list',
                 ],
                 [
-                    'text' => 'Purchase Orders',
+                    'text' => 'purchase_orders',
                     'url'  => 'purchase_orders',
                     'icon' => 'fas fa-shopping-cart',
                 ],
@@ -386,25 +386,25 @@ return [
         //     ],
         // ],
         [
-            'text'    => 'Sales',
+            'text'    => 'menu.sales',
             'icon'    => 'fas fa-cash-register',
             'submenu' => [
                 [
-                    'text' => 'Customers',
+                    'text' => 'customers',
                     'url'  => 'customers',
                     'icon' => 'fas fa-users',
                 ],
                 [
-                    'text' => 'Customer Orders',
+                    'text' => 'customer_orders',
                     'url'  => 'customer-orders', // The route to the customer orders index page
                     'icon' => 'fas fa-shopping-cart', // Relevant icon for Customer Orders
                 ],
                 [
-                    'text'    => 'Packages',
+                    'text'    => 'menu.packages',
                     'icon'    => 'fas fa-box',
                     'submenu' => [
                         [
-                            'text' => 'All Packages',
+                            'text' => 'all_packages',
                             'url'  => 'packages',
                             'icon' => 'fas fa-list',
                         ],
@@ -417,23 +417,23 @@ return [
         
         
         [
-            'text'    => 'Stock Management',
+            'text'    => 'menu.stock_management',
             'icon'    => 'fas fa-box',
             'submenu' => [
                 [
-                    'text' => 'Items',
+                    'text' => 'items',
                     'url'  => 'items',
                     'icon' => 'fas fa-tags',
                 ],
                 [
-                    'text'    => 'Received Goods',
+                    'text'    => 'received_goods',
                     'url'     => 'received-goods',
                     'icon'    => 'fas fa-box', // or use 'fas fa-box-open'
                     
                 ],
                
                 [
-                    'text' => 'Stock Transaction',
+                    'text' => 'stock_transactions',
                     'url'  => 'stock-transactions',
                     'icon' => 'fas fa-warehouse',
 
@@ -445,24 +445,24 @@ return [
                 // ],
               
                 [
-                    'text' => 'Categories',
+                    'text' => 'categories',
                     'url'  => 'categories',
                     'icon' => 'fas fa-tags',
                 ],
             ],
         ],
         [
-            'text'    => 'Finance',
+            'text'    => 'menu.finance',
             'icon'    => 'fas fa-money-bill-wave', // Icon for Finance
             'submenu' => [
                 [
-                    'text' => 'Accounts',
+                    'text' => 'accounts',
                     'url'  => 'accounts',
                     'icon' => 'fas fa-university',
                    
                 ],
                 [
-                    'text' => 'Transactions',
+                    'text' => 'transactions',
                     'url'  => 'transactions',
                     'icon' => 'fas fa-exchange-alt', // Icon for Transactions
                 ],
@@ -473,12 +473,12 @@ return [
         ['header' => 'settings'],
 
         [
-            'text' => 'Management',
+            'text' => 'menu.management',
             'icon' => 'fas fa-fw fa-cog',
             // 'icon_color' => 'primary',
             'submenu' => [
                 [
-                    'text' => 'Users',
+                    'text' => 'users',
                     'url'  => 'users',
                     'icon' => 'fas fa-user-friends',
                     'can'  => 'user_manage',

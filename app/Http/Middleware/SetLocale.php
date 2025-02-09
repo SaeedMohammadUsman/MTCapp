@@ -16,15 +16,41 @@ class SetLocale
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next)
-    {
-        $locale = Session::get('locale', config('app.locale'));
-        Log::info('Before setting locale', ['locale' => App::getLocale(), 'session_locale' => $locale]);
-        
-        dd('Middleware executed', $locale);
-        App::setLocale($locale);
-        Log::info('After setting locale', ['locale' => App::getLocale()]);
+    // public function handle($request, Closure $next)
+    // {
+    //     $locale = Session::get('locale', config('app.locale'));
+    //     Log::info('Middleware: Before setting locale', [
+    //         'app_locale' => App::getLocale(),
+    //         'session_locale' => $locale
+    //     ]);
+    
+    //     App::setLocale($locale);
+    //     Log::info('Middleware: After setting locale', [
+    //         'app_locale' => App::getLocale()
+    //     ]);
 
-        return $next($request);
-    }
+
+    //     return $next($request);
+    // }
+    
+    
+    public function handle($request, Closure $next)
+{
+    $locale = session('locale', config('app.locale')); // Use session() helper for consistency
+
+    // Log::info('Middleware: Before setting locale', [
+    //     'app_locale' => App::getLocale(),
+    //     'session_locale' => $locale
+    // ]);
+
+    App::setLocale($locale);
+
+    // Log::info('Middleware: After setting locale', [
+    //     'app_locale' => App::getLocale()
+    // ]);
+
+    return $next($request);
+}
+
+
 }

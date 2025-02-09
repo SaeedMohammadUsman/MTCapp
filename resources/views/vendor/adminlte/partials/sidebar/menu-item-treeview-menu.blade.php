@@ -9,14 +9,14 @@
         }}"></i>
 
         <p>
-            {{-- {{ $item['text'] }} --}}
-            {{ trans($item['text']) }}
+           
+            {{ __($item['text']) }}
             <i class="fas fa-angle-left right"></i>
 
             @isset($item['label'])
                 <span class="badge badge-{{ $item['label_color'] ?? 'primary' }} right">
-                    {{-- {{ $item['label'] }} --}}
-                    {{ trans($item['label']) }}
+                    {{ __($item['label']) }}
+                    {{-- {{ __($item['label']) }}   --}}
                 </span>
             @endisset
         </p>
