@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'profile' => 'پروفایل',
     'full_name' => 'نام',
     'email' => 'ایمیل',
     'password' => 'رمز عبور',

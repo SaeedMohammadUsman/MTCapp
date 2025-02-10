@@ -66,7 +66,8 @@
             @if ($profile_url)
                 <a href="{{ $profile_url }}" class="btn btn-default btn-flat d-block text-start">
                     <i class="fa fa-fw fa-user text-lightblue"></i>
-                    Profile
+                    {{ __('adminlte::adminlte.profile') }}
+
                 </a>
             @endif
 
@@ -84,7 +85,10 @@
             <a class="btn btn-default btn-flat d-block text-start"
                 href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fa fa-fw fa-power-off text-red"></i>
-                Logout
+                {{-- Logout --}}
+                {{-- {{ __('adminlte.log_out') }} --}}
+                {{ __('adminlte::adminlte.log_out') }}
+
             </a>
             <form id="logout-form" action="{{ $logout_url }}" method="POST" style="display: none;">
                 @if (config('adminlte.logout_method'))
