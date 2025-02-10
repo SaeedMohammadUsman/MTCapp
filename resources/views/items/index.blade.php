@@ -3,7 +3,9 @@
 @section('title', 'Items')
 
 @section('content_header')
-    <h1>Items</h1>
+    {{-- <h1>Items</h1> --}}
+    <h1>{{ __('menu.items') }}</h1>
+    
 @stop
 
 @section('content')

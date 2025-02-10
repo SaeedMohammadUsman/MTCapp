@@ -3,7 +3,9 @@
 @section('title', 'Manage Accounts')
 
 @section('content_header')
-    <h1>Manage Accounts</h1>
+    {{-- <h1>Manage Accounts</h1> --}}
+    <h1>{{ __('menu.accounts') }}</h1>
+    
 @stop
 
 @section('content')

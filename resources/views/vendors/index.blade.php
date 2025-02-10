@@ -3,7 +3,9 @@
 @section('title', 'Vendors')
 
 @section('content_header')
-    <h1>Vendors</h1>
+    {{-- <h1>Vendors</h1> --}}
+    <h1>{{ __('menu.vendor_list') }}</h1>
+  
 @stop
 
 @section('content')

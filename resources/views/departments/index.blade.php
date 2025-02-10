@@ -4,14 +4,7 @@
 @section('title', 'Departments')
 
 @section('content_header')
-    {{-- <h1>Departments</h1> --}}
-    {{-- <h1>{{ __('menu.departments') }}</h1> --}}
-    <h1>{{ trans('menu.departments') }}</h1>
-
-    {{-- <h1>((__menu.departemnt))</h1> --}}
-    
-    
-    {{-- {{ app()->getLocale() }} --}}
+    <h1>{{ __('menu.department') }}</h1>
 
 @stop
 

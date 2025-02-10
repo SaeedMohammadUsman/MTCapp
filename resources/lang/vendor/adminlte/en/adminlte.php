@@ -14,7 +14,7 @@ return [
     'sign_in' => 'Sign In',
     'log_out' => 'Log Out',
     'toggle_navigation' => 'Toggle navigation',
-    'login_message' => 'Maknoon Trading Company',
+    'login_message' => 'Welcome To MaknoonTrade App',
     'register_message' => 'Register a new membership',
     'password_reset_message' => 'Reset Password',
     'reset_password' => 'Reset Password',

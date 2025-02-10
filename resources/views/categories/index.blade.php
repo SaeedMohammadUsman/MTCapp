@@ -6,7 +6,10 @@
 
 @section('content_header')
 
-    <h1>Categories</h1>
+    {{-- <h1>Categories</h1> --}}
+    <h1>{{ __('menu.categories') }}</h1>
+    
+    
 @stop
 
 @section('content')

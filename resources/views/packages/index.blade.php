@@ -3,7 +3,9 @@
 @section('title', 'Price Packages')
 
 @section('content_header')
-    <h1>Price Packages</h1>
+    {{-- <h1>Price Packages</h1> --}}
+    <h1>{{ __('menu.packages') }}</h1>
+    
 @stop
 @section('content')
     {{-- Search and Filter Section --}}

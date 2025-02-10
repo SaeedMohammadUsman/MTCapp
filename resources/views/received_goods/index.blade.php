@@ -3,7 +3,9 @@
 @section('title', 'Received Goods')
 
 @section('content_header')
-    <h1>Received Goods</h1>
+    {{-- <h1>Received Goods</h1> --}}
+    <h1>{{ __('menu.received_goods') }}</h1>
+
 @stop
 
 @section('content')

@@ -30,6 +30,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
+Route::get('/test', function () {
+    return __('adminlte::adminlte.login_message');
+});
+
 
 Route::get('/toggle-language', function (Request $request) {
     $currentLang = Session::get('locale', 'en');
