@@ -17,7 +17,7 @@ return [
     'warning' => 'Warning',
     'information' => 'Information',
     
-    
+    'dashboard' => 'Dashboard',
     
     
     'main_navigation' => 'MAIN NAVIGATION',

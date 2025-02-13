@@ -33,6 +33,14 @@
             </a>
         </li> --}}
 
+        <li class="nav-item mx-2">
+            <a class="nav-link btn" href="javascript:void(0);" onclick="customBack()">
+                <i class="fas fa-arrow-left mr-1"></i>
+                <span class="d-none d-md-inline">Back</span>
+            </a>
+        </li>
+        
+        
         {{-- Language & RTL/LTR Toggle Button --}}
         <li class="nav-item">
             <a class="nav-link" href="{{ route('toggleLanguage') }}">
@@ -58,3 +66,25 @@
     </ul>
 
 </nav>
+
+
+
+<script>
+    function customBack() {
+        let referrer = document.referrer; // Get the previous URL
+        let currentURL = window.location.href; // Get the current URL
+        let homeURL = "{{ url('/home') }}"; // Home page URL
+        let loginURL = "{{ url('/login') }}"; // Login page URL
+
+        if (referrer.includes(loginURL)) {
+            // If the previous page was login, always go to home
+            window.location.href = homeURL;
+        } else if (currentURL === homeURL) {
+            // If already on home, refresh the page instead of going back
+            window.location.reload();
+        } else {
+            // Otherwise, go back normally in history
+            history.back();
+        }
+    }
+</script>

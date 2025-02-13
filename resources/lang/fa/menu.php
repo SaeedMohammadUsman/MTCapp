@@ -20,7 +20,7 @@ return [
     
     
     
-    
+    'dashboard' => 'داشبورد',
     'main_navigation' => 'ناوبری اصلی',
 
     'department' => 'بخش',
