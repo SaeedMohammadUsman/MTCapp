@@ -127,7 +127,10 @@
                 <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
                 <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
                 <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+                
         @endswitch
+@include('components.sweetalert')
+        
     @endif
 
     {{-- Extra Configured Plugins Scripts --}}
@@ -142,8 +145,11 @@
         @endif
     @endif
 
+
     {{-- Custom Scripts --}}
-    @yield('adminlte_js')
+@yield('adminlte_js')
+    
+  
 
 </body>
 

@@ -85,6 +85,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::resource('departments', DepartmentController::class);
+
 // Route::resource('vendors', VendorController::class);
 Route::resource('vendors', VendorController::class)
     ->middleware(['role:Admin|Manager']);

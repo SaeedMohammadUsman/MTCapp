@@ -3,7 +3,7 @@
 @section('title', 'Customer Orders')
 
 @section('content_header')
-    <h1>Customer Orders</h1>
+    {{-- <h1>Customer Orders</h1> --}}
     <h1>{{ __('menu.customer_orders') }}</h1>
     
 @stop

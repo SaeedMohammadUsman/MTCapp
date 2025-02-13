@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
+use App\Models\PurchaseOrder;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +26,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $departmentCount = Department::count();
+        $vendorCount = Vendor::count();
+        $purchaseOrderCount = PurchaseOrder::count();
+        return view('home', compact('departmentCount', 'vendorCount','purchaseOrderCount'));
     }
 }
