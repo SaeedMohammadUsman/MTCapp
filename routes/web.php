@@ -19,6 +19,8 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ReceivedGoodController;
 use App\Http\Controllers\ReceivedGoodDetailController;
+use App\Http\Controllers\Reports\ReportController;
+use App\Http\Controllers\Reports\StockTransactionReportController;
 use App\Http\Controllers\StockTransactionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserRolePermissionController;
@@ -29,6 +31,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+
 
 Route::get('/test', function () {
     return __('adminlte::adminlte.login_message');
@@ -207,4 +210,17 @@ Route::prefix('transactions')->name('transactions.')->group(function () {
         Route::delete('{transaction}', [TransactionController::class, 'destroy'])->name('destroy');
         Route::post('{transaction}/restore', [TransactionController::class, 'restore'])->name('restore');
     });
+});
+
+
+
+Route::prefix('reports')->name('reports.')->group(function () {
+    Route::get('dashboard', [ReportController::class, 'dashboard'])->name('dashboard');
+    
+    Route::get('stock-transactions', [StockTransactionReportController::class, 'index'])
+        ->name('stock-transactions');
+        
+        Route::get('stock-transactions/export', [StockTransactionReportController::class, 'export'])
+        ->name('stock-transactions.export');
+    // Future report routes will go here...
 });

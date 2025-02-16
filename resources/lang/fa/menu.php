@@ -45,6 +45,13 @@ return [
     'accounts' => 'حساب‌ها',
     'transactions' => 'معاملات',
 
+    
+    'reports' => 'گزارشات',
+    'report_dashboard' => 'داشبورد گزارشات',
+    'stock_transaction_report' => 'گزارش تراکنش‌های انبار',
+    'customer_report' => 'گزارش مشتریان',
+    'account_report' => 'گزارش مالی',
+
     'settings' => 'تنظیمات',
     'management' => 'مدیریت',
     'users' => 'کاربران',

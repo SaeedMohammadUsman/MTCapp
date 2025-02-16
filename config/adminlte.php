@@ -468,6 +468,58 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'menu.reports',
+            'icon' => 'fas fa-chart-line',
+            'submenu' => [
+                [
+                    'text' => 'report_dashboard',  // Remove 'menu.' prefix
+                    'url'  => 'reports/dashboard',
+                    'icon' => 'fas fa-tachometer-alt',
+                ],
+                [
+                    'text' => 'stock_transaction_report',  // Remove 'menu.' prefix
+                    'url'  => 'reports/stock-transactions',
+                    'icon' => 'fas fa-box',
+                ],
+                [
+                    'text' => 'customer_report',  // Remove 'menu.' prefix
+                    'url'  => 'reports/customers',
+                    'icon' => 'fas fa-user',
+                ],
+                [
+                    'text' => 'account_report',  // Remove 'menu.' prefix
+                    'url'  => 'reports/accounts',
+                    'icon' => 'fas fa-wallet',
+                ],
+            ],
+        ],
+        // [
+        //     'text'    => 'menu.reports',
+        //     'icon'    => 'fas fa-chart-line', // Icon for Reports
+        //     'submenu' => [
+        //         [
+        //             'text' => 'report_dashboard',
+        //             'url'  => 'reports/dashboard',
+        //             'icon' => 'fas fa-tachometer-alt', // Dashboard Icon
+        //         ],
+        //         [
+        //             'text' => 'stock_transaction_report',
+        //             'url'  => 'reports/stock-transactions',
+        //             'icon' => 'fas fa-box', // Stock Transaction Icon
+        //         ],
+        //         [
+        //             'text' => 'customer_report',
+        //             'url'  => 'reports/customers',
+        //             'icon' => 'fas fa-user', // Customer Report Icon
+        //         ],
+        //         [
+        //             'text' => 'account_report',
+        //             'url'  => 'reports/accounts',
+        //             'icon' => 'fas fa-wallet', // Account Report Icon
+        //         ],
+        //     ],
+        // ],
         
         
         ['header' => 'settings'],

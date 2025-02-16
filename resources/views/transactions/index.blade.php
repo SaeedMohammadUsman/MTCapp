@@ -112,8 +112,11 @@
     </table>
 </div>
     {{-- Pagination --}}
-    {{ $transactions->links() }}
-
+    {{-- {{ $transactions->links() }} --}}
+    <div class="card-footer">
+        {{-- Pagination Links --}}
+        {{ $transactions->links('vendor.pagination.bootstrap-4') }}
+    </div>
     {{-- Transaction Modal --}}
     <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
         <div class="modal-dialog">

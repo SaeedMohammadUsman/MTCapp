@@ -43,6 +43,13 @@ return [
     'finance' => 'Finance',
     'accounts' => 'Accounts',
     'transactions' => 'Transactions',
+    
+    
+    'reports'                  => 'Reports',
+    'report_dashboard'         => 'Report Dashboard',
+    'stock_transaction_report' => 'Stock Transactions Report',
+    'customer_report'          => 'Customer Report',
+    'account_report'           => 'Financial Report',
 
     'settings' => 'Settings',
     'management' => 'Management',

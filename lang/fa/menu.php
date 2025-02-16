@@ -45,6 +45,7 @@ return [
     'accounts' => 'حساب‌ها',
     'transactions' => 'معاملات',
 
+
     'settings' => 'تنظیمات',
     'management' => 'مدیریت',
     'users' => 'کاربران',
