@@ -1,22 +1,24 @@
 <?php
 namespace App\Http\Controllers\Reports;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\StockTransaction;
-use App\Models\Item;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StockTransactionExport;
+use App\Http\Controllers\Controller;
+use App\Models\Item;
+use App\Models\StockTransaction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StockTransactionReportController extends Controller
 {
     public function index()
     {
         $items = Item::all();
-        $transactions = StockTransaction::with('details.item')->get();
-        return view('reports.stock_transactions', compact('items','transactions'));
+       
+        return view('reports.stock_transactions', compact('items'   ));
         
     }
+
 
     public function filter(Request $request)
     {
@@ -24,37 +26,58 @@ class StockTransactionReportController extends Controller
         $transactionType = $request->input('transaction_type');
         $dateFrom = $request->input('date_from');
         $dateTo = $request->input('date_to');
-
-        $query = StockTransaction::query();
-
-        if ($itemId) {
-            $query->whereHas('details', function ($q) use ($itemId) {
-                $q->where('item_id', $itemId);
-            });
-        }
-
-        if ($transactionType) {
-            $query->where('transaction_type', $transactionType);
-        }
-
+    
+        $query = StockTransaction::with(['details' => function ($query) use ($itemId) {
+            if ($itemId) {
+                $query->where('item_id', $itemId);
+            }
+            $query->with('item:id,trade_name_en,trade_name_fa');
+        }]);
+    
+        // Apply date range filter if provided
         if ($dateFrom && $dateTo) {
-            $query->whereBetween('transaction_date', [$dateFrom, $dateTo]);
+            $query->whereBetween('transaction_date', [
+                Carbon::parse($dateFrom)->startOfDay(),
+                Carbon::parse($dateTo)->endOfDay()
+            ]);
         }
-
-        $transactions = $query->with('details.item')->get();
-
-        $totalIn = $transactions->where('transaction_type', 'in')->sum('quantity');
-        $totalOut = $transactions->where('transaction_type', 'out')->sum('quantity');
+    
+        // Filter by transaction type if specified
+        if ($transactionType) {
+            $type = ($transactionType === 'in') ? 1 : 2;
+            $query->where('transaction_type', $type);
+        }
+    
+        // Get transactions and filter out ones with no matching details
+        $transactions = $query->get()->filter(function ($transaction) {
+            return $transaction->details->isNotEmpty();
+        });
+    
+        // Initialize totals
+        $totalIn = 0;
+        $totalOut = 0;
+    
+        // Calculate totals
+        foreach ($transactions as $transaction) {
+            foreach ($transaction->details as $detail) {
+                if ($transaction->transaction_type == 1) {
+                    $totalIn += $detail->quantity;
+                } else if ($transaction->transaction_type == 2) {
+                    $totalOut += $detail->quantity;
+                }
+            }
+        }
+    
+        // Calculate current stock
         $currentStock = $totalIn - $totalOut;
-
+    
         return response()->json([
-            'transactions' => $transactions,
+            'transactions' => $transactions->values(),
             'total_in' => $totalIn,
             'total_out' => $totalOut,
             'current_stock' => $currentStock
         ]);
     }
-
     public function export(Request $request)
     {
         $transactions = StockTransaction::with('details.item')->get()->map(function ($transaction) {

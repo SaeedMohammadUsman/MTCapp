@@ -81,53 +81,57 @@
 
 {{-- Include JavaScript for filtering and data population --}}
 <script>
-    // Filter function
-    function filter() {
-        $.ajax({
-            url: '{{ route("reports.stock-transactions.filter") }}',
-            method: 'POST',
-            data: $('#filter-form').serialize(),
-            success: function(response) {
-                if (response.success) {
-                    // Show the table if there are results
-                    $('#stock-transactions-table').show();
-                    
-                    // Clear the table body first
-                    $('#stock-transactions-body').empty();
-                    
-                    // Populate the table with data
-                    response.transactions.forEach(function(transaction) {
+  // Filter function
+function filter() {
+    $.ajax({
+        url: '{{ route("reports.stock-transactions.filter") }}',
+        method: 'POST',
+        data: $('#filter-form').serialize(),
+        success: function(response) {
+            if (response.transactions.length > 0) {
+                // Show the table if there are results
+                $('#stock-transactions-table').show();
+                
+                // Clear the table body first
+                $('#stock-transactions-body').empty();
+                
+                // Populate the table with data
+                response.transactions.forEach(function(transaction) {
+                    transaction.details.forEach(function(detail) {
                         $('#stock-transactions-body').append(`
                             <tr>
-                                <td>${transaction.transaction_date}</td>
-                                <td>${transaction.item.trade_name_en}</td>
-                                <td>${transaction.item.trade_name_fa}</td>
-                                <td>${transaction.quantity}</td>
+                                <td>${new Date(transaction.transaction_date).toLocaleDateString()}</td>
+                                <td>${detail.item.trade_name_en}</td>
+                                <td>${detail.item.trade_name_fa}</td>
+                                <td>${detail.quantity}</td>
                             </tr>
                         `);
                     });
-                    
-                    // Update total summary
-                    $('#total-in').text(response.total_in);
-                    $('#total-out').text(response.total_out);
-                    $('#current-stock').text(response.current_stock);
-                }
+                });
+
+                // Update total summary
+                $('#total-in').text(response.total_in);
+                $('#total-out').text(response.total_out);
+                $('#current-stock').text(response.current_stock);
+
+                // Enable the export button if there are results
+                $('#export-btn').prop('disabled', false);
+            } else {
+                $('#stock-transactions-table').hide();
+                $('#export-btn').prop('disabled', true);
             }
-        });
-    }
-
-    // When the filter is applied or cleared, trigger the filter function
-    $('#filter-form').on('submit', function(e) {
-        e.preventDefault();
-        filter();
+        },
+        error: function() {
+            alert("An error occurred while fetching stock transactions.");
+        }
     });
+}
 
-    // Clear filters and hide the table
-    $('#clear-btn').on('click', function() {
-    // Reset the filter form
-    $('#filter-form')[0].reset();
-    
-    // Submit the form (it will trigger a POST request)
-    $('#filter-form').submit();
+// When the filter is applied or cleared, trigger the filter function
+$('#filter-form').on('submit', function(e) {
+    e.preventDefault();
+    filter();
 });
+
+
 </script>
