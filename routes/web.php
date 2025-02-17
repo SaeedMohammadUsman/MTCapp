@@ -220,8 +220,8 @@ Route::prefix('reports')->name('reports.')->group(function () {
     Route::get('stock-transactions', [StockTransactionReportController::class, 'index'])
         ->name('stock-transactions');
         
-        Route::get('stock-transactions/export', [StockTransactionReportController::class, 'export'])
-        ->name('stock-transactions.export');
+        // Route::get('stock-transactions/export', [StockTransactionReportController::class, 'export'])
+        // ->name('stock-transactions.export');
         Route::post('stock-transactions/filter', [StockTransactionReportController::class, 'filter'])
         ->name('stock-transactions.filter');
     

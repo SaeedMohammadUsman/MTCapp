@@ -78,19 +78,21 @@ class StockTransactionReportController extends Controller
             'current_stock' => $currentStock
         ]);
     }
-    public function export(Request $request)
-    {
-        $transactions = StockTransaction::with('details.item')->get()->map(function ($transaction) {
-            return [
-                'transaction_date' => $transaction->transaction_date,
-                'item_name' => optional($transaction->details->first()->item)->trade_name_en ?? 'N/A',
-                'transaction_type' => $transaction->transaction_type,
-                'quantity' => $transaction->details->sum('quantity'),
-            ];
-        });
-        
-        return Excel::download(new StockTransactionExport($transactions), 'stock_tracking.xlsx');
-        
-    }
+    // public function export(Request $request)
+    // {
+    //     $transactions = StockTransaction::with('details.item')->get()->flatMap(function ($transaction) {
+    //         return $transaction->details->map(function ($detail) use ($transaction) {
+    //             return [
+    //                 'transaction_date' => $transaction->transaction_date,
+    //                 'item_name' => optional($detail->item)->trade_name_en ?? 'N/A',
+    //                 'transaction_type' => $transaction->transaction_type,
+    //                 'quantity' => $detail->quantity,  // Fix: Ensure correct sum per item
+    //             ];
+    //         });
+    //     });
+    
+    //     return Excel::download(new StockTransactionExport($transactions), 'stock_tracking.xlsx');
+    // }
+    
     
 }
