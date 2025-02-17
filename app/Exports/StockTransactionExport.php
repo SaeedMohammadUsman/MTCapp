@@ -1,47 +1,62 @@
 <?php
+// namespace App\Exports;
+
+// use Illuminate\Support\Collection;
+// use Maatwebsite\Excel\Concerns\FromCollection;
+// use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+// use Maatwebsite\Excel\Concerns\WithHeadings;
+
+// class StockTransactionExport implements FromCollection, WithHeadings, ShouldAutoSize
+// {
+//     private $transactions;
+
+//     public function __construct($transactions)
+//     {
+//         $this->transactions = $transactions;
+//     }
+
+//     public function collection()
+//     {
+//         return new Collection($this->transactions->map(function ($transaction) {
+//             return [
+//                 'Date' => $transaction->transaction_date,
+//                 'Item' => optional($transaction->details->first()->item)->trade_name_en ?? 'N/A',
+//                 'Transaction Type' => $transaction->transaction_type,
+//                 'Quantity' => $transaction->details->quantity ?? 0,
+//             ];
+//         }));
+//     }
+
+//     public function headings(): array
+//     {
+//         return ['Date', 'Item', 'Transaction Type', 'Quantity'];
+//     }
+// }
 
 namespace App\Exports;
 
-use App\Models\StockTransactionDetail;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Illuminate\Http\Request;
 
-class StockTransactionExport implements FromQuery, WithHeadings
+class StockTransactionExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
-    protected $request;
+    private $transactions;
 
-    public function __construct(Request $request)
+    public function __construct($transactions)
     {
-        $this->request = $request;
+        $this->transactions = $transactions;
     }
 
-    public function query()
+    public function collection()
     {
-        return StockTransactionDetail::query()
-            ->with('item', 'stockTransaction')
-            ->when($this->request->item_id, function ($query) {
-                $query->where('item_id', $this->request->item_id);
-            })
-            ->when($this->request->transaction_type, function ($query) {
-                $query->whereHas('stockTransaction', function ($q) {
-                    $q->where('transaction_type', $this->request->transaction_type);
-                });
-            })
-            ->when($this->request->start_date && $this->request->end_date, function ($query) {
-                $query->whereHas('stockTransaction', function ($q) {
-                    $q->whereBetween('transaction_date', [$this->request->start_date, $this->request->end_date]);
-                });
-            })
-            ->select([
-                'item_id',
-                'quantity',
-                'remarks',
-            ]);
+        return new Collection($this->transactions);
+
     }
 
     public function headings(): array
     {
-        return ['Item ID', 'Quantity', 'Remarks'];
+        return ['Date', 'Item', 'Transaction Type', 'Quantity'];
     }
 }

@@ -1,41 +1,73 @@
 <?php
-
 namespace App\Http\Controllers\Reports;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\StockTransaction;
-use App\Models\StockTransactionDetail;
 use App\Models\Item;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StockTransactionExport;
 
 class StockTransactionReportController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $items = Item::select('id', 'trade_name_en', 'trade_name_fa')->get();
+        $items = Item::all();
+        $transactions = StockTransaction::with('details.item')->get();
+        return view('reports.stock_transactions', compact('items','transactions'));
+        
+    }
 
-        $query = StockTransaction::with(['details.item'])
-            ->when($request->item_id, function ($q) use ($request) {
-                return $q->whereHas('details', function ($query) use ($request) {
-                    $query->where('item_id', $request->item_id);
-                });
-            })
-            ->when($request->transaction_type, function ($q) use ($request) {
-                return $q->where('transaction_type', $request->transaction_type);
-            })
-            ->when($request->start_date && $request->end_date, function ($q) use ($request) {
-                return $q->whereBetween('transaction_date', [$request->start_date, $request->end_date]);
-            })
-            ->orderBy('transaction_date', 'desc')
-            ->get();
+    public function filter(Request $request)
+    {
+        $itemId = $request->input('item_id');
+        $transactionType = $request->input('transaction_type');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
 
-        return view('reports.stock_transactions', compact('items', 'query'));
+        $query = StockTransaction::query();
+
+        if ($itemId) {
+            $query->whereHas('details', function ($q) use ($itemId) {
+                $q->where('item_id', $itemId);
+            });
+        }
+
+        if ($transactionType) {
+            $query->where('transaction_type', $transactionType);
+        }
+
+        if ($dateFrom && $dateTo) {
+            $query->whereBetween('transaction_date', [$dateFrom, $dateTo]);
+        }
+
+        $transactions = $query->with('details.item')->get();
+
+        $totalIn = $transactions->where('transaction_type', 'in')->sum('quantity');
+        $totalOut = $transactions->where('transaction_type', 'out')->sum('quantity');
+        $currentStock = $totalIn - $totalOut;
+
+        return response()->json([
+            'transactions' => $transactions,
+            'total_in' => $totalIn,
+            'total_out' => $totalOut,
+            'current_stock' => $currentStock
+        ]);
     }
 
     public function export(Request $request)
     {
-        return Excel::download(new StockTransactionExport($request), 'stock_transactions.xlsx');
+        $transactions = StockTransaction::with('details.item')->get()->map(function ($transaction) {
+            return [
+                'transaction_date' => $transaction->transaction_date,
+                'item_name' => optional($transaction->details->first()->item)->trade_name_en ?? 'N/A',
+                'transaction_type' => $transaction->transaction_type,
+                'quantity' => $transaction->details->sum('quantity'),
+            ];
+        });
+        
+        return Excel::download(new StockTransactionExport($transactions), 'stock_tracking.xlsx');
+        
     }
     
 }

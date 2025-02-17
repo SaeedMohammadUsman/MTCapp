@@ -222,5 +222,8 @@ Route::prefix('reports')->name('reports.')->group(function () {
         
         Route::get('stock-transactions/export', [StockTransactionReportController::class, 'export'])
         ->name('stock-transactions.export');
+        Route::post('stock-transactions/filter', [StockTransactionReportController::class, 'filter'])
+        ->name('stock-transactions.filter');
+    
     // Future report routes will go here...
 });
