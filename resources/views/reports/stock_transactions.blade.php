@@ -1,4 +1,3 @@
-
 @extends('adminlte::page')
 @section('title', __('menu.stock_transaction_report'))
 @section('content_header')

@@ -484,7 +484,7 @@ return [
                 ],
                 [
                     'text' => 'customer_report',  // Remove 'menu.' prefix
-                    'url'  => 'reports/customers',
+                    'url'  => 'reports/customer-report',
                     'icon' => 'fas fa-user',
                 ],
                 [

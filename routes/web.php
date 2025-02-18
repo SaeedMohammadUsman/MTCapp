@@ -19,6 +19,7 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ReceivedGoodController;
 use App\Http\Controllers\ReceivedGoodDetailController;
+use App\Http\Controllers\Reports\CustomerReportController;
 use App\Http\Controllers\Reports\ReportController;
 use App\Http\Controllers\Reports\StockTransactionReportController;
 use App\Http\Controllers\StockTransactionController;
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+
 
 
 Route::get('/test', function () {
@@ -219,11 +221,15 @@ Route::prefix('reports')->name('reports.')->group(function () {
     
     Route::get('stock-transactions', [StockTransactionReportController::class, 'index'])
         ->name('stock-transactions');
-        
-        // Route::get('stock-transactions/export', [StockTransactionReportController::class, 'export'])
-        // ->name('stock-transactions.export');
+     
         Route::post('stock-transactions/filter', [StockTransactionReportController::class, 'filter'])
         ->name('stock-transactions.filter');
     
+    
+        Route::get('customer-report', [CustomerReportController::class, 'index'])
+        ->name('customer');
+        
+    Route::post('customer-report/filter', [CustomerReportController::class, 'filter'])
+        ->name('customer.filter');
     // Future report routes will go here...
 });
