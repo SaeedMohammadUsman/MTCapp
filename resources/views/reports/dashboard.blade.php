@@ -68,7 +68,7 @@
                     </div>
                     <h5 class="fw-bold text-dark report-title">{{ __('menu.customer_report') }}</h5>
                     <p class="text-muted">{{ __('menu.reports') }}</p>
-                    <a href="{{ url('reports/customers') }}" class="btn btn-outline-success btn-sm">
+                    <a href="{{ url('reports/customer-report') }}" class="btn btn-outline-success btn-sm">
                         {{ __('menu.management') }} <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -84,7 +84,7 @@
                     </div>
                     <h5 class="fw-bold text-dark report-title">{{ __('menu.account_report') }}</h5>
                     <p class="text-muted">{{ __('menu.reports') }}</p>
-                    <a href="{{ url('reports/accounts') }}" class="btn btn-outline-warning btn-sm">
+                    <a href="{{ url('reports/finance-report') }}" class="btn btn-outline-warning btn-sm">
                         {{ __('menu.management') }} <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>

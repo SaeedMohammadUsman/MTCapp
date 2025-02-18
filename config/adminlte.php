@@ -489,7 +489,7 @@ return [
                 ],
                 [
                     'text' => 'account_report',  // Remove 'menu.' prefix
-                    'url'  => 'reports/accounts',
+                    'url'  => 'reports/finance-report',
                     'icon' => 'fas fa-wallet',
                 ],
             ],

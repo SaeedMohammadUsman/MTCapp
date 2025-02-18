@@ -20,6 +20,7 @@ use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\ReceivedGoodController;
 use App\Http\Controllers\ReceivedGoodDetailController;
 use App\Http\Controllers\Reports\CustomerReportController;
+use App\Http\Controllers\Reports\FinanceReportController;
 use App\Http\Controllers\Reports\ReportController;
 use App\Http\Controllers\Reports\StockTransactionReportController;
 use App\Http\Controllers\StockTransactionController;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+
 
 
 
@@ -216,7 +218,7 @@ Route::prefix('transactions')->name('transactions.')->group(function () {
 
 
 
-Route::prefix('reports')->name('reports.')->group(function () {
+Route::prefix('reports')->name('reports.')->middleware(['role:Admin|Manager'])->group(function () {
     Route::get('dashboard', [ReportController::class, 'dashboard'])->name('dashboard');
     
     Route::get('stock-transactions', [StockTransactionReportController::class, 'index'])
@@ -231,5 +233,12 @@ Route::prefix('reports')->name('reports.')->group(function () {
         
     Route::post('customer-report/filter', [CustomerReportController::class, 'filter'])
         ->name('customer.filter');
+        
+        
+        Route::get('finance-report', [FinanceReportController::class, 'index'])
+        ->name('finance');
+        
+    Route::post('finance-report/filter', [FinanceReportController::class, 'filter'])
+        ->name('finance.filter');
     // Future report routes will go here...
 });
