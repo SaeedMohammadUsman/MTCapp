@@ -87,7 +87,7 @@
 @section('auth_footer')
     {{-- Password reset link --}}
     <p class="my-0 text-center text-primary font-weight-bold">
-        Developed by <span class="text-danger">Usman Saeed</span>
+        Developed by <span class="text-danger">Usman Saeed | Yahya</span>
     </p>
     {{-- @if($password_reset_url)
         <p class="my-0">
